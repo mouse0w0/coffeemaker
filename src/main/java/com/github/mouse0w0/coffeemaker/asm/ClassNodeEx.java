@@ -62,7 +62,7 @@ public class ClassNodeEx extends ClassNode {
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
         MethodNodeEx method = new MethodNodeEx(access, name, descriptor, signature, exceptions);
-        methodsEx.put(new MethodIdentifier(owner, this, method), method);
+        methodsEx.put(new MethodIdentifier(method), method);
         methods.add(method);
         return method;
     }
