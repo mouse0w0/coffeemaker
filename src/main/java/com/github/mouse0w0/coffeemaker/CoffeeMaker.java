@@ -1,7 +1,7 @@
 package com.github.mouse0w0.coffeemaker;
 
 import com.github.mouse0w0.coffeemaker.exception.IllegalTemplateException;
-import com.github.mouse0w0.coffeemaker.impl.TemplateResolverImpl;
+import com.github.mouse0w0.coffeemaker.impl.TemplateParserImpl;
 import com.github.mouse0w0.coffeemaker.util.IOUtils;
 import org.objectweb.asm.tree.ClassNode;
 
@@ -16,17 +16,17 @@ import java.util.Map;
 
 public class CoffeeMaker {
 
-    private TemplateResolver templateResolver = new TemplateResolverImpl();
+    private TemplateParser templateParser = new TemplateParserImpl();
 
     private Map<String, Template> templateMap = new HashMap<>();
     private Map<String, Snippet> snippetMap = new HashMap<>();
 
-    public TemplateResolver getTemplateResolver() {
-        return templateResolver;
+    public TemplateParser getTemplateParser() {
+        return templateParser;
     }
 
-    public void setTemplateResolver(TemplateResolver templateResolver) {
-        this.templateResolver = templateResolver;
+    public void setTemplateParser(TemplateParser templateParser) {
+        this.templateParser = templateParser;
     }
 
     public void loadTemplateFromJar(String url) throws IOException {
@@ -51,7 +51,7 @@ public class CoffeeMaker {
                 if (!file1.getFileName().toString().endsWith(".class")) continue;
                 ClassNode classNode = IOUtils.loadClassNode(file1);
                 try {
-                    Template template = templateResolver.resolve(classNode);
+                    Template template = templateParser.parse(classNode);
                     templateMap.put(template.getName(), template);
                 } catch (IllegalTemplateException ignored) {
                 }
