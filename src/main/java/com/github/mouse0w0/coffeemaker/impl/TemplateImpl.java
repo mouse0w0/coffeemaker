@@ -1,9 +1,9 @@
 package com.github.mouse0w0.coffeemaker.impl;
 
 import com.github.mouse0w0.coffeemaker.Evaluator;
+import com.github.mouse0w0.coffeemaker.Processor;
 import com.github.mouse0w0.coffeemaker.Template;
 import com.github.mouse0w0.coffeemaker.asm.ClassNodeEx;
-import com.github.mouse0w0.coffeemaker.processor.Processor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 

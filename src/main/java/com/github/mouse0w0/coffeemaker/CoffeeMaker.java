@@ -1,11 +1,12 @@
 package com.github.mouse0w0.coffeemaker;
 
+import com.github.mouse0w0.coffeemaker.asm.ClassNodeEx;
 import com.github.mouse0w0.coffeemaker.exception.IllegalTemplateException;
 import com.github.mouse0w0.coffeemaker.impl.TemplateParserImpl;
-import com.github.mouse0w0.coffeemaker.util.IOUtils;
-import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.ClassReader;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -49,13 +50,22 @@ public class CoffeeMaker {
                 Path file1 = iterator.next();
                 if (!Files.isRegularFile(file1)) continue;
                 if (!file1.getFileName().toString().endsWith(".class")) continue;
-                ClassNode classNode = IOUtils.loadClassNode(file1);
+                ClassNodeEx classNode = loadClassNode(file1);
                 try {
                     Template template = templateParser.parse(classNode);
                     templateMap.put(template.getName(), template);
                 } catch (IllegalTemplateException ignored) {
                 }
             }
+        }
+    }
+
+    private static ClassNodeEx loadClassNode(Path file) throws IOException {
+        try (InputStream inputStream = Files.newInputStream(file)) {
+            ClassReader classReader = new ClassReader(inputStream);
+            ClassNodeEx classNode = new ClassNodeEx();
+            classReader.accept(classNode, 0);
+            return classNode;
         }
     }
 

@@ -1,6 +1,6 @@
-package com.github.mouse0w0.coffeemaker.handler;
+package com.github.mouse0w0.coffeemaker.impl.processor;
 
-import com.github.mouse0w0.coffeemaker.processor.Processor;
+import com.github.mouse0w0.coffeemaker.Processor;
 import org.objectweb.asm.tree.AnnotationNode;
 
 import java.util.List;

@@ -1,7 +1,7 @@
-package com.github.mouse0w0.coffeemaker.handler;
+package com.github.mouse0w0.coffeemaker.impl.processor;
 
+import com.github.mouse0w0.coffeemaker.Processor;
 import com.github.mouse0w0.coffeemaker.asm.MethodIdentifier;
-import com.github.mouse0w0.coffeemaker.processor.Processor;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
