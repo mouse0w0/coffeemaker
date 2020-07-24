@@ -1,11 +1,17 @@
 package com.github.mouse0w0.coffeemaker.asm;
 
+import org.objectweb.asm.Type;
+
 import java.util.Objects;
 
 public class EnumInfo {
 
     private final String descriptor;
     private final String value;
+
+    public EnumInfo(Enum<?> value) {
+        this(Type.getDescriptor(value.getClass()), value.name());
+    }
 
     public EnumInfo(String descriptor, String value) {
         this.descriptor = descriptor;
