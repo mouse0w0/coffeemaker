@@ -1,9 +1,9 @@
 package com.github.mouse0w0.coffeemaker;
 
+import com.github.mouse0w0.coffeemaker.asm.ClassNodeEx;
 import com.github.mouse0w0.coffeemaker.exception.IllegalTemplateException;
 import com.github.mouse0w0.coffeemaker.impl.TemplateParserImpl;
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.tree.ClassNode;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,7 +50,7 @@ public class CoffeeMaker {
                 Path file1 = iterator.next();
                 if (!Files.isRegularFile(file1)) continue;
                 if (!file1.getFileName().toString().endsWith(".class")) continue;
-                ClassNode classNode = loadClassNode(file1);
+                ClassNodeEx classNode = loadClassNode(file1);
                 try {
                     Template template = templateParser.parse(classNode);
                     templateMap.put(template.getName(), template);
@@ -60,10 +60,10 @@ public class CoffeeMaker {
         }
     }
 
-    private static ClassNode loadClassNode(Path file) throws IOException {
+    private static ClassNodeEx loadClassNode(Path file) throws IOException {
         try (InputStream inputStream = Files.newInputStream(file)) {
             ClassReader classReader = new ClassReader(inputStream);
-            ClassNode classNode = new ClassNode();
+            ClassNodeEx classNode = new ClassNodeEx();
             classReader.accept(classNode, 0);
             return classNode;
         }
