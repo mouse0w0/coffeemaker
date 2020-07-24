@@ -55,7 +55,7 @@ public class ASMUtils {
         return null;
     }
 
-    public static Map<String, Object> getAnnotationValues(AnnotationNode annotation, String name) {
+    public static Map<String, Object> getAnnotationValues(AnnotationNode annotation) {
         Map<String, Object> valueMap = new HashMap<>();
         List<Object> values = annotation.values;
         for (int i = 0; i < values.size(); i += 2) {
