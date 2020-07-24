@@ -13,7 +13,7 @@ public class ClassNodeEx extends ClassNode {
 
     private final Map<String, AnnotationNodeEx> annotationsEx = new HashMap<>();
     private final Map<String, FieldNodeEx> fieldsEx = new HashMap<>();
-    private final Map<MethodIdentifier, MethodNodeEx> methodsEx = new HashMap<>();
+    private final Map<String, MethodNodeEx> methodsEx = new HashMap<>();
 
     public Map<String, AnnotationNodeEx> getAnnotationsEx() {
         return annotationsEx;
@@ -31,12 +31,16 @@ public class ClassNodeEx extends ClassNode {
         return fieldsEx.get(name);
     }
 
-    public Map<MethodIdentifier, MethodNodeEx> getMethodsEx() {
+    public Map<String, MethodNodeEx> getMethodsEx() {
         return methodsEx;
     }
 
-    public MethodNodeEx getMethodEx(MethodIdentifier identifier) {
-        return methodsEx.get(identifier);
+    public MethodNodeEx getMethodEx(String id) {
+        return methodsEx.get(id);
+    }
+
+    public MethodNodeEx getMethodEx(String name, String desc) {
+        return methodsEx.get(name + desc);
     }
 
     public ClassNodeEx() {
@@ -67,7 +71,7 @@ public class ClassNodeEx extends ClassNode {
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
         MethodNodeEx method = new MethodNodeEx(api, access, name, descriptor, signature, exceptions);
-        methodsEx.put(new MethodIdentifier(method), method);
+        methodsEx.put(name + descriptor, method);
         methods.add(method);
         return method;
     }

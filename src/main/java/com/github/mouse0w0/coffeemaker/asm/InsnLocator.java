@@ -7,7 +7,8 @@ import org.objectweb.asm.tree.MethodNode;
 
 public class InsnLocator {
 
-    private MethodIdentifier method;
+    private String methodName;
+    private String methodDesc;
     private int insnIndex;
 
     public InsnLocator(MethodNode method, AbstractInsnNode insn) {
@@ -15,12 +16,21 @@ public class InsnLocator {
     }
 
     private InsnLocator(String methodName, String methodDesc, int insnIndex) {
-        this.method = new MethodIdentifier(null, methodName, methodDesc);
+        this.methodName = methodName;
+        this.methodDesc = methodDesc;
         this.insnIndex = insnIndex;
     }
 
-    public MethodIdentifier getMethod() {
-        return method;
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public String getMethodDesc() {
+        return methodDesc;
+    }
+
+    public String getMethodId() {
+        return methodName + methodDesc;
     }
 
     public int getInsnIndex() {
@@ -28,12 +38,12 @@ public class InsnLocator {
     }
 
     public AbstractInsnNode get(ClassNode classNode) {
-        MethodNode methodNode = ASMUtils.getMethod(classNode, method.getName(), method.getDescriptor());
+        MethodNode methodNode = ASMUtils.getMethod(classNode, methodName, methodDesc);
         return methodNode != null ? methodNode.instructions.get(insnIndex) : null;
     }
 
     public AbstractInsnNode get(MethodNode methodNode) {
-        if (method.equals(methodNode)) {
+        if (methodNode.name.equals(methodName) && methodNode.desc.equals(methodDesc)) {
             return methodNode.instructions.get(insnIndex);
         }
         return null;
