@@ -4,8 +4,10 @@ package com.github.mouse0w0.coffeemaker.util;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,5 +74,13 @@ public class ASMUtils {
             }
         }
         return null;
+    }
+
+    public static String getMethodId(Method method) {
+        return Type.getInternalName(method.getDeclaringClass()) + "." + method.getName() + Type.getMethodDescriptor(method);
+    }
+
+    public static String getMethodId(MethodInsnNode insnNode) {
+        return insnNode.owner + "." + insnNode.name + insnNode.desc;
     }
 }

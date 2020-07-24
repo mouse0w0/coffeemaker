@@ -29,6 +29,10 @@ public class MethodNodeEx extends MethodNode {
         super(api, access, name, descriptor, signature, exceptions);
     }
 
+    public Map<String, AnnotationNodeEx> getAnnotationsEx() {
+        return annotationsEx;
+    }
+
     public AnnotationNodeEx getAnnotationEx(String descriptor) {
         return annotationsEx.get(descriptor);
     }

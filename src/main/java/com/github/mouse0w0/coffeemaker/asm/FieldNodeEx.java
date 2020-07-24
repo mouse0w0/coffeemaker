@@ -18,6 +18,10 @@ public class FieldNodeEx extends FieldNode {
         super(api, access, name, descriptor, signature, value);
     }
 
+    public Map<String, AnnotationNodeEx> getAnnotationsEx() {
+        return annotationsEx;
+    }
+
     public AnnotationNodeEx getAnnotationEx(String descriptor) {
         return annotationsEx.get(descriptor);
     }

@@ -1,4 +1,4 @@
-package com.github.mouse0w0.coffeemaker.impl.processor;
+package com.github.mouse0w0.coffeemaker.impl.handler;
 
 import com.github.mouse0w0.coffeemaker.Evaluator;
 import com.github.mouse0w0.coffeemaker.Processor;
@@ -10,17 +10,17 @@ import org.objectweb.asm.Type;
 
 import java.util.List;
 
-public class ModifyAnnotationProcessor implements Processor {
+public class ModifyAnnotationHandler implements Processor {
 
-    public static Processor.Factory factory() {
-        return new Factory();
+    public static AnnotationHandler handler() {
+        return new Handler();
     }
 
     private final String type;
     private final String name;
     private final String statement;
 
-    private ModifyAnnotationProcessor(AnnotationNodeEx annotation) {
+    private ModifyAnnotationHandler(AnnotationNodeEx annotation) {
         this.type = annotation.<Type>getValueEx("type").getDescriptor();
         this.name = annotation.getValueEx("name");
         this.statement = annotation.getValueEx("statement");
@@ -32,24 +32,24 @@ public class ModifyAnnotationProcessor implements Processor {
         annotation.setValueEx(name, evaluator.eval(statement));
     }
 
-    private static class Factory implements Processor.Factory {
+    private static class Handler implements AnnotationHandler {
 
         private static final String MODIFY_ANNOTATION_DESC = Type.getDescriptor(ModifyAnnotation.class);
         private static final String MODIFY_ANNOTATIONS_DESC = Type.getDescriptor(ModifyAnnotations.class);
 
         @Override
-        public void create(ClassNodeEx classNode, List<Processor> processors) {
-            AnnotationNodeEx annotation = classNode.getAnnotationEx(MODIFY_ANNOTATION_DESC);
-            if (annotation != null) {
-                processors.add(new ModifyAnnotationProcessor(annotation));
-                return;
-            }
+        public String[] getSupportedAnnotationTypes() {
+            return new String[]{MODIFY_ANNOTATION_DESC, MODIFY_ANNOTATIONS_DESC};
+        }
 
-            annotation = classNode.getAnnotationEx(MODIFY_ANNOTATIONS_DESC);
-            if (annotation != null) {
+        @Override
+        public void handle(Object owner, AnnotationNodeEx annotation, List<Processor> processors) {
+            if (annotation.desc.equals(MODIFY_ANNOTATION_DESC)) {
+                processors.add(new ModifyAnnotationHandler(annotation));
+            } else if (annotation.desc.equals(MODIFY_ANNOTATIONS_DESC)) {
                 List<AnnotationNodeEx> values = annotation.getValueEx("value");
                 for (AnnotationNodeEx value : values) {
-                    processors.add(new ModifyAnnotationProcessor(value));
+                    processors.add(new ModifyAnnotationHandler(value));
                 }
             }
         }
