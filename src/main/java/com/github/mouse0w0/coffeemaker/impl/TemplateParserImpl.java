@@ -6,6 +6,7 @@ import com.github.mouse0w0.coffeemaker.TemplateParser;
 import com.github.mouse0w0.coffeemaker.asm.ClassNodeEx;
 import com.github.mouse0w0.coffeemaker.exception.IllegalTemplateException;
 import com.github.mouse0w0.coffeemaker.exception.TemplateParseException;
+import com.github.mouse0w0.coffeemaker.impl.processor.ModifyAnnotationProcessor;
 import com.github.mouse0w0.coffeemaker.syntax.ATemplate;
 import com.github.mouse0w0.coffeemaker.util.ASMUtils;
 import org.objectweb.asm.Type;
@@ -19,6 +20,10 @@ public class TemplateParserImpl implements TemplateParser {
     private static final Type TEMPLATE_ANNOTATION = Type.getType(ATemplate.class);
 
     private final List<Processor.Factory> processorFactories = new ArrayList<>();
+
+    public TemplateParserImpl() {
+        addProcessorFactory(ModifyAnnotationProcessor.factory());
+    }
 
     public void addProcessorFactory(Processor.Factory factory) {
         processorFactories.add(factory);

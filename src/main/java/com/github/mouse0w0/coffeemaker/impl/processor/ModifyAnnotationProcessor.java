@@ -2,15 +2,13 @@ package com.github.mouse0w0.coffeemaker.impl.processor;
 
 import com.github.mouse0w0.coffeemaker.Evaluator;
 import com.github.mouse0w0.coffeemaker.Processor;
+import com.github.mouse0w0.coffeemaker.asm.AnnotationNodeEx;
 import com.github.mouse0w0.coffeemaker.asm.ClassNodeEx;
 import com.github.mouse0w0.coffeemaker.syntax.ModifyAnnotation;
 import com.github.mouse0w0.coffeemaker.syntax.ModifyAnnotations;
-import com.github.mouse0w0.coffeemaker.util.ASMUtils;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AnnotationNode;
 
 import java.util.List;
-import java.util.Map;
 
 public class ModifyAnnotationProcessor implements Processor {
 
@@ -18,13 +16,20 @@ public class ModifyAnnotationProcessor implements Processor {
         return new Factory();
     }
 
-    private ModifyAnnotationProcessor(AnnotationNode annotation) {
-        Map<String, Object> values = ASMUtils.getAnnotationValues(annotation);
+    private final String type;
+    private final String name;
+    private final String statement;
+
+    private ModifyAnnotationProcessor(AnnotationNodeEx annotation) {
+        this.type = annotation.<Type>getValueEx("type").getDescriptor();
+        this.name = annotation.getValueEx("name");
+        this.statement = annotation.getValueEx("statement");
     }
 
     @Override
     public void process(ClassNodeEx classNode, Evaluator evaluator) {
-
+        AnnotationNodeEx annotation = classNode.getAnnotationEx(type);
+        annotation.setValueEx(name, evaluator.eval(statement));
     }
 
     private static class Factory implements Processor.Factory {
@@ -34,17 +39,17 @@ public class ModifyAnnotationProcessor implements Processor {
 
         @Override
         public void create(ClassNodeEx classNode, List<Processor> processors) {
-            for (AnnotationNode annotation : classNode.invisibleAnnotations) {
-                if (MODIFY_ANNOTATION_DESC.equals(annotation.desc)) {
-                    processors.add(new ModifyAnnotationProcessor(annotation));
-                    return;
-                }
+            AnnotationNodeEx annotation = classNode.getAnnotationEx(MODIFY_ANNOTATION_DESC);
+            if (annotation != null) {
+                processors.add(new ModifyAnnotationProcessor(annotation));
+                return;
+            }
 
-                if (MODIFY_ANNOTATIONS_DESC.equals(annotation.desc)) {
-                    List<AnnotationNode> values = ASMUtils.getAnnotationValue(annotation, "value");
-                    assert values != null;
-                    values.stream().map(ModifyAnnotationProcessor::new).forEach(processors::add);
-                    return;
+            annotation = classNode.getAnnotationEx(MODIFY_ANNOTATIONS_DESC);
+            if (annotation != null) {
+                List<AnnotationNodeEx> values = annotation.getValueEx("value");
+                for (AnnotationNodeEx value : values) {
+                    processors.add(new ModifyAnnotationProcessor(value));
                 }
             }
         }

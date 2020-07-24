@@ -30,6 +30,21 @@ public class AnnotationNodeEx extends AnnotationNode {
         return (T) valuesEx.get(name);
     }
 
+    public void setValueEx(String name, Object value) {
+        if (values == null) visit(name, value);
+
+        for (int i = 0; i < values.size(); i += 2) {
+            String key = (String) values.get(i);
+            if (name.equals(key)) {
+                values.set(i + 1, value);
+                valuesEx.put(name, value);
+                return;
+            }
+        }
+
+        visit(name, value);
+    }
+
     @Override
     public void visit(String name, Object value) {
         super.visit(name, value);
