@@ -1,13 +1,13 @@
 package com.github.mouse0w0.coffeemaker;
 
-import com.github.mouse0w0.coffeemaker.asm.ClassNodeEx;
+import org.objectweb.asm.tree.ClassNode;
 
 import java.util.List;
 
 public interface Processor {
-    void process(ClassNodeEx classNode, Evaluator evaluator);
+    void process(ClassNode classNode, Evaluator evaluator);
 
     interface Factory {
-        void create(ClassNodeEx classNode, List<Processor> processors);
+        void create(ClassNode classNode, List<Processor> processors);
     }
 }
