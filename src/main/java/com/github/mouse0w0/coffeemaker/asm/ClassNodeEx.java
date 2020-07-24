@@ -3,6 +3,7 @@ package com.github.mouse0w0.coffeemaker.asm;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 
 import java.util.HashMap;
@@ -38,9 +39,13 @@ public class ClassNodeEx extends ClassNode {
         return methodsEx.get(identifier);
     }
 
+    public ClassNodeEx() {
+        super(Opcodes.ASM5);
+    }
+
     @Override
     public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-        AnnotationNodeEx annotation = new AnnotationNodeEx(descriptor);
+        AnnotationNodeEx annotation = new AnnotationNodeEx(api, descriptor);
         annotation.visible = visible;
         annotationsEx.put(descriptor, annotation);
         if (visible) {
@@ -53,7 +58,7 @@ public class ClassNodeEx extends ClassNode {
 
     @Override
     public FieldVisitor visitField(int access, String name, String descriptor, String signature, Object value) {
-        FieldNodeEx field = new FieldNodeEx(access, name, descriptor, signature, value);
+        FieldNodeEx field = new FieldNodeEx(api, access, name, descriptor, signature, value);
         fieldsEx.put(name, field);
         fields.add(field);
         return field;
@@ -61,7 +66,7 @@ public class ClassNodeEx extends ClassNode {
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
-        MethodNodeEx method = new MethodNodeEx(access, name, descriptor, signature, exceptions);
+        MethodNodeEx method = new MethodNodeEx(api, access, name, descriptor, signature, exceptions);
         methodsEx.put(new MethodIdentifier(method), method);
         methods.add(method);
         return method;

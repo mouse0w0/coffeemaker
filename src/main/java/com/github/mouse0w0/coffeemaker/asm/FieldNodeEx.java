@@ -1,6 +1,7 @@
 package com.github.mouse0w0.coffeemaker.asm;
 
 import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.FieldNode;
 
 import java.util.HashMap;
@@ -10,7 +11,7 @@ public class FieldNodeEx extends FieldNode {
     private final Map<String, AnnotationNodeEx> annotationsEx = new HashMap<>();
 
     public FieldNodeEx(int access, String name, String descriptor, String signature, Object value) {
-        super(access, name, descriptor, signature, value);
+        this(Opcodes.ASM5, access, name, descriptor, signature, value);
     }
 
     public FieldNodeEx(int api, int access, String name, String descriptor, String signature, Object value) {

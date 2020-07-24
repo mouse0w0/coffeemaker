@@ -1,6 +1,7 @@
 package com.github.mouse0w0.coffeemaker.asm;
 
 import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -13,6 +14,7 @@ public class MethodNodeEx extends MethodNode {
     private AbstractInsnNode[] insnNodesEx;
 
     public MethodNodeEx() {
+        this(Opcodes.ASM5);
     }
 
     public MethodNodeEx(int api) {

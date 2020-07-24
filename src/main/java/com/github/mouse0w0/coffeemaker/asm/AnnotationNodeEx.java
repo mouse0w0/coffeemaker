@@ -1,6 +1,7 @@
 package com.github.mouse0w0.coffeemaker.asm;
 
 import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AnnotationNode;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class AnnotationNodeEx extends AnnotationNode {
     public boolean visible;
 
     public AnnotationNodeEx(String s) {
-        super(s);
+        this(Opcodes.ASM5, s);
     }
 
     public AnnotationNodeEx(int i, String s) {
