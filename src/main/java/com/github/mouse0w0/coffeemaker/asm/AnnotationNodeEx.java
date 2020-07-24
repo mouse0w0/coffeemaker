@@ -67,7 +67,7 @@ public class AnnotationNodeEx extends AnnotationNode {
         List<Object> array = new ArrayList<>();
         values.add(array);
         valuesEx.put(name, array);
-        AnnotationNode annotation = new AnnotationNode(null);
+        AnnotationNodeEx annotation = new AnnotationNodeEx(null);
         annotation.values = array;
         return annotation;
     }
