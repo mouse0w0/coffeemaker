@@ -3,17 +3,14 @@ package com.github.mouse0w0.coffeemaker.impl;
 import com.github.mouse0w0.coffeemaker.Processor;
 import com.github.mouse0w0.coffeemaker.Template;
 import com.github.mouse0w0.coffeemaker.TemplateParser;
-import com.github.mouse0w0.coffeemaker.asm.AnnotationNodeEx;
-import com.github.mouse0w0.coffeemaker.asm.ClassNodeEx;
-import com.github.mouse0w0.coffeemaker.asm.FieldNodeEx;
-import com.github.mouse0w0.coffeemaker.asm.MethodNodeEx;
+import com.github.mouse0w0.coffeemaker.asm.*;
 import com.github.mouse0w0.coffeemaker.exception.IllegalTemplateException;
 import com.github.mouse0w0.coffeemaker.exception.TemplateParseException;
 import com.github.mouse0w0.coffeemaker.impl.handler.AnnotationHandler;
 import com.github.mouse0w0.coffeemaker.impl.handler.InvokeMethodHandler;
-import com.github.mouse0w0.coffeemaker.impl.handler.ModifyAnnotationHandler;
+import com.github.mouse0w0.coffeemaker.impl.processor.ConstantProcessor;
+import com.github.mouse0w0.coffeemaker.impl.processor.ModifyAnnotationProcessor;
 import com.github.mouse0w0.coffeemaker.syntax.ATemplate;
-import com.github.mouse0w0.coffeemaker.util.ASMUtils;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
@@ -31,7 +28,8 @@ public class TemplateParserImpl implements TemplateParser {
     private final Map<String, InvokeMethodHandler> invokeMethodHandlerMap = new HashMap<>();
 
     public TemplateParserImpl() {
-        addAnnotationHandler(ModifyAnnotationHandler.handler());
+        addAnnotationHandler(ModifyAnnotationProcessor.handler());
+        addInvokeMethodHandler(ConstantProcessor.handler());
     }
 
     public void addAnnotationHandler(AnnotationHandler handler) {

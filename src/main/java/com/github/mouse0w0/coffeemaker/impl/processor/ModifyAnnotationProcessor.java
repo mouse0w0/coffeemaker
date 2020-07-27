@@ -1,16 +1,17 @@
-package com.github.mouse0w0.coffeemaker.impl.handler;
+package com.github.mouse0w0.coffeemaker.impl.processor;
 
 import com.github.mouse0w0.coffeemaker.Evaluator;
 import com.github.mouse0w0.coffeemaker.Processor;
 import com.github.mouse0w0.coffeemaker.asm.AnnotationNodeEx;
 import com.github.mouse0w0.coffeemaker.asm.ClassNodeEx;
+import com.github.mouse0w0.coffeemaker.impl.handler.AnnotationHandler;
 import com.github.mouse0w0.coffeemaker.syntax.ModifyAnnotation;
 import com.github.mouse0w0.coffeemaker.syntax.ModifyAnnotations;
 import org.objectweb.asm.Type;
 
 import java.util.List;
 
-public class ModifyAnnotationHandler implements Processor {
+public class ModifyAnnotationProcessor implements Processor {
 
     public static AnnotationHandler handler() {
         return new Handler();
@@ -20,7 +21,7 @@ public class ModifyAnnotationHandler implements Processor {
     private final String name;
     private final String statement;
 
-    private ModifyAnnotationHandler(AnnotationNodeEx annotation) {
+    private ModifyAnnotationProcessor(AnnotationNodeEx annotation) {
         this.type = annotation.<Type>getValueEx("type").getDescriptor();
         this.name = annotation.getValueEx("name");
         this.statement = annotation.getValueEx("statement");
@@ -45,11 +46,11 @@ public class ModifyAnnotationHandler implements Processor {
         @Override
         public void handle(Object owner, AnnotationNodeEx annotation, List<Processor> processors) {
             if (annotation.desc.equals(MODIFY_ANNOTATION_DESC)) {
-                processors.add(new ModifyAnnotationHandler(annotation));
+                processors.add(new ModifyAnnotationProcessor(annotation));
             } else if (annotation.desc.equals(MODIFY_ANNOTATIONS_DESC)) {
                 List<AnnotationNodeEx> values = annotation.getValueEx("value");
                 for (AnnotationNodeEx value : values) {
-                    processors.add(new ModifyAnnotationHandler(value));
+                    processors.add(new ModifyAnnotationProcessor(value));
                 }
             }
         }

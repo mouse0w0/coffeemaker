@@ -21,6 +21,10 @@ public final class Constants {
         throw new UnsupportedOperationException("template");
     }
 
+    public static long $long(String statement) {
+        throw new UnsupportedOperationException("template");
+    }
+
     public static float $float(String statement) {
         throw new UnsupportedOperationException("template");
     }
