@@ -1,22 +1,21 @@
 package com.github.mouse0w0.coffeemaker.impl;
 
+import com.github.mouse0w0.asm.extree.ClassNodeEx;
 import com.github.mouse0w0.coffeemaker.Evaluator;
 import com.github.mouse0w0.coffeemaker.Processor;
 import com.github.mouse0w0.coffeemaker.Template;
-import com.github.mouse0w0.coffeemaker.asm.ClassNodeEx;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.tree.ClassNode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TemplateImpl implements Template {
     private final String name;
-    private final ClassNode classNode;
+    private final ClassNodeEx classNode;
 
     private final List<Processor> processors = new ArrayList<>();
 
-    public TemplateImpl(String name, ClassNode classNode) {
+    public TemplateImpl(String name, ClassNodeEx classNode) {
         this.name = name;
         this.classNode = classNode;
     }

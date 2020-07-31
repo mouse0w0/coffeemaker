@@ -1,20 +1,21 @@
 package com.github.mouse0w0.coffeemaker.impl.processor;
 
+import com.github.mouse0w0.asm.extree.ClassNodeEx;
+import com.github.mouse0w0.asm.extree.MethodNodeEx;
 import com.github.mouse0w0.coffeemaker.Evaluator;
 import com.github.mouse0w0.coffeemaker.Processor;
 import com.github.mouse0w0.coffeemaker.asm.ASMUtils;
-import com.github.mouse0w0.coffeemaker.asm.ClassNodeEx;
-import com.github.mouse0w0.coffeemaker.asm.MethodNodeEx;
 import com.github.mouse0w0.coffeemaker.impl.handler.InvokeMethodHandler;
 import com.github.mouse0w0.coffeemaker.syntax.Constants;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.commons.Method;
 import org.objectweb.asm.tree.*;
 
 import java.util.List;
 
 public abstract class ConstantProcessor implements Processor {
 
-    private final String methodId;
+    private final Method method;
     private final int insnIndex;
     protected final String statement;
 
@@ -22,8 +23,8 @@ public abstract class ConstantProcessor implements Processor {
         return new Handler();
     }
 
-    public ConstantProcessor(String methodId, int insnIndex, String statement) {
-        this.methodId = methodId;
+    public ConstantProcessor(Method method, int insnIndex, String statement) {
+        this.method = method;
         this.insnIndex = insnIndex;
         this.statement = statement;
     }
@@ -32,8 +33,8 @@ public abstract class ConstantProcessor implements Processor {
 
     @Override
     public void process(ClassNodeEx classNode, Evaluator evaluator) {
-        MethodNodeEx method = classNode.getMethodEx(methodId);
-        InsnList instructions = method.instructions;
+        MethodNodeEx methodNode = classNode.methods.get(method);
+        InsnList instructions = methodNode.instructions;
         AbstractInsnNode methodInsn = instructions.get(insnIndex);
         AbstractInsnNode insertPoint = methodInsn.getPrevious();
         instructions.remove(methodInsn);
@@ -42,8 +43,8 @@ public abstract class ConstantProcessor implements Processor {
 
     private static class LdcProcessor extends ConstantProcessor {
 
-        public LdcProcessor(String methodId, int insnIndex, String statement) {
-            super(methodId, insnIndex, statement);
+        public LdcProcessor(Method method, int insnIndex, String statement) {
+            super(method, insnIndex, statement);
         }
 
         @Override
@@ -54,8 +55,8 @@ public abstract class ConstantProcessor implements Processor {
 
     private static class BooleanProcessor extends ConstantProcessor {
 
-        public BooleanProcessor(String methodId, int insnIndex, String statement) {
-            super(methodId, insnIndex, statement);
+        public BooleanProcessor(Method method, int insnIndex, String statement) {
+            super(method, insnIndex, statement);
         }
 
         @Override
@@ -67,8 +68,8 @@ public abstract class ConstantProcessor implements Processor {
 
     private static class ByteProcessor extends ConstantProcessor {
 
-        public ByteProcessor(String methodId, int insnIndex, String statement) {
-            super(methodId, insnIndex, statement);
+        public ByteProcessor(Method method, int insnIndex, String statement) {
+            super(method, insnIndex, statement);
         }
 
         @Override
@@ -80,8 +81,8 @@ public abstract class ConstantProcessor implements Processor {
 
     private static class ShortProcessor extends ConstantProcessor {
 
-        public ShortProcessor(String methodId, int insnIndex, String statement) {
-            super(methodId, insnIndex, statement);
+        public ShortProcessor(Method method, int insnIndex, String statement) {
+            super(method, insnIndex, statement);
         }
 
         @Override
@@ -93,8 +94,8 @@ public abstract class ConstantProcessor implements Processor {
 
     private static class CharProcessor extends ConstantProcessor {
 
-        public CharProcessor(String methodId, int insnIndex, String statement) {
-            super(methodId, insnIndex, statement);
+        public CharProcessor(Method method, int insnIndex, String statement) {
+            super(method, insnIndex, statement);
         }
 
         @Override
@@ -129,9 +130,9 @@ public abstract class ConstantProcessor implements Processor {
         }
 
         @Override
-        public void handle(MethodNodeEx method, MethodInsnNode insn, List<Processor> processors) {
-            String methodId = ASMUtils.getMethodId(method);
-            int insnIndex = method.instructions.indexOf(insn);
+        public void handle(MethodNodeEx methodNode, MethodInsnNode insn, List<Processor> processors) {
+            Method method = new Method(methodNode.name, methodNode.desc);
+            int insnIndex = methodNode.instructions.indexOf(insn);
             LdcInsnNode statementLdcInsn = (LdcInsnNode) insn.getPrevious();
             String statement = (String) statementLdcInsn.cst;
             switch (insn.name) {
@@ -141,19 +142,19 @@ public abstract class ConstantProcessor implements Processor {
                 case "$double":
                 case "$string":
                 case "$class":
-                    processors.add(new LdcProcessor(methodId, insnIndex, statement));
+                    processors.add(new LdcProcessor(method, insnIndex, statement));
                     break;
                 case "$boolean":
-                    processors.add(new BooleanProcessor(methodId, insnIndex, statement));
+                    processors.add(new BooleanProcessor(method, insnIndex, statement));
                     break;
                 case "$byte":
-                    processors.add(new ByteProcessor(methodId, insnIndex, statement));
+                    processors.add(new ByteProcessor(method, insnIndex, statement));
                     break;
                 case "$short":
-                    processors.add(new ShortProcessor(methodId, insnIndex, statement));
+                    processors.add(new ShortProcessor(method, insnIndex, statement));
                     break;
                 case "$char":
-                    processors.add(new CharProcessor(methodId, insnIndex, statement));
+                    processors.add(new CharProcessor(method, insnIndex, statement));
                     break;
             }
         }

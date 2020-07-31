@@ -1,7 +1,7 @@
 package com.github.mouse0w0.coffeemaker.impl.handler;
 
+import com.github.mouse0w0.asm.extree.AnnotationNodeEx;
 import com.github.mouse0w0.coffeemaker.Processor;
-import com.github.mouse0w0.coffeemaker.asm.AnnotationNodeEx;
 
 import java.util.List;
 

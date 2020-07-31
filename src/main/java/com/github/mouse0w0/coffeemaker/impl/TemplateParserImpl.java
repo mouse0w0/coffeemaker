@@ -1,9 +1,13 @@
 package com.github.mouse0w0.coffeemaker.impl;
 
+import com.github.mouse0w0.asm.extree.AnnotationNodeEx;
+import com.github.mouse0w0.asm.extree.ClassNodeEx;
+import com.github.mouse0w0.asm.extree.FieldNodeEx;
+import com.github.mouse0w0.asm.extree.MethodNodeEx;
 import com.github.mouse0w0.coffeemaker.Processor;
 import com.github.mouse0w0.coffeemaker.Template;
 import com.github.mouse0w0.coffeemaker.TemplateParser;
-import com.github.mouse0w0.coffeemaker.asm.*;
+import com.github.mouse0w0.coffeemaker.asm.ASMUtils;
 import com.github.mouse0w0.coffeemaker.exception.IllegalTemplateException;
 import com.github.mouse0w0.coffeemaker.exception.TemplateParseException;
 import com.github.mouse0w0.coffeemaker.impl.handler.AnnotationHandler;
@@ -13,7 +17,6 @@ import com.github.mouse0w0.coffeemaker.impl.processor.ModifyAnnotationProcessor;
 import com.github.mouse0w0.coffeemaker.syntax.ATemplate;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 
 import java.util.HashMap;
@@ -22,7 +25,7 @@ import java.util.Map;
 
 public class TemplateParserImpl implements TemplateParser {
 
-    private static final Type TEMPLATE_ANNOTATION = Type.getType(ATemplate.class);
+    private static final String TEMPLATE_ANNOTATION = Type.getInternalName(ATemplate.class);
 
     private final Map<String, AnnotationHandler> annotationHandlerMap = new HashMap<>();
     private final Map<String, InvokeMethodHandler> invokeMethodHandlerMap = new HashMap<>();
@@ -46,23 +49,23 @@ public class TemplateParserImpl implements TemplateParser {
 
     @Override
     public Template parse(ClassNodeEx classNode) throws IllegalTemplateException, TemplateParseException {
-        AnnotationNode annoTemplateClass = ASMUtils.getInvisibleAnnotation(classNode, TEMPLATE_ANNOTATION);
+        AnnotationNodeEx annoTemplateClass = classNode.getAnnotation(TEMPLATE_ANNOTATION);
         if (annoTemplateClass == null) {
             throw new IllegalTemplateException("Class " + classNode.name + "is not a template");
         }
 
-        TemplateImpl template = new TemplateImpl(ASMUtils.getAnnotationValue(annoTemplateClass, "value"), classNode);
+        TemplateImpl template = new TemplateImpl(annoTemplateClass.getValue("value"), classNode);
 
         List<Processor> processors = template.getProcessors();
-        for (AnnotationNodeEx annotation : classNode.getAnnotationsEx().values()) {
+        for (AnnotationNodeEx annotation : classNode.annotations.values()) {
             AnnotationHandler handler = annotationHandlerMap.get(annotation.desc);
             if (handler != null) {
                 handler.handle(classNode, annotation, processors);
             }
         }
 
-        for (FieldNodeEx field : classNode.getFieldsEx().values()) {
-            for (AnnotationNodeEx annotation : field.getAnnotationsEx().values()) {
+        for (FieldNodeEx field : classNode.fields.values()) {
+            for (AnnotationNodeEx annotation : field.annotations.values()) {
                 AnnotationHandler handler = annotationHandlerMap.get(annotation.desc);
                 if (handler != null) {
                     handler.handle(field, annotation, processors);
@@ -70,8 +73,8 @@ public class TemplateParserImpl implements TemplateParser {
             }
         }
 
-        for (MethodNodeEx method : classNode.getMethodsEx().values()) {
-            for (AnnotationNodeEx annotation : method.getAnnotationsEx().values()) {
+        for (MethodNodeEx method : classNode.methods.values()) {
+            for (AnnotationNodeEx annotation : method.annotations.values()) {
                 AnnotationHandler handler = annotationHandlerMap.get(annotation.desc);
                 if (handler != null) {
                     handler.handle(method, annotation, processors);

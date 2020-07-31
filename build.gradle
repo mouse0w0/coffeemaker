@@ -10,10 +10,12 @@ sourceCompatibility = 1.8
 
 repositories {
     jcenter()
+    maven { url 'https://jitpack.io' }
     mavenCentral()
 }
 
 dependencies {
+    compile 'com.github.Mouse0w0:asm-extree:8.0.2'
     compile 'org.ow2.asm:asm-commons:8.0.1'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.1'
