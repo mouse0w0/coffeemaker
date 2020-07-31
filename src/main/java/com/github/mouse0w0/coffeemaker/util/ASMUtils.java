@@ -1,4 +1,4 @@
-package com.github.mouse0w0.coffeemaker.asm;
+package com.github.mouse0w0.coffeemaker.util;
 
 
 import org.objectweb.asm.Type;
