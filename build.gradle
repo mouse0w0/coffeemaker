@@ -14,7 +14,6 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.mouse0w0:asm-extree:8.0.3'
     compile 'org.ow2.asm:asm-commons:8.0.1'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.1'

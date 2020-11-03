@@ -1,8 +1,10 @@
 package com.github.mouse0w0.coffeemaker;
 
-import com.github.mouse0w0.asm.extree.ClassNodeEx;
-import com.github.mouse0w0.coffeemaker.exception.IllegalTemplateException;
-import com.github.mouse0w0.coffeemaker.impl.TemplateParserImpl;
+import com.github.mouse0w0.coffeemaker.extree.ClassNodeEx;
+import com.github.mouse0w0.coffeemaker.template.Template;
+import com.github.mouse0w0.coffeemaker.template.TemplateParseException;
+import com.github.mouse0w0.coffeemaker.template.TemplateParser;
+import com.github.mouse0w0.coffeemaker.template.impl.TemplateParserImpl;
 import org.objectweb.asm.ClassReader;
 
 import java.io.IOException;
@@ -17,17 +19,16 @@ import java.util.Map;
 
 public class CoffeeMaker {
 
-    private TemplateParser templateParser = new TemplateParserImpl();
+    private final TemplateParser templateParser = new TemplateParserImpl();
 
-    private Map<String, Template> templateMap = new HashMap<>();
-    private Map<String, Snippet> snippetMap = new HashMap<>();
+    private final Map<String, Template> templateMap = new HashMap<>();
 
     public TemplateParser getTemplateParser() {
         return templateParser;
     }
 
-    public void setTemplateParser(TemplateParser templateParser) {
-        this.templateParser = templateParser;
+    public Template getTemplate(String name) {
+        return templateMap.get(name);
     }
 
     public void loadTemplateFromJar(String url) throws IOException {
@@ -50,26 +51,26 @@ public class CoffeeMaker {
                 Path file1 = iterator.next();
                 if (!Files.isRegularFile(file1)) continue;
                 if (!file1.getFileName().toString().endsWith(".class")) continue;
-                ClassNodeEx classNode = loadClassNode(file1);
-                try {
-                    Template template = templateParser.parse(classNode);
-                    templateMap.put(template.getName(), template);
-                } catch (IllegalTemplateException ignored) {
+                try (InputStream in = Files.newInputStream(file)) {
+                    loadTemplate(in);
                 }
             }
         }
     }
 
-    private static ClassNodeEx loadClassNode(Path file) throws IOException {
-        try (InputStream inputStream = Files.newInputStream(file)) {
-            ClassReader classReader = new ClassReader(inputStream);
-            ClassNodeEx classNode = new ClassNodeEx();
-            classReader.accept(classNode, 0);
-            return classNode;
+    public void loadTemplate(InputStream in) throws IOException {
+        ClassNodeEx classNode = loadClassNode(in);
+        try {
+            Template template = templateParser.parse(classNode);
+            templateMap.put(template.getName(), template);
+        } catch (TemplateParseException ignored) {
         }
     }
 
-    public Template getTemplate(String name) {
-        return templateMap.get(name);
+    private static ClassNodeEx loadClassNode(InputStream in) throws IOException {
+        ClassReader classReader = new ClassReader(in);
+        ClassNodeEx classNode = new ClassNodeEx();
+        classReader.accept(classNode, 0);
+        return classNode;
     }
 }
