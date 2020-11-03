@@ -7,7 +7,7 @@ import org.objectweb.asm.tree.*;
 
 import java.lang.reflect.Method;
 
-public class ASMUtils {
+public class Utils {
 
     public static String getMethodId(Class<?> clazz, String name, Class<?>... parameterTypes) {
         try {

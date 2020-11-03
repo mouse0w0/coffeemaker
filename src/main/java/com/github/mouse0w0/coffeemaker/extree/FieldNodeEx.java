@@ -6,7 +6,7 @@ import org.objectweb.asm.tree.UnsupportedClassVersionException;
 
 import java.util.*;
 
-public class FieldNodeEx extends FieldVisitor {
+public class FieldNodeEx extends FieldVisitor implements AnnotationHolder {
 
     /**
      * The field's access flags (see {@link Opcodes}). This field also indicates if
@@ -98,19 +98,37 @@ public class FieldNodeEx extends FieldVisitor {
         this.value = value;
     }
 
+    @Override
     public Collection<AnnotationNodeEx> getAnnotations() {
         return annotations == null ? Collections.emptyList() : annotations.values();
     }
 
+    @Override
     public AnnotationNodeEx getAnnotation(String descriptor) {
         return annotations == null ? null : annotations.get(descriptor);
     }
 
+    @Override
     public void addAnnotation(AnnotationNodeEx annotationNode) {
         if (annotations == null) {
             annotations = new LinkedHashMap<>(2);
         }
         annotations.put(annotationNode.desc, annotationNode);
+    }
+
+    @Override
+    public void removeAnnotation(String descriptor) {
+        if (annotations == null) return;
+        annotations.remove(descriptor);
+    }
+
+    @Override
+    public void removeAnnotation(AnnotationNodeEx annotation) {
+        removeAnnotation(annotation.desc);
+    }
+
+    public Collection<TypeAnnotationNodeEx> getTypeAnnotations() {
+        return typeAnnotations == null ? Collections.emptyList() : typeAnnotations.values();
     }
 
     public TypeAnnotationNodeEx getTypeAnnotation(String descriptor) {

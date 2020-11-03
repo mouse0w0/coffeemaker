@@ -1,11 +1,12 @@
 package com.github.mouse0w0.coffeemaker.extree;
 
 import org.objectweb.asm.*;
+import org.objectweb.asm.commons.Method;
 import org.objectweb.asm.tree.*;
 
 import java.util.*;
 
-public class MethodNodeEx extends MethodVisitor {
+public class MethodNodeEx extends MethodVisitor implements AnnotationHolder {
 
     /**
      * The method's access flags (see {@link Opcodes}). This field also indicates if the method is
@@ -131,19 +132,41 @@ public class MethodNodeEx extends MethodVisitor {
         this.instructions = new InsnList();
     }
 
+    public Method toMethod() {
+        return new Method(name, desc);
+    }
+
+    @Override
     public Collection<AnnotationNodeEx> getAnnotations() {
         return annotations == null ? Collections.emptyList() : annotations.values();
     }
 
+    @Override
     public AnnotationNodeEx getAnnotation(String descriptor) {
         return annotations == null ? null : annotations.get(descriptor);
     }
 
+    @Override
     public void addAnnotation(AnnotationNodeEx annotationNode) {
         if (annotations == null) {
             annotations = new LinkedHashMap<>(2);
         }
         annotations.put(annotationNode.desc, annotationNode);
+    }
+
+    @Override
+    public void removeAnnotation(String descriptor) {
+        if (annotations == null) return;
+        annotations.remove(descriptor);
+    }
+
+    @Override
+    public void removeAnnotation(AnnotationNodeEx annotation) {
+        removeAnnotation(annotation.desc);
+    }
+
+    public Collection<TypeAnnotationNodeEx> getTypeAnnotations() {
+        return typeAnnotations == null ? Collections.emptyList() : typeAnnotations.values();
     }
 
     public TypeAnnotationNodeEx getTypeAnnotation(String descriptor) {

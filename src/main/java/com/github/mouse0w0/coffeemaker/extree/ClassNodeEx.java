@@ -9,7 +9,7 @@ import org.objectweb.asm.tree.UnsupportedClassVersionException;
 
 import java.util.*;
 
-public class ClassNodeEx extends ClassVisitor {
+public class ClassNodeEx extends ClassVisitor implements AnnotationHolder {
     /**
      * The class version. The minor version is stored in the 16 most significant bits, and the major
      * version in the 16 least significant bits.
@@ -151,19 +151,33 @@ public class ClassNodeEx extends ClassVisitor {
         this.methods = new LinkedHashMap<>();
     }
 
+    @Override
     public Collection<AnnotationNodeEx> getAnnotations() {
         return annotations == null ? Collections.emptyList() : annotations.values();
     }
 
+    @Override
     public AnnotationNodeEx getAnnotation(String descriptor) {
         return annotations == null ? null : annotations.get(descriptor);
     }
 
+    @Override
     public void addAnnotation(AnnotationNodeEx annotation) {
         if (annotations == null) {
             annotations = new LinkedHashMap<>(2);
         }
         annotations.put(annotation.desc, annotation);
+    }
+
+    @Override
+    public void removeAnnotation(String descriptor) {
+        if (annotations == null) return;
+        annotations.remove(descriptor);
+    }
+
+    @Override
+    public void removeAnnotation(AnnotationNodeEx annotation) {
+        removeAnnotation(annotation.desc);
     }
 
     public Collection<TypeAnnotationNodeEx> getTypeAnnotations() {
@@ -202,7 +216,7 @@ public class ClassNodeEx extends ClassVisitor {
     }
 
     public void addMethod(MethodNodeEx method) {
-        methods.put(new Method(method.name, method.desc), method);
+        methods.put(method.toMethod(), method);
     }
 
     // -----------------------------------------------------------------------------------------------
@@ -452,12 +466,13 @@ public class ClassNodeEx extends ClassVisitor {
             }
         }
         // Visit the fields.
-        for (int i = 0, n = fields.size(); i < n; ++i) {
-            fields.get(i).accept(classVisitor);
+        for (FieldNodeEx field : getFields()) {
+            field.accept(classVisitor);
         }
+
         // Visit the methods.
-        for (int i = 0, n = methods.size(); i < n; ++i) {
-            methods.get(i).accept(classVisitor);
+        for (MethodNodeEx method : getMethods()) {
+            method.accept(classVisitor);
         }
         classVisitor.visitEnd();
     }

@@ -1,6 +1,7 @@
 package com.github.mouse0w0.coffeemaker.template.impl.handler;
 
 import com.github.mouse0w0.coffeemaker.Evaluator;
+import com.github.mouse0w0.coffeemaker.extree.AnnotationHolder;
 import com.github.mouse0w0.coffeemaker.extree.AnnotationNodeEx;
 import com.github.mouse0w0.coffeemaker.extree.ClassNodeEx;
 import com.github.mouse0w0.coffeemaker.template.ModifyClassName;
@@ -20,9 +21,10 @@ public class ModifyClassNameHandler implements AnnotationHandler {
     }
 
     @Override
-    public void handle(Object owner, AnnotationNodeEx annotation, List<Processor> processors) {
+    public void handle(AnnotationHolder owner, AnnotationNodeEx annotation, List<Processor> processors) {
         String statement = annotation.getValue("value");
         processors.add(new ProcessorImpl(statement));
+        owner.removeAnnotation(annotation);
     }
 
     private static class ProcessorImpl implements Processor {

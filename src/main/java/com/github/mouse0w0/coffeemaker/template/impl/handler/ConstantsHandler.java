@@ -5,8 +5,8 @@ import com.github.mouse0w0.coffeemaker.extree.ClassNodeEx;
 import com.github.mouse0w0.coffeemaker.extree.MethodNodeEx;
 import com.github.mouse0w0.coffeemaker.template.Constants;
 import com.github.mouse0w0.coffeemaker.template.TemplateProcessException;
-import com.github.mouse0w0.coffeemaker.template.impl.ASMUtils;
 import com.github.mouse0w0.coffeemaker.template.impl.Processor;
+import com.github.mouse0w0.coffeemaker.template.impl.Utils;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.Method;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -16,7 +16,7 @@ import org.objectweb.asm.tree.MethodInsnNode;
 
 import java.util.List;
 
-import static com.github.mouse0w0.coffeemaker.template.impl.ASMUtils.createInsnNode;
+import static com.github.mouse0w0.coffeemaker.template.impl.Utils.createInsnNode;
 
 public class ConstantsHandler implements InvokeMethodHandler {
 
@@ -27,16 +27,16 @@ public class ConstantsHandler implements InvokeMethodHandler {
     @Override
     public String[] getSupportedInvokeMethods() {
         return new String[]{
-                ASMUtils.getMethodId(Constants.class, "$int", String.class),
-                ASMUtils.getMethodId(Constants.class, "$long", String.class),
-                ASMUtils.getMethodId(Constants.class, "$float", String.class),
-                ASMUtils.getMethodId(Constants.class, "$double", String.class),
-                ASMUtils.getMethodId(Constants.class, "$string", String.class),
-                ASMUtils.getMethodId(Constants.class, "$class", String.class),
-                ASMUtils.getMethodId(Constants.class, "$bool", String.class),
-                ASMUtils.getMethodId(Constants.class, "$byte", String.class),
-                ASMUtils.getMethodId(Constants.class, "$short", String.class),
-                ASMUtils.getMethodId(Constants.class, "$char", String.class),
+                Utils.getMethodId(Constants.class, "$int", String.class),
+                Utils.getMethodId(Constants.class, "$long", String.class),
+                Utils.getMethodId(Constants.class, "$float", String.class),
+                Utils.getMethodId(Constants.class, "$double", String.class),
+                Utils.getMethodId(Constants.class, "$string", String.class),
+                Utils.getMethodId(Constants.class, "$class", String.class),
+                Utils.getMethodId(Constants.class, "$bool", String.class),
+                Utils.getMethodId(Constants.class, "$byte", String.class),
+                Utils.getMethodId(Constants.class, "$short", String.class),
+                Utils.getMethodId(Constants.class, "$char", String.class),
         };
     }
 
@@ -134,7 +134,9 @@ public class ConstantsHandler implements InvokeMethodHandler {
         }
 
         private void notNull(Object value) {
-            throw new TemplateProcessException(String.format("eval(%s) cannot be null", statement));
+            if (value == null) {
+                throw new TemplateProcessException(String.format("eval(%s) cannot be null", statement));
+            }
         }
     }
 }
