@@ -26,13 +26,15 @@ public class TemplateImpl implements Template {
 
     @Override
     public byte[] process(Evaluator evaluator) {
-        ClassNodeEx classNodeEx = new ClassNodeEx();
-        classNode.accept(classNodeEx);
+        ClassNodeEx cn = new ClassNodeEx();
+        classNode.accept(cn);
 
-        processors.forEach(processor -> processor.process(classNodeEx, evaluator));
+        for (Processor processor : processors) {
+            cn = processor.process(cn, evaluator);
+        }
 
         ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
-        classNodeEx.accept(classWriter);
+        cn.accept(classWriter);
         return classWriter.toByteArray();
     }
 

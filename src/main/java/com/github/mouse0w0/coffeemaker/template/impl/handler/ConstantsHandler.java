@@ -89,7 +89,7 @@ public class ConstantsHandler implements InvokeMethodHandler {
         }
 
         @Override
-        public void process(ClassNodeEx classNode, Evaluator evaluator) {
+        public ClassNodeEx process(ClassNodeEx classNode, Evaluator evaluator) {
             Object value = evaluator.eval(statement);
             MethodNodeEx methodNode = classNode.methods.get(targetMethod);
             InsnList instructions = methodNode.instructions;
@@ -100,34 +100,34 @@ public class ConstantsHandler implements InvokeMethodHandler {
                 case INT:
                     notNull(value);
                     instructions.set(insertPoint, createInsnNode(((Number) value).intValue()));
-                    return;
+                    return classNode;
                 case CHAR:
                     notNull(value);
                     instructions.set(insertPoint, createInsnNode((Character) value));
-                    return;
+                    return classNode;
                 case BOOL:
                     notNull(value);
                     instructions.set(insertPoint, createInsnNode((Boolean) value));
-                    return;
+                    return classNode;
                 case LONG:
                     notNull(value);
                     instructions.set(insertPoint, createInsnNode((Long) value));
-                    return;
+                    return classNode;
                 case FLOAT:
                     notNull(value);
                     instructions.set(insertPoint, createInsnNode((Float) value));
-                    return;
+                    return classNode;
                 case DOUBLE:
                     notNull(value);
                     instructions.set(insertPoint, createInsnNode((Double) value));
-                    return;
+                    return classNode;
                 case STRING:
                     instructions.set(insertPoint, createInsnNode((String) value));
-                    return;
+                    return classNode;
                 case CLASS:
                     Type type = value instanceof Class<?> ? Type.getType((Class<?>) value) : (Type) value;
                     instructions.set(insertPoint, createInsnNode(type));
-                    return;
+                    return classNode;
                 default:
                     throw new TemplateProcessException("Should not reach here");
             }

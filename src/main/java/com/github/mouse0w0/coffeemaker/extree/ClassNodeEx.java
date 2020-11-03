@@ -166,6 +166,10 @@ public class ClassNodeEx extends ClassVisitor {
         annotations.put(annotation.desc, annotation);
     }
 
+    public Collection<TypeAnnotationNodeEx> getTypeAnnotations() {
+        return typeAnnotations == null ? Collections.emptyList() : typeAnnotations.values();
+    }
+
     public TypeAnnotationNodeEx getTypeAnnotation(String descriptor) {
         return typeAnnotations == null ? null : typeAnnotations.get(descriptor);
     }
@@ -177,12 +181,20 @@ public class ClassNodeEx extends ClassVisitor {
         typeAnnotations.put(typeAnnotation.desc, typeAnnotation);
     }
 
+    public Collection<FieldNodeEx> getFields() {
+        return fields == null ? Collections.emptyList() : fields.values();
+    }
+
     public FieldNodeEx getField(String name) {
         return fields.get(name);
     }
 
     public void addField(FieldNodeEx field) {
         fields.put(field.name, field);
+    }
+
+    public Collection<MethodNodeEx> getMethods() {
+        return methods == null ? Collections.emptyList() : methods.values();
     }
 
     public MethodNodeEx getMethod(Method method) {

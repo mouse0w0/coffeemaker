@@ -13,18 +13,18 @@ import java.util.List;
 
 public class ModifyAnnotationHandler implements AnnotationHandler {
     private static final String MODIFY_ANNOTATION_DESC = Type.getDescriptor(ModifyAnnotation.class);
-    private static final String MODIFY_ANNOTATIONS_DESC = Type.getDescriptor(ModifyAnnotation.Annotations.class);
+    private static final String ANNOTATIONS_DESC = Type.getDescriptor(ModifyAnnotation.Annotations.class);
 
     @Override
     public String[] getSupportedAnnotationTypes() {
-        return new String[]{MODIFY_ANNOTATION_DESC, MODIFY_ANNOTATIONS_DESC};
+        return new String[]{MODIFY_ANNOTATION_DESC, ANNOTATIONS_DESC};
     }
 
     @Override
     public void handle(Object owner, AnnotationNodeEx annotation, List<Processor> processors) {
         if (annotation.desc.equals(MODIFY_ANNOTATION_DESC)) {
             processors.add(new ProcessorImpl(annotation));
-        } else if (annotation.desc.equals(MODIFY_ANNOTATIONS_DESC)) {
+        } else if (annotation.desc.equals(ANNOTATIONS_DESC)) {
             List<AnnotationNodeEx> values = annotation.getValue("value");
             for (AnnotationNodeEx value : values) {
                 processors.add(new ProcessorImpl(value));
@@ -44,7 +44,7 @@ public class ModifyAnnotationHandler implements AnnotationHandler {
         }
 
         @Override
-        public void process(ClassNodeEx classNode, Evaluator evaluator) {
+        public ClassNodeEx process(ClassNodeEx classNode, Evaluator evaluator) {
             AnnotationNodeEx annotation = classNode.getAnnotation(type);
             if (annotation == null) {
                 annotation = new AnnotationNodeEx(type, visible);
@@ -62,6 +62,7 @@ public class ModifyAnnotationHandler implements AnnotationHandler {
                     value.putValue(name, evaluator.eval(statement));
                 }
             }
+            return classNode;
         }
     }
 }
