@@ -3,7 +3,8 @@ package com.github.mouse0w0.coffeemaker.template.impl.handler;
 import com.github.mouse0w0.coffeemaker.Evaluator;
 import com.github.mouse0w0.coffeemaker.extree.ClassNodeEx;
 import com.github.mouse0w0.coffeemaker.extree.MethodNodeEx;
-import com.github.mouse0w0.coffeemaker.template.Constants;
+import com.github.mouse0w0.coffeemaker.template.Markers;
+import com.github.mouse0w0.coffeemaker.template.TemplateParseException;
 import com.github.mouse0w0.coffeemaker.template.TemplateProcessException;
 import com.github.mouse0w0.coffeemaker.template.impl.Processor;
 import com.github.mouse0w0.coffeemaker.template.impl.Utils;
@@ -27,24 +28,28 @@ public class ConstantsHandler implements InvokeMethodHandler {
     @Override
     public String[] getSupportedInvokeMethods() {
         return new String[]{
-                Utils.getMethodId(Constants.class, "$int", String.class),
-                Utils.getMethodId(Constants.class, "$long", String.class),
-                Utils.getMethodId(Constants.class, "$float", String.class),
-                Utils.getMethodId(Constants.class, "$double", String.class),
-                Utils.getMethodId(Constants.class, "$string", String.class),
-                Utils.getMethodId(Constants.class, "$class", String.class),
-                Utils.getMethodId(Constants.class, "$bool", String.class),
-                Utils.getMethodId(Constants.class, "$byte", String.class),
-                Utils.getMethodId(Constants.class, "$short", String.class),
-                Utils.getMethodId(Constants.class, "$char", String.class),
+                Utils.getMethodId(Markers.class, "$int", String.class),
+                Utils.getMethodId(Markers.class, "$long", String.class),
+                Utils.getMethodId(Markers.class, "$float", String.class),
+                Utils.getMethodId(Markers.class, "$double", String.class),
+                Utils.getMethodId(Markers.class, "$string", String.class),
+                Utils.getMethodId(Markers.class, "$class", String.class),
+                Utils.getMethodId(Markers.class, "$bool", String.class),
+                Utils.getMethodId(Markers.class, "$byte", String.class),
+                Utils.getMethodId(Markers.class, "$short", String.class),
+                Utils.getMethodId(Markers.class, "$char", String.class),
         };
     }
 
     @Override
-    public void handle(MethodNodeEx methodNode, MethodInsnNode insn, List<Processor> processors) {
-        Method targetMethod = new Method(methodNode.name, methodNode.desc);
-        int targetInsn = methodNode.instructions.indexOf(insn);
-        String statement = (String) ((LdcInsnNode) insn.getPrevious()).cst;
+    public void handle(MethodNodeEx method, MethodInsnNode insn, List<Processor> processors) {
+        Method targetMethod = new Method(method.name, method.desc);
+        int targetInsn = method.instructions.indexOf(insn);
+        AbstractInsnNode arg0 = insn.getPrevious();
+        if (!(arg0 instanceof LdcInsnNode)) {
+            throw new TemplateParseException(String.format("The parameter of %s method must be LDC", insn.name));
+        }
+        String statement = (String) ((LdcInsnNode) arg0).cst;
         switch (insn.name) {
             case "$byte":
             case "$short":
