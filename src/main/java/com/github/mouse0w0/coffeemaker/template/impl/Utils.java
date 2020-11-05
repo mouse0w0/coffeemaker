@@ -9,6 +9,9 @@ import java.lang.reflect.Method;
 
 public class Utils {
 
+    public static final Type CLASS_TYPE = Type.getObjectType("java/lang/Class");
+    public static final Type STRING_TYPE = Type.getObjectType("java/lang/String");
+
     public static String getMethodId(Class<?> clazz, String name, Class<?>... parameterTypes) {
         try {
             return getMethodId(clazz.getMethod(name, parameterTypes));
@@ -67,7 +70,7 @@ public class Utils {
         }
     }
 
-    public static AbstractInsnNode createInsnNode(final String value) {
+    public static AbstractInsnNode createInsnNode(String value) {
         if (value == null) {
             return new InsnNode(Opcodes.ACONST_NULL);
         } else {
