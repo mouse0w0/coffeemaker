@@ -20,15 +20,22 @@ public class SimpleEvaluator extends BaseEvaluator {
     }
 
     @Override
+
     public <T> T eval(String statement) {
+        T obj = eval0(statement);
+        return obj != null ? obj : super.eval(statement);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T> T eval0(String statement) {
         Object obj = dataModel;
         for (String s : SYNTAX.split(statement)) {
-            obj = get(obj, s);
+            obj = eval1(obj, s);
         }
         return (T) obj;
     }
 
-    private Object get(Object obj, String name) {
+    private Object eval1(Object obj, String name) {
         if (obj instanceof Map) {
             return ((Map) obj).get(name);
         }

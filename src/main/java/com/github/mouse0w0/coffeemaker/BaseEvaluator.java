@@ -1,7 +1,7 @@
 package com.github.mouse0w0.coffeemaker;
 
 public abstract class BaseEvaluator implements Evaluator {
-    private final Evaluator parent;
+    protected final Evaluator parent;
 
     public BaseEvaluator() {
         this(null);
