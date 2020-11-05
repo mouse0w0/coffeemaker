@@ -26,6 +26,7 @@ public class TemplateParserImpl implements TemplateParser {
 
     public TemplateParserImpl() {
         addAnnotationHandler(new ModifyClassNameHandler());
+        addAnnotationHandler(new ModifySourceHandler());
         addAnnotationHandler(new ModifyAnnotationHandler());
         addInvokeMethodHandler(new ConstantsHandler());
         addInvokeMethodHandler(new GetStaticFieldHandler());
