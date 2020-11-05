@@ -128,16 +128,9 @@ public class ClassNodeEx extends ClassVisitor implements AnnotationHolder {
      * @throws IllegalStateException If a subclass calls this constructor.
      */
     public ClassNodeEx() {
-        this(Opcodes.ASM8);
+        this(Opcodes.ASM9);
     }
 
-    /**
-     * Constructs a new {@link org.objectweb.asm.tree.ClassNode}.
-     *
-     * @param api the ASM API version implemented by this visitor. Must be one of {@link
-     *            Opcodes#ASM4}, {@link Opcodes#ASM5}, {@link Opcodes#ASM6}, {@link Opcodes#ASM7} or {@link
-     *            Opcodes#ASM8}.
-     */
     public ClassNodeEx(final int api) {
         super(api);
         this.interfaces = new ArrayList<>();
@@ -342,13 +335,13 @@ public class ClassNodeEx extends ClassVisitor implements AnnotationHolder {
      * in more recent versions of the ASM API than the given version.
      *
      * @param api an ASM API version. Must be one of {@link Opcodes#ASM4}, {@link Opcodes#ASM5},
-     *            {@link Opcodes#ASM6}, {@link Opcodes#ASM7}. or {@link Opcodes#ASM8}.
+     *            {@link Opcodes#ASM6}, {@link Opcodes#ASM7}. or {@link Opcodes#ASM9}.
      */
     public void check(final int api) {
         if (api < Opcodes.ASM9 && permittedSubclasses != null) {
             throw new UnsupportedClassVersionException();
         }
-        if (api < Opcodes.ASM8 && ((access & Opcodes.ACC_RECORD) != 0 || recordComponents != null)) {
+        if (api < Opcodes.ASM9 && ((access & Opcodes.ACC_RECORD) != 0 || recordComponents != null)) {
             throw new UnsupportedClassVersionException();
         }
         if (api < Opcodes.ASM7 && (nestHostClass != null || nestMembers != null)) {

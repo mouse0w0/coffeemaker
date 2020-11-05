@@ -95,7 +95,7 @@ public class MethodNodeEx extends MethodVisitor implements AnnotationHolder {
     private boolean visited;
 
     public MethodNodeEx() {
-        this(/* latest api = */ Opcodes.ASM8);
+        this(/* latest api = */ Opcodes.ASM9);
     }
 
     public MethodNodeEx(final int api) {
@@ -109,7 +109,7 @@ public class MethodNodeEx extends MethodVisitor implements AnnotationHolder {
             final String descriptor,
             final String signature,
             final String[] exceptions) {
-        this(/* latest api = */ Opcodes.ASM8, access, name, descriptor, signature, exceptions);
+        this(/* latest api = */ Opcodes.ASM9, access, name, descriptor, signature, exceptions);
     }
 
     public MethodNodeEx(
@@ -508,7 +508,7 @@ public class MethodNodeEx extends MethodVisitor implements AnnotationHolder {
      * in more recent versions of the ASM API than the given version.
      *
      * @param api an ASM API version. Must be one of {@link Opcodes#ASM4}, {@link Opcodes#ASM5},
-     *            {@link Opcodes#ASM6}, {@link Opcodes#ASM7} or {@link Opcodes#ASM8}.
+     *            {@link Opcodes#ASM6}, {@link Opcodes#ASM7} or {@link Opcodes#ASM9}.
      */
     public void check(final int api) {
         if (api == Opcodes.ASM4) {

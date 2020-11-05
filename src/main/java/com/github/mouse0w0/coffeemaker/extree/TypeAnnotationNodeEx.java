@@ -30,15 +30,13 @@ public class TypeAnnotationNodeEx extends AnnotationNodeEx {
      * @throws IllegalStateException If a subclass calls this constructor.
      */
     public TypeAnnotationNodeEx(final int typeRef, final TypePath typePath, final String descriptor, final boolean visible) {
-        this(/* latest api = */ Opcodes.ASM8, typeRef, typePath, descriptor, visible);
+        this(/* latest api = */ Opcodes.ASM9, typeRef, typePath, descriptor, visible);
     }
 
     /**
      * Constructs a new {@link AnnotationNodeEx}.
      *
-     * @param api        the ASM API version implemented by this visitor. Must be one of {@link
-     *                   Opcodes#ASM4}, {@link Opcodes#ASM5}, {@link Opcodes#ASM6}, {@link Opcodes#ASM7} or {@link
-     *                   Opcodes#ASM8}.
+     * @param api        the ASM API version implemented by this visitor.
      * @param typeRef    a reference to the annotated type. See {@link org.objectweb.asm.TypeReference}.
      * @param typePath   the path to the annotated type argument, wildcard bound, array element type, or
      *                   static inner type within 'typeRef'. May be {@literal null} if the annotation targets

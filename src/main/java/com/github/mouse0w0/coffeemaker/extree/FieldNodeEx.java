@@ -65,15 +65,13 @@ public class FieldNodeEx extends FieldVisitor implements AnnotationHolder {
             final String descriptor,
             final String signature,
             final Object value) {
-        this(/* latest api = */ Opcodes.ASM8, access, name, descriptor, signature, value);
+        this(/* latest api = */ Opcodes.ASM9, access, name, descriptor, signature, value);
     }
 
     /**
      * Constructs a new {@link FieldNode}.
      *
-     * @param api        the ASM API version implemented by this visitor. Must be one of {@link
-     *                   Opcodes#ASM4}, {@link Opcodes#ASM5}, {@link Opcodes#ASM6}, {@link Opcodes#ASM7} or {@link
-     *                   Opcodes#ASM8}.
+     * @param api        the ASM API version implemented by this visitor.
      * @param access     the field's access flags (see {@link Opcodes}). This parameter
      *                   also indicates if the field is synthetic and/or deprecated.
      * @param name       the field's name.

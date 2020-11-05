@@ -18,7 +18,7 @@ public class AnnotationNodeEx extends AnnotationVisitor {
     List<Object> array;
 
     public AnnotationNodeEx(final String descriptor, final boolean visible) {
-        this(/* latest api = */ Opcodes.ASM8, descriptor, visible);
+        this(/* latest api = */ Opcodes.ASM9, descriptor, visible);
     }
 
     public AnnotationNodeEx(final int api, final String descriptor, final boolean visible) {
@@ -28,7 +28,7 @@ public class AnnotationNodeEx extends AnnotationVisitor {
     }
 
     AnnotationNodeEx(final List<Object> array) {
-        super(/* latest api = */ Opcodes.ASM8);
+        super(/* latest api = */ Opcodes.ASM9);
         this.array = array;
     }
 
@@ -131,7 +131,7 @@ public class AnnotationNodeEx extends AnnotationVisitor {
      * introduced in more recent versions of the ASM API than the given version.
      *
      * @param api an ASM API version. Must be one of {@link Opcodes#ASM4}, {@link Opcodes#ASM5},
-     *            {@link Opcodes#ASM6}, {@link Opcodes#ASM7} or {@link Opcodes#ASM8}.
+     *            {@link Opcodes#ASM6}, {@link Opcodes#ASM7} or {@link Opcodes#ASM9}.
      */
     public void check(final int api) {
         // nothing to do
