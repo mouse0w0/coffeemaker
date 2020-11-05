@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.ow2.asm:asm-commons:8.0.1'
+    compile 'org.ow2.asm:asm-commons:9.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.1'
