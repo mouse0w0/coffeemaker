@@ -1,6 +1,6 @@
 package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 
-import com.github.mouse0w0.coffeemaker.Evaluator;
+import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.insn.BtLabel;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.TryCatchBlockNode;

@@ -1,6 +1,7 @@
 package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 
-import com.github.mouse0w0.coffeemaker.Evaluator;
+import com.github.mouse0w0.coffeemaker.evaluator.EmptyEvaluator;
+import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 import org.objectweb.asm.Attribute;
 
 /**
@@ -16,6 +17,22 @@ public abstract class BtNode {
 
     void setParent(BtParent parent) {
         this.parent = parent;
+    }
+
+    public Object get() {
+        return compute(EmptyEvaluator.INSTANCE);
+    }
+
+    public int getAsInt() {
+        return computeInt(EmptyEvaluator.INSTANCE);
+    }
+
+    public String getAsString() {
+        return computeString(EmptyEvaluator.INSTANCE);
+    }
+
+    public boolean getAsBoolean() {
+        return computeBoolean(EmptyEvaluator.INSTANCE);
     }
 
     public Object compute(Evaluator evaluator) {

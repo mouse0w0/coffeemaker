@@ -27,7 +27,7 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 package com.github.mouse0w0.coffeemaker.template.impl2.tree.insn;
 
-import com.github.mouse0w0.coffeemaker.Evaluator;
+import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 

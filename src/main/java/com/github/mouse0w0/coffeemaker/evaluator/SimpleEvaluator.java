@@ -1,4 +1,4 @@
-package com.github.mouse0w0.coffeemaker;
+package com.github.mouse0w0.coffeemaker.evaluator;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

@@ -1,7 +1,6 @@
 package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 
-import com.github.mouse0w0.coffeemaker.EmptyEvaluator;
-import com.github.mouse0w0.coffeemaker.Evaluator;
+import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 import org.objectweb.asm.ClassVisitor;
 
 public class BtClass extends BtObject {
@@ -45,7 +44,7 @@ public class BtClass extends BtObject {
         if (annotations == null) return null;
         for (BtNode node : annotations) {
             BtAnnotation annotation = (BtAnnotation) node;
-            if (descriptor.equals(annotation.computeString(BtAnnotation.DESCRIPTOR, EmptyEvaluator.INSTANCE)))
+            if (descriptor.equals(annotation.get(BtAnnotation.DESCRIPTOR).getAsString()))
                 return annotation;
         }
         return null;

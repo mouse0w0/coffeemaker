@@ -1,6 +1,6 @@
 package com.github.mouse0w0.coffeemaker.template.impl.handler;
 
-import com.github.mouse0w0.coffeemaker.Evaluator;
+import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 import com.github.mouse0w0.coffeemaker.template.ModifySource;
 import com.github.mouse0w0.coffeemaker.template.impl.Processor;
 import com.github.mouse0w0.coffeemaker.template.impl.extree.AnnotationHolder;

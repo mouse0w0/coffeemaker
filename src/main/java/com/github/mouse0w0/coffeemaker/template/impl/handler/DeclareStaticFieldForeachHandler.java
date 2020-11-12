@@ -1,7 +1,7 @@
 package com.github.mouse0w0.coffeemaker.template.impl.handler;
 
-import com.github.mouse0w0.coffeemaker.Evaluator;
-import com.github.mouse0w0.coffeemaker.PrefixEvaluator;
+import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
+import com.github.mouse0w0.coffeemaker.evaluator.PrefixEvaluator;
 import com.github.mouse0w0.coffeemaker.template.DeclareStaticFieldForeach;
 import com.github.mouse0w0.coffeemaker.template.impl.Processor;
 import com.github.mouse0w0.coffeemaker.template.impl.extree.AnnotationHolder;
