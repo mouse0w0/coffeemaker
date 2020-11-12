@@ -195,6 +195,10 @@ public class ClassNodeEx extends ClassVisitor implements AnnotationHolder {
         fields.put(field.name, field);
     }
 
+    public void removeField(FieldNodeEx field) {
+        fields.remove(field.name);
+    }
+
     public Collection<MethodNodeEx> getMethods() {
         return methods == null ? Collections.emptyList() : methods.values();
     }
@@ -205,6 +209,10 @@ public class ClassNodeEx extends ClassVisitor implements AnnotationHolder {
 
     public void addMethod(MethodNodeEx method) {
         methods.put(method.toMethod(), method);
+    }
+
+    public void removeMethod(MethodNodeEx method) {
+        methods.remove(method.toMethod());
     }
 
     // -----------------------------------------------------------------------------------------------
@@ -304,6 +312,7 @@ public class ClassNodeEx extends ClassVisitor implements AnnotationHolder {
             final String signature,
             final Object value) {
         FieldNodeEx field = new FieldNodeEx(access, name, descriptor, signature, value);
+        field.setOwner(this);
         fields.put(name, field);
         return field;
     }
@@ -316,6 +325,7 @@ public class ClassNodeEx extends ClassVisitor implements AnnotationHolder {
             final String signature,
             final String[] exceptions) {
         MethodNodeEx method = new MethodNodeEx(access, name, descriptor, signature, exceptions);
+        method.setOwner(this);
         methods.put(new Method(name, descriptor), method);
         return method;
     }

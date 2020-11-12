@@ -45,6 +45,8 @@ public class FieldNodeEx extends FieldVisitor implements AnnotationHolder {
      */
     public List<Attribute> attrs;
 
+    private ClassNodeEx owner;
+
     /**
      * Constructs a new {@link FieldNode}. <i>Subclasses must not use this constructor</i>. Instead,
      * they must use the {@link #FieldNodeEx(int, int, String, String, String, Object)} version.
@@ -94,6 +96,14 @@ public class FieldNodeEx extends FieldVisitor implements AnnotationHolder {
         this.desc = descriptor;
         this.signature = signature;
         this.value = value;
+    }
+
+    public ClassNodeEx getOwner() {
+        return owner;
+    }
+
+    void setOwner(ClassNodeEx owner) {
+        this.owner = owner;
     }
 
     @Override

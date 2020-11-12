@@ -94,6 +94,8 @@ public class MethodNodeEx extends MethodVisitor implements AnnotationHolder {
      */
     private boolean visited;
 
+    private ClassNodeEx owner;
+
     public MethodNodeEx() {
         this(/* latest api = */ Opcodes.ASM9);
     }
@@ -134,6 +136,14 @@ public class MethodNodeEx extends MethodVisitor implements AnnotationHolder {
 
     public Method toMethod() {
         return new Method(name, desc);
+    }
+
+    public ClassNodeEx getOwner() {
+        return owner;
+    }
+
+    void setOwner(ClassNodeEx owner) {
+        this.owner = owner;
     }
 
     @Override
