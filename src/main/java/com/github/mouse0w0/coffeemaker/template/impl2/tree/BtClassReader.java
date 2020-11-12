@@ -1,13 +1,12 @@
-package com.github.mouse0w0.coffeemaker.template.impl2.tree.factory;
+package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 
-import com.github.mouse0w0.coffeemaker.template.impl2.tree.*;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.util.SmartList;
 import org.objectweb.asm.*;
 
-public class BtClassVisitor extends ClassVisitor {
+public class BtClassReader extends ClassVisitor {
     private BtClass clazz;
 
-    public BtClassVisitor() {
+    public BtClassReader() {
         super(Opcodes.ASM5);
     }
 
@@ -17,6 +16,7 @@ public class BtClassVisitor extends ClassVisitor {
 
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+        clazz = new BtClass();
         clazz.putValue(BtClass.VERSION, version);
         clazz.putValue(BtClass.ACCESS, access);
         clazz.putValue(BtClass.NAME, name);
@@ -51,7 +51,7 @@ public class BtClassVisitor extends ClassVisitor {
         BtAnnotation annotation = new BtAnnotation(descriptor, visible);
         clazz.computeIfNull(BtClass.ANNOTATIONS, k -> new BtList())
                 .add(annotation);
-        return new BtAnnotationVisitor(api, annotation);
+        return new BtAnnotationReader(api, annotation);
     }
 
     @Override
@@ -86,12 +86,15 @@ public class BtClassVisitor extends ClassVisitor {
         BtField field = new BtField(access, name, descriptor, signature, value);
         clazz.computeIfNull(BtClass.FIELDS, k -> new BtList())
                 .add(field);
-        return new BtFieldVisitor(api, field);
+        return new BtFieldReader(api, field);
     }
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
-        return super.visitMethod(access, name, descriptor, signature, exceptions);
+        BtMethod method = new BtMethod(access, name, descriptor, signature, exceptions);
+        clazz.computeIfNull(BtClass.METHODS, k -> new BtList())
+                .add(method);
+        return new BtMethodReader(api, method);
     }
 
     @Override

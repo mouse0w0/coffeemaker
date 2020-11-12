@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class BtList extends BtParent {
+public class BtList extends BtParent<BtNode> {
     private final List<BtNode> children = new SmartList<>();
     private List<BtNode> unmodifiableChildren;
 

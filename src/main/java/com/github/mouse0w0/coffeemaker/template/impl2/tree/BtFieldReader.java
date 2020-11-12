@@ -1,17 +1,14 @@
-package com.github.mouse0w0.coffeemaker.template.impl2.tree.factory;
+package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 
-import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtAnnotation;
-import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtField;
-import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtList;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.TypePath;
 
-class BtFieldVisitor extends FieldVisitor {
+class BtFieldReader extends FieldVisitor {
     private final BtField field;
 
-    public BtFieldVisitor(int api, BtField field) {
+    public BtFieldReader(int api, BtField field) {
         super(api);
         this.field = field;
     }
@@ -21,7 +18,7 @@ class BtFieldVisitor extends FieldVisitor {
         BtAnnotation annotation = new BtAnnotation(descriptor, visible);
         field.computeIfNull(BtField.ANNOTATIONS, k -> new BtList())
                 .add(annotation);
-        return new BtAnnotationVisitor(api, annotation);
+        return new BtAnnotationReader(api, annotation);
     }
 
     @Override

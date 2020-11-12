@@ -11,13 +11,19 @@ public class SmartList<E> extends AbstractList<E> implements RandomAccess {
     public SmartList() {
     }
 
+    public SmartList(E element) {
+        add(element);
+    }
+
+    @SafeVarargs
     public SmartList(E... elements) {
         int length = elements.length;
         if (length == 1) {
-            e = elements[0];
+            add(elements[0]);
         } else if (length > 1) {
             ensureCapacity(length);
             System.arraycopy(elements, 0, e, 0, length);
+            size = length;
         }
     }
 

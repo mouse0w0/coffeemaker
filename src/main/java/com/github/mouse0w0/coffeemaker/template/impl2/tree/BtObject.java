@@ -1,5 +1,7 @@
 package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 
+import com.github.mouse0w0.coffeemaker.Evaluator;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +9,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public class BtObject extends BtParent {
+public class BtObject extends BtParent<BtNode> {
     private final Map<String, BtNode> children = new HashMap<>();
 
     @SuppressWarnings("unchecked")
@@ -85,5 +87,25 @@ public class BtObject extends BtParent {
     @Override
     public int size() {
         return children.size();
+    }
+
+    public Object compute(String key, Evaluator evaluator) {
+        return get(key).compute(evaluator);
+    }
+
+    public int computeInt(String key, Evaluator evaluator) {
+        return get(key).computeInt(evaluator);
+    }
+
+    public String computeString(String key, Evaluator evaluator) {
+        return get(key).computeString(evaluator);
+    }
+
+    public boolean computeBoolean(String key, Evaluator evaluator) {
+        return get(key).computeBoolean(evaluator);
+    }
+
+    public String[] computeStringArray(String key, Evaluator evaluator) {
+        return get(key).computeStringArray(evaluator);
     }
 }

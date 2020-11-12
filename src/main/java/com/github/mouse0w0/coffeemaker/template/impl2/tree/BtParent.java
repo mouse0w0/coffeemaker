@@ -3,16 +3,16 @@ package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 import java.util.Collection;
 import java.util.Iterator;
 
-public abstract class BtParent extends BtNode implements Iterable<BtNode> {
+public abstract class BtParent<T extends BtNode> extends BtNode implements Iterable<T> {
 
-    public abstract Collection<BtNode> getChildren();
+    public abstract Collection<T> getChildren();
 
     public abstract boolean isEmpty();
 
     public abstract int size();
 
     @Override
-    public Iterator<BtNode> iterator() {
+    public Iterator<T> iterator() {
         return getChildren().iterator();
     }
 }
