@@ -1,5 +1,8 @@
 package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 
+import com.github.mouse0w0.coffeemaker.Evaluator;
+import org.objectweb.asm.ClassVisitor;
+
 public class BtInnerClass extends BtObject {
 
     public static final String NAME = "name";
@@ -15,5 +18,8 @@ public class BtInnerClass extends BtObject {
     }
 
     public BtInnerClass() {
+    }
+
+    public void accept(ClassVisitor classVisitor, Evaluator evaluator) {
     }
 }
