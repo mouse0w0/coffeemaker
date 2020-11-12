@@ -3,28 +3,27 @@ package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 import com.github.mouse0w0.coffeemaker.template.Enum;
 import org.objectweb.asm.AnnotationVisitor;
 
-class BtAnnotationReader extends AnnotationVisitor {
+class BtAnnotationVisitor extends AnnotationVisitor {
     private BtAnnotation annotation;
     private BtList list;
 
-    public BtAnnotationReader(int api) {
+    public BtAnnotationVisitor(int api) {
         super(api);
     }
 
-    public BtAnnotationReader(int api, BtAnnotation annotation) {
+    public BtAnnotationVisitor(int api, BtAnnotation annotation) {
         super(api);
         this.annotation = annotation;
     }
 
-    public BtAnnotationReader(int api, BtList list) {
+    public BtAnnotationVisitor(int api, BtList list) {
         super(api);
         this.list = list;
     }
 
     public void putValue(String name, Object value) {
         if (annotation != null) {
-            annotation.computeIfNull(BtAnnotation.VALUES, k -> new BtObject())
-                    .putValue(name, value);
+            annotation.putAnnotationValue(name, value);
         } else {
             list.addValue(value);
         }
@@ -44,14 +43,14 @@ class BtAnnotationReader extends AnnotationVisitor {
     public AnnotationVisitor visitAnnotation(String name, String descriptor) {
         BtAnnotation annotation = new BtAnnotation(descriptor, false);
         putValue(name, annotation);
-        return new BtAnnotationReader(api, annotation);
+        return new BtAnnotationVisitor(api, annotation);
     }
 
     @Override
     public AnnotationVisitor visitArray(String name) {
         BtList list = new BtList();
         putValue(name, list);
-        return new BtAnnotationReader(api, list);
+        return new BtAnnotationVisitor(api, list);
     }
 
     @Override

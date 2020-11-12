@@ -3,11 +3,11 @@ package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.insn.*;
 import org.objectweb.asm.*;
 
-class BtMethodReader extends MethodVisitor {
+class BtMethodVisitor extends MethodVisitor {
     private final BtMethod method;
     private final BtInsnList instructions;
 
-    public BtMethodReader(int api, BtMethod method) {
+    public BtMethodVisitor(int api, BtMethod method) {
         super(api);
         this.method = method;
         this.instructions = new BtInsnList();
@@ -23,7 +23,7 @@ class BtMethodReader extends MethodVisitor {
 
     @Override
     public AnnotationVisitor visitAnnotationDefault() {
-        return new BtAnnotationReader(api) {
+        return new BtAnnotationVisitor(api) {
             @Override
             public void putValue(String name, Object value) {
                 method.putValue(BtMethod.ANNOTATION_DEFAULT, value);
@@ -36,7 +36,7 @@ class BtMethodReader extends MethodVisitor {
         BtAnnotation annotation = new BtAnnotation(descriptor, visible);
         method.computeIfNull(BtMethod.ANNOTATIONS, k -> new BtList())
                 .add(annotation);
-        return new BtAnnotationReader(api, annotation);
+        return new BtAnnotationVisitor(api, annotation);
     }
 
     @Override

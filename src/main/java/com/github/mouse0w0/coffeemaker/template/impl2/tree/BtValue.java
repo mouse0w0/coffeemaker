@@ -36,6 +36,7 @@ public class BtValue extends BtNode {
 
     @Override
     public String computeString(Evaluator evaluator) {
+        if (value == null) return null;
         if (value instanceof String) {
             return (String) value;
         }
@@ -49,6 +50,8 @@ public class BtValue extends BtNode {
             return ((Collection<String>) value).toArray(new String[0]);
         } else if (value instanceof String[]) {
             return (String[]) value;
+        } else if (value == null) {
+            return null;
         }
         throw new TemplateProcessException("The type of value is not String[]");
     }

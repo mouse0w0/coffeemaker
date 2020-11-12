@@ -3,10 +3,10 @@ package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.util.SmartList;
 import org.objectweb.asm.*;
 
-public class BtClassReader extends ClassVisitor {
+public class BtClassVisitor extends ClassVisitor {
     private BtClass clazz;
 
-    public BtClassReader() {
+    public BtClassVisitor() {
         super(Opcodes.ASM5);
     }
 
@@ -51,7 +51,7 @@ public class BtClassReader extends ClassVisitor {
         BtAnnotation annotation = new BtAnnotation(descriptor, visible);
         clazz.computeIfNull(BtClass.ANNOTATIONS, k -> new BtList())
                 .add(annotation);
-        return new BtAnnotationReader(api, annotation);
+        return new BtAnnotationVisitor(api, annotation);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class BtClassReader extends ClassVisitor {
         BtField field = new BtField(access, name, descriptor, signature, value);
         clazz.computeIfNull(BtClass.FIELDS, k -> new BtList())
                 .add(field);
-        return new BtFieldReader(api, field);
+        return new BtFieldVisitor(api, field);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class BtClassReader extends ClassVisitor {
         BtMethod method = new BtMethod(access, name, descriptor, signature, exceptions);
         clazz.computeIfNull(BtClass.METHODS, k -> new BtList())
                 .add(method);
-        return new BtMethodReader(api, method);
+        return new BtMethodVisitor(api, method);
     }
 
     @Override
