@@ -1,6 +1,5 @@
 package com.github.mouse0w0.coffeemaker.template.impl2;
 
-import com.github.mouse0w0.coffeemaker.EmptyEvaluator;
 import com.github.mouse0w0.coffeemaker.template.*;
 import com.github.mouse0w0.coffeemaker.template.impl2.handler.Handler;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtClass;
@@ -28,7 +27,7 @@ public class TemplateParserImpl implements TemplateParser {
         cr.accept(cv, 0);
         BtClass btClass = cv.getBtClass();
 
-        String name = btClass.get(BtClass.NAME).computeString(EmptyEvaluator.INSTANCE);
+        String name = btClass.get(BtClass.NAME).getAsString();
 
         if (btClass.findAnnotation(TEMPLATE_ANNOTATION) == null) {
             throw new InvalidTemplateException(name.replace('/', '.'));

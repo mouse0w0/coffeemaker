@@ -1,4 +1,4 @@
-package com.github.mouse0w0.coffeemaker;
+package com.github.mouse0w0.coffeemaker.evaluator;
 
 public class EmptyEvaluator implements Evaluator {
     public static final EmptyEvaluator INSTANCE = new EmptyEvaluator();

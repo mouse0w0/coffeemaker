@@ -1,6 +1,6 @@
 package com.github.mouse0w0.coffeemaker.template.impl.handler;
 
-import com.github.mouse0w0.coffeemaker.Evaluator;
+import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 import com.github.mouse0w0.coffeemaker.template.Markers;
 import com.github.mouse0w0.coffeemaker.template.TemplateParseException;
 import com.github.mouse0w0.coffeemaker.template.TemplateProcessException;
