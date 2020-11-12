@@ -3,7 +3,7 @@ package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 import org.objectweb.asm.ClassVisitor;
 
-public class BtClass extends BtObject {
+public class BtClass extends BtObject implements AnnotationHolder {
 
     public static final String VERSION = "version";
     public static final String ACCESS = "access";
@@ -39,15 +39,9 @@ public class BtClass extends BtObject {
     public BtClass() {
     }
 
-    public BtAnnotation findAnnotation(String descriptor) {
-        BtList annotations = get(ANNOTATIONS);
-        if (annotations == null) return null;
-        for (BtNode node : annotations) {
-            BtAnnotation annotation = (BtAnnotation) node;
-            if (descriptor.equals(annotation.get(BtAnnotation.DESCRIPTOR).getAsString()))
-                return annotation;
-        }
-        return null;
+    @Override
+    public BtList<BtAnnotation> getAnnotations() {
+        return computeIfNull(ANNOTATIONS, k -> new BtList<>());
     }
 
     public void accept(ClassVisitor classVisitor, Evaluator evaluator) {
@@ -76,10 +70,10 @@ public class BtClass extends BtObject {
 //            classVisitor.visitOuterClass(outerClass, outerMethod, outerMethodDesc);
 //        }
         // Visit the annotations.
-        BtList annotations = get(ANNOTATIONS);
+        BtList<BtAnnotation> annotations = getAnnotations();
         if (annotations != null) {
-            for (BtNode node : annotations) {
-                ((BtAnnotation) node).accept(classVisitor, evaluator);
+            for (BtAnnotation annotation : annotations) {
+                annotation.accept(classVisitor, evaluator);
             }
         }
 //        if (typeAnnotations != null) {
@@ -90,7 +84,7 @@ public class BtClass extends BtObject {
 //            }
 //        }
         // Visit the non standard attributes.
-        BtList attributes = get(ATTRIBUTES);
+        BtList<BtNode> attributes = get(ATTRIBUTES);
         if (attributes != null) {
             for (BtNode node : attributes) {
                 classVisitor.visitAttribute(node.computeAttribute(evaluator));
@@ -109,9 +103,9 @@ public class BtClass extends BtObject {
 //            }
 //        }
         // Visit the inner classes.
-        BtList innerClasses = get(INNER_CLASSES);
-        for (BtNode node : innerClasses) {
-            ((BtInnerClass) node).accept(classVisitor, evaluator);
+        BtList<BtInnerClass> innerClasses = get(INNER_CLASSES);
+        for (BtInnerClass innerClass : innerClasses) {
+            innerClass.accept(classVisitor, evaluator);
         }
 //        // Visit the record components.
 //        if (recordComponents != null) {
@@ -120,15 +114,15 @@ public class BtClass extends BtObject {
 //            }
 //        }
         // Visit the fields.
-        BtList fields = get(FIELDS);
-        for (BtNode node : fields) {
-            ((BtField) node).accept(classVisitor, evaluator);
+        BtList<BtField> fields = get(FIELDS);
+        for (BtField field : fields) {
+            field.accept(classVisitor, evaluator);
         }
 
         // Visit the methods.
-        BtList methods = get(METHODS);
-        for (BtNode node : methods) {
-            ((BtMethod) node).accept(classVisitor, evaluator);
+        BtList<BtMethod> methods = get(METHODS);
+        for (BtMethod method : methods) {
+            method.accept(classVisitor, evaluator);
         }
 
         classVisitor.visitEnd();

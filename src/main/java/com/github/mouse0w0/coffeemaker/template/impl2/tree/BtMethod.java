@@ -7,7 +7,7 @@ import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 
-public class BtMethod extends BtObject {
+public class BtMethod extends BtObject implements AnnotationHolder {
 
     public static final String ACCESS = "access";
     public static final String NAME = "name";
@@ -18,6 +18,7 @@ public class BtMethod extends BtObject {
     public static final String PARAMETERS = "parameters";
 
     public static final String ANNOTATIONS = "annotations";
+
     public static final String TYPE_ANNOTATIONS = "typeAnnotations";
 
     public static final String ATTRIBUTES = "attributes";
@@ -46,6 +47,12 @@ public class BtMethod extends BtObject {
     public BtMethod() {
     }
 
+    @Override
+    public BtList<BtAnnotation> getAnnotations() {
+        return computeIfNull(ANNOTATIONS, k -> new BtList<>());
+    }
+
+    @SuppressWarnings("unchecked")
     public void accept(ClassVisitor classVisitor, Evaluator evaluator) {
         MethodVisitor methodVisitor =
                 classVisitor.visitMethod(
@@ -60,10 +67,9 @@ public class BtMethod extends BtObject {
         }
 
         // Visit the parameters.
-        BtList parameters = get(PARAMETERS);
+        BtList<BtParameter> parameters = get(PARAMETERS);
         if (parameters != null) {
-            for (BtNode node : parameters) {
-                BtParameter parameter = (BtParameter) node;
+            for (BtParameter parameter : parameters) {
                 methodVisitor.visitParameter(parameter.computeString(BtParameter.NAME, evaluator),
                         parameter.computeInt(BtParameter.ACCESS, evaluator));
             }
@@ -78,7 +84,7 @@ public class BtMethod extends BtObject {
             }
         }
         if (containsKey(ANNOTATIONS)) {
-            BtList annotations = get(ANNOTATIONS);
+            BtList<BtAnnotation> annotations = getAnnotations();
             for (BtNode node : annotations) {
                 ((BtAnnotation) node).accept(methodVisitor, evaluator);
             }
@@ -96,8 +102,8 @@ public class BtMethod extends BtObject {
         int invisibleAnnotableParameterCount = 0;
         if (parameters != null) {
             for (int i = 0; i < parameters.size(); i++) {
-                BtParameter parameter = (BtParameter) parameters.get(i);
-                BtList annotations = (BtList) parameter.compute(BtParameter.ANNOTATIONS, evaluator);
+                BtParameter parameter = parameters.get(i);
+                BtList<BtAnnotation> annotations = (BtList<BtAnnotation>) parameter.compute(BtParameter.ANNOTATIONS, evaluator);
                 if (annotations == null) continue;
 
                 for (BtNode annotation : annotations) {
@@ -113,14 +119,14 @@ public class BtMethod extends BtObject {
         if (visibleAnnotableParameterCount > 0) {
             methodVisitor.visitAnnotableParameterCount(visibleAnnotableParameterCount, true);
             for (int i = 0; i < visibleAnnotableParameterCount; i++) {
-                BtParameter parameter = (BtParameter) parameters.get(i);
+                BtParameter parameter = parameters.get(i);
                 parameter.acceptParameterAnnotation(methodVisitor, i, true);
             }
         }
         if (invisibleAnnotableParameterCount > 0) {
             methodVisitor.visitAnnotableParameterCount(invisibleAnnotableParameterCount, false);
             for (int i = 0; i < visibleAnnotableParameterCount; i++) {
-                BtParameter parameter = (BtParameter) parameters.get(i);
+                BtParameter parameter = parameters.get(i);
                 parameter.acceptParameterAnnotation(methodVisitor, i, false);
             }
         }
@@ -130,7 +136,7 @@ public class BtMethod extends BtObject {
             instructions.resetLabels();
         }
         if (containsKey(ATTRIBUTES)) {
-            BtList attributes = get(ATTRIBUTES);
+            BtList<BtNode> attributes = get(ATTRIBUTES);
             for (BtNode node : attributes) {
                 classVisitor.visitAttribute(node.computeAttribute(evaluator));
             }

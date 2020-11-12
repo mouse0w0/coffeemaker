@@ -4,7 +4,7 @@ import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 
-public class BtField extends BtObject {
+public class BtField extends BtObject implements AnnotationHolder {
     public static final String ACCESS = "access";
     public static final String NAME = "name";
     public static final String DESCRIPTOR = "descriptor";
@@ -28,6 +28,11 @@ public class BtField extends BtObject {
     public BtField() {
     }
 
+    @Override
+    public BtList<BtAnnotation> getAnnotations() {
+        return computeIfNull(ANNOTATIONS, k -> new BtList<>());
+    }
+
     public void accept(ClassVisitor classVisitor, Evaluator evaluator) {
         FieldVisitor fieldVisitor = classVisitor.visitField(
                 computeInt(ACCESS, evaluator),
@@ -39,10 +44,10 @@ public class BtField extends BtObject {
             return;
         }
         // Visit the annotations.
-        if (containsKey(ANNOTATIONS)) {
-            BtList annotations = get(ANNOTATIONS);
-            for (BtNode node : annotations) {
-                ((BtAnnotation) node).accept(fieldVisitor, evaluator);
+        BtList<BtAnnotation> annotations = getAnnotations();
+        if (annotations != null) {
+            for (BtAnnotation node : annotations) {
+                node.accept(fieldVisitor, evaluator);
             }
         }
 //        if (typeAnnotations != null) {
@@ -54,7 +59,7 @@ public class BtField extends BtObject {
 //        }
         // Visit the non standard attributes.
         if (containsKey(ATTRIBUTES)) {
-            BtList attributes = get(ATTRIBUTES);
+            BtList<BtNode> attributes = get(ATTRIBUTES);
             for (BtNode node : attributes) {
                 classVisitor.visitAttribute(node.computeAttribute(evaluator));
             }
