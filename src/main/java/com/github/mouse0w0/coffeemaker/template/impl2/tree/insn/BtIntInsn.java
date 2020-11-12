@@ -28,6 +28,7 @@
 package com.github.mouse0w0.coffeemaker.template.impl2.tree.insn;
 
 import com.github.mouse0w0.coffeemaker.Evaluator;
+import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtNode;
 import org.objectweb.asm.MethodVisitor;
 
 import java.util.Map;
@@ -43,7 +44,7 @@ public class BtIntInsn extends BtInsnBase {
     /**
      * The operand of this instruction.
      */
-    public int operand;
+    public static final String OPERAND = "operand";
 
     /**
      * Constructs a new {@link BtIntInsn}.
@@ -54,7 +55,12 @@ public class BtIntInsn extends BtInsnBase {
      */
     public BtIntInsn(final int opcode, final int operand) {
         super(opcode);
-        this.operand = operand;
+        putValue(OPERAND, operand);
+    }
+
+    private BtIntInsn(final int opcode, final BtNode operand) {
+        super(opcode);
+        put(OPERAND, operand);
     }
 
     /**
@@ -73,12 +79,12 @@ public class BtIntInsn extends BtInsnBase {
 
     @Override
     public void accept(final MethodVisitor methodVisitor, final Evaluator evaluator) {
-        methodVisitor.visitIntInsn(opcode, operand);
+        methodVisitor.visitIntInsn(opcode, computeInt(OPERAND, evaluator));
         acceptAnnotations(methodVisitor);
     }
 
     @Override
     public BtInsnBase clone(final Map<BtLabel, BtLabel> clonedLabels) {
-        return new BtIntInsn(opcode, operand).cloneAnnotations(this);
+        return new BtIntInsn(opcode, get(OPERAND)).cloneAnnotations(this);
     }
 }
