@@ -44,6 +44,14 @@ public class BtClass extends BtObject implements AnnotationHolder {
         return computeIfNull(ANNOTATIONS, k -> new BtList<>());
     }
 
+    public BtList<BtField> getFields() {
+        return computeIfNull(FIELDS, k -> new BtList<>());
+    }
+
+    public BtList<BtMethod> getMethods() {
+        return computeIfNull(METHODS, k -> new BtList<>());
+    }
+
     public void accept(ClassVisitor classVisitor, Evaluator evaluator) {
         // Visit the header.
         classVisitor.visit(
@@ -114,13 +122,13 @@ public class BtClass extends BtObject implements AnnotationHolder {
 //            }
 //        }
         // Visit the fields.
-        BtList<BtField> fields = get(FIELDS);
+        BtList<BtField> fields = getFields();
         for (BtField field : fields) {
             field.accept(classVisitor, evaluator);
         }
 
         // Visit the methods.
-        BtList<BtMethod> methods = get(METHODS);
+        BtList<BtMethod> methods = getMethods();
         for (BtMethod method : methods) {
             method.accept(classVisitor, evaluator);
         }
