@@ -1,5 +1,6 @@
 package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 
+import com.github.mouse0w0.coffeemaker.EmptyEvaluator;
 import com.github.mouse0w0.coffeemaker.Evaluator;
 import org.objectweb.asm.ClassVisitor;
 
@@ -39,6 +40,17 @@ public class BtClass extends BtObject {
     public BtClass() {
     }
 
+    public BtAnnotation findAnnotation(String descriptor) {
+        BtList annotations = get(ANNOTATIONS);
+        if (annotations == null) return null;
+        for (BtNode node : annotations) {
+            BtAnnotation annotation = (BtAnnotation) node;
+            if (descriptor.equals(annotation.computeString(BtAnnotation.DESCRIPTOR, EmptyEvaluator.INSTANCE)))
+                return annotation;
+        }
+        return null;
+    }
+
     public void accept(ClassVisitor classVisitor, Evaluator evaluator) {
         // Visit the header.
         classVisitor.visit(
@@ -47,7 +59,7 @@ public class BtClass extends BtObject {
                 computeString(NAME, evaluator),
                 computeString(SIGNATURE, evaluator),
                 computeString(SUPER_NAME, evaluator),
-                computeStringArray(INNER_CLASSES, evaluator));
+                computeStringArray(INTERFACES, evaluator));
         // Visit the source.
         if (containsKey(SOURCE_FILE) || containsKey(SOURCE_DEBUG)) {
             classVisitor.visitSource(computeString(SOURCE_FILE, evaluator), computeString(SOURCE_DEBUG, evaluator));

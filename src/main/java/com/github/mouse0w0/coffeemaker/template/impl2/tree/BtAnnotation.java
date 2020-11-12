@@ -22,6 +22,11 @@ public class BtAnnotation extends BtObject {
     public BtAnnotation() {
     }
 
+    public void putAnnotationValue(String name, BtNode value) {
+        computeIfNull(BtAnnotation.VALUES, k -> new BtObject())
+                .put(name, value);
+    }
+
     public void putAnnotationValue(String name, Object value) {
         computeIfNull(BtAnnotation.VALUES, k -> new BtObject())
                 .putValue(name, value);

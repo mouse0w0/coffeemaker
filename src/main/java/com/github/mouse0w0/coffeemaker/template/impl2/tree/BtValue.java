@@ -19,6 +19,11 @@ public class BtValue extends BtNode {
     }
 
     @Override
+    public Object compute(Evaluator evaluator) {
+        return value;
+    }
+
+    @Override
     public int computeInt(Evaluator evaluator) {
         if (value instanceof Integer) {
             return (int) value;
