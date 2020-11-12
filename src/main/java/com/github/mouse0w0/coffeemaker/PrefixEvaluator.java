@@ -14,7 +14,7 @@ public class PrefixEvaluator extends SimpleEvaluator {
     }
 
     @Override
-    public <T> T eval(String statement) {
-        return statement.startsWith(prefix) ? eval0(statement.substring(prefix.length())) : super.eval(statement);
+    public <T> T eval(String expression) {
+        return expression.startsWith(prefix) ? eval0(expression.substring(prefix.length())) : super.eval(expression);
     }
 }

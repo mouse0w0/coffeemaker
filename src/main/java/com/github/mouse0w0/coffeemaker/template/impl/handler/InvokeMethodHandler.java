@@ -1,7 +1,7 @@
 package com.github.mouse0w0.coffeemaker.template.impl.handler;
 
-import com.github.mouse0w0.coffeemaker.extree.MethodNodeEx;
 import com.github.mouse0w0.coffeemaker.template.impl.Processor;
+import com.github.mouse0w0.coffeemaker.template.impl.extree.MethodNodeEx;
 import org.objectweb.asm.tree.MethodInsnNode;
 
 import java.util.List;

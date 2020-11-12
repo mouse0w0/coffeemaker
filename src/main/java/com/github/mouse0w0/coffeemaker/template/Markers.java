@@ -2,57 +2,57 @@ package com.github.mouse0w0.coffeemaker.template;
 
 public final class Markers {
     // Constants
-    public static <T> Class<T> $class(String statement) {
+    public static <T> Class<T> $class(String expression) {
         throw new UnsupportedOperationException("template");
     }
 
-    public static String $string(String statement) {
+    public static String $string(String expression) {
         throw new UnsupportedOperationException("template");
     }
 
-    public static byte $byte(String statement) {
+    public static byte $byte(String expression) {
         throw new UnsupportedOperationException("template");
     }
 
-    public static short $short(String statement) {
+    public static short $short(String expression) {
         throw new UnsupportedOperationException("template");
     }
 
-    public static int $int(String statement) {
+    public static int $int(String expression) {
         throw new UnsupportedOperationException("template");
     }
 
-    public static long $long(String statement) {
+    public static long $long(String expression) {
         throw new UnsupportedOperationException("template");
     }
 
-    public static float $float(String statement) {
+    public static float $float(String expression) {
         throw new UnsupportedOperationException("template");
     }
 
-    public static double $double(String statement) {
+    public static double $double(String expression) {
         throw new UnsupportedOperationException("template");
     }
 
-    public static char $char(String statement) {
+    public static char $char(String expression) {
         throw new UnsupportedOperationException("template");
     }
 
-    public static boolean $bool(String statement) {
+    public static boolean $bool(String expression) {
         throw new UnsupportedOperationException("template");
     }
 
     // Get fields
-    public static <T> T $staticField(String statement) {
+    public static <T> T $staticField(String expression) {
         throw new UnsupportedOperationException("template");
     }
 
     // If
-    public static void $if(String statement) {
+    public static void $if(String expression) {
         throw new UnsupportedOperationException("template");
     }
 
-    public static void $elseIf(String statement) {
+    public static void $elseIf(String expression) {
         throw new UnsupportedOperationException("template");
     }
 

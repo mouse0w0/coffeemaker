@@ -1,10 +1,9 @@
 package com.github.mouse0w0.coffeemaker;
 
-import com.github.mouse0w0.coffeemaker.extree.ClassNodeEx;
+import com.github.mouse0w0.coffeemaker.template.InvalidTemplateException;
 import com.github.mouse0w0.coffeemaker.template.Template;
 import com.github.mouse0w0.coffeemaker.template.TemplateParser;
 import com.github.mouse0w0.coffeemaker.template.impl.TemplateParserImpl;
-import org.objectweb.asm.ClassReader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,28 +50,15 @@ public class CoffeeMaker {
                 if (!Files.isRegularFile(file1)) continue;
                 if (!file1.getFileName().toString().endsWith(".class")) continue;
                 try (InputStream in = Files.newInputStream(file)) {
-                    loadTemplate(in, false);
+                    Template template = templateParser.parse(in);
+                    templateMap.put(template.getName(), template);
+                } catch (InvalidTemplateException ignored) {
                 }
             }
         }
     }
 
     public void loadTemplate(InputStream in) throws IOException {
-        loadTemplate(in, true);
-    }
-
-    private void loadTemplate(InputStream in, boolean ensureTemplate) throws IOException {
-        ClassNodeEx classNode = loadClassNode(in);
-        if (ensureTemplate || templateParser.isTemplate(classNode)) {
-            Template template = templateParser.parse(classNode);
-            templateMap.put(template.getName(), template);
-        }
-    }
-
-    private static ClassNodeEx loadClassNode(InputStream in) throws IOException {
-        ClassReader classReader = new ClassReader(in);
-        ClassNodeEx classNode = new ClassNodeEx();
-        classReader.accept(classNode, 0);
-        return classNode;
+        templateParser.parse(in);
     }
 }

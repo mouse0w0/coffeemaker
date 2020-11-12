@@ -1,18 +1,18 @@
 package com.github.mouse0w0.coffeemaker.template.impl;
 
-import com.github.mouse0w0.coffeemaker.extree.AnnotationNodeEx;
-import com.github.mouse0w0.coffeemaker.extree.ClassNodeEx;
-import com.github.mouse0w0.coffeemaker.extree.FieldNodeEx;
-import com.github.mouse0w0.coffeemaker.extree.MethodNodeEx;
-import com.github.mouse0w0.coffeemaker.template.Template;
-import com.github.mouse0w0.coffeemaker.template.TemplateClass;
-import com.github.mouse0w0.coffeemaker.template.TemplateParseException;
-import com.github.mouse0w0.coffeemaker.template.TemplateParser;
+import com.github.mouse0w0.coffeemaker.template.*;
+import com.github.mouse0w0.coffeemaker.template.impl.extree.AnnotationNodeEx;
+import com.github.mouse0w0.coffeemaker.template.impl.extree.ClassNodeEx;
+import com.github.mouse0w0.coffeemaker.template.impl.extree.FieldNodeEx;
+import com.github.mouse0w0.coffeemaker.template.impl.extree.MethodNodeEx;
 import com.github.mouse0w0.coffeemaker.template.impl.handler.*;
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,17 +44,10 @@ public class TemplateParserImpl implements TemplateParser {
         }
     }
 
-    @Override
-    public boolean isTemplate(ClassNodeEx classNode) {
-        return classNode.getAnnotation(TEMPLATE_ANNOTATION) != null;
-    }
-
-    @Override
     public Template parse(ClassNodeEx classNode) throws TemplateParseException {
-        if (!isTemplate(classNode)) {
-            throw new TemplateParseException("Class " + classNode.name + "is not a template");
+        if (classNode.getAnnotation(TEMPLATE_ANNOTATION) == null) {
+            throw new InvalidTemplateException(classNode.name.replace('/', '.'));
         }
-
         classNode.removeAnnotation(TEMPLATE_ANNOTATION);
 
         TemplateImpl template = new TemplateImpl(classNode.name, classNode);
@@ -96,5 +89,17 @@ public class TemplateParserImpl implements TemplateParser {
         }
 
         return template;
+    }
+
+    @Override
+    public Template parse(InputStream in) throws IOException, TemplateParseException {
+        return parse(loadClassNode(in));
+    }
+
+    private static ClassNodeEx loadClassNode(InputStream in) throws IOException {
+        ClassReader classReader = new ClassReader(in);
+        ClassNodeEx classNode = new ClassNodeEx();
+        classReader.accept(classNode, 0);
+        return classNode;
     }
 }
