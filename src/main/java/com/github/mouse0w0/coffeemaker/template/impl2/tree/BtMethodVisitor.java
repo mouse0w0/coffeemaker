@@ -11,7 +11,7 @@ class BtMethodVisitor extends MethodVisitor {
         super(api);
         this.method = method;
         this.instructions = new BtInsnList();
-        method.putValue(BtMethod.INSTRUCTIONS, instructions);
+        method.put(BtMethod.INSTRUCTIONS, instructions);
     }
 
     @Override

@@ -17,6 +17,7 @@ public class SmartList<E> extends AbstractList<E> implements RandomAccess {
 
     @SafeVarargs
     public SmartList(E... elements) {
+        if (elements == null) return;
         int length = elements.length;
         if (length == 1) {
             add(elements[0]);

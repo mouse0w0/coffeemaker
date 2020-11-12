@@ -21,7 +21,15 @@ class BtAnnotationVisitor extends AnnotationVisitor {
         this.list = list;
     }
 
-    public void putValue(String name, Object value) {
+    protected void put(String name, BtNode value) {
+        if (annotation != null) {
+            annotation.putAnnotationValue(name, value);
+        } else {
+            list.add(value);
+        }
+    }
+
+    protected void putValue(String name, Object value) {
         if (annotation != null) {
             annotation.putAnnotationValue(name, value);
         } else {
@@ -42,14 +50,14 @@ class BtAnnotationVisitor extends AnnotationVisitor {
     @Override
     public AnnotationVisitor visitAnnotation(String name, String descriptor) {
         BtAnnotation annotation = new BtAnnotation(descriptor, false);
-        putValue(name, annotation);
+        put(name, annotation);
         return new BtAnnotationVisitor(api, annotation);
     }
 
     @Override
     public AnnotationVisitor visitArray(String name) {
         BtList list = new BtList();
-        putValue(name, list);
+        put(name, list);
         return new BtAnnotationVisitor(api, list);
     }
 
