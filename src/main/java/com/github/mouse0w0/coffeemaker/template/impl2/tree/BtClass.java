@@ -65,8 +65,8 @@ public class BtClass extends BtObject {
 //            classVisitor.visitOuterClass(outerClass, outerMethod, outerMethodDesc);
 //        }
         // Visit the annotations.
-        if (containsKey(ANNOTATIONS)) {
-            BtList annotations = get(ANNOTATIONS);
+        BtList annotations = get(ANNOTATIONS);
+        if (annotations != null) {
             for (BtNode node : annotations) {
                 ((BtAnnotation) node).accept(classVisitor, evaluator);
             }
@@ -79,8 +79,8 @@ public class BtClass extends BtObject {
 //            }
 //        }
         // Visit the non standard attributes.
-        if (containsKey(ATTRIBUTES)) {
-            BtList attributes = get(ATTRIBUTES);
+        BtList attributes = get(ATTRIBUTES);
+        if (attributes != null) {
             for (BtNode node : attributes) {
                 classVisitor.visitAttribute(node.computeAttribute(evaluator));
             }

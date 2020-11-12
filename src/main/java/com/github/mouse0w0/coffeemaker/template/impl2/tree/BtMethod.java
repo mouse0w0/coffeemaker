@@ -73,14 +73,14 @@ public class BtMethod extends BtObject {
         if (annotationDefault != null) {
             AnnotationVisitor annotationVisitor = methodVisitor.visitAnnotationDefault();
             if (annotationVisitor != null) {
-                BtAnnotation.accept(annotationVisitor, null, annotationDefault.compute(evaluator));
+                BtAnnotation.accept(annotationVisitor, null, annotationDefault, evaluator);
                 annotationVisitor.visitEnd();
             }
         }
         if (containsKey(ANNOTATIONS)) {
             BtList annotations = get(ANNOTATIONS);
             for (BtNode node : annotations) {
-                ((BtAnnotation) node).accept(classVisitor, evaluator);
+                ((BtAnnotation) node).accept(methodVisitor, evaluator);
             }
         }
 
