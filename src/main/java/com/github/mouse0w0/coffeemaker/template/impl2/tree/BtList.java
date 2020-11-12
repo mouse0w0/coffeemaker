@@ -6,33 +6,37 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class BtList extends BtParent<BtNode> {
-    private final List<BtNode> children = new SmartList<>();
-    private List<BtNode> unmodifiableChildren;
+public class BtList<T extends BtNode> extends BtParent<T> {
+    private final List<T> children = new SmartList<>();
+    private List<T> unmodifiableChildren;
 
     @Override
-    public Collection<BtNode> getChildren() {
+    public Collection<T> getChildren() {
         if (unmodifiableChildren == null) {
             unmodifiableChildren = Collections.unmodifiableList(children);
         }
         return unmodifiableChildren;
     }
 
-    public BtNode get(int index) {
+    public T get(int index) {
         return children.get(index);
     }
 
-    public void add(BtNode node) {
-        if (node != null) node.setParent(this);
+    public void add(T node) {
+        if (node == null) {
+            throw new NullPointerException("node");
+        }
+        node.setParent(this);
         children.add(node);
     }
 
+    @SuppressWarnings("unchecked")
     public void addValue(Object value) {
-        add(new BtValue(value));
+        add((T) new BtValue(value));
     }
 
-    public boolean remove(BtNode node) {
-        return children.remove(node);
+    public boolean remove(Object o) {
+        return children.remove(o);
     }
 
     @Override

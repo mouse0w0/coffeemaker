@@ -29,7 +29,7 @@ public class TemplateParserImpl implements TemplateParser {
 
         String name = btClass.get(BtClass.NAME).getAsString();
 
-        if (btClass.findAnnotation(TEMPLATE_ANNOTATION) == null) {
+        if (btClass.getAnnotation(TEMPLATE_ANNOTATION) == null) {
             throw new InvalidTemplateException(name.replace('/', '.'));
         }
 
