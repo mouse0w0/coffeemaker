@@ -1,11 +1,11 @@
 package com.github.mouse0w0.coffeemaker.template.impl.handler;
 
 import com.github.mouse0w0.coffeemaker.Evaluator;
-import com.github.mouse0w0.coffeemaker.extree.Enum;
-import com.github.mouse0w0.coffeemaker.extree.*;
 import com.github.mouse0w0.coffeemaker.template.ModifyAnnotation;
 import com.github.mouse0w0.coffeemaker.template.TemplateProcessException;
 import com.github.mouse0w0.coffeemaker.template.impl.Processor;
+import com.github.mouse0w0.coffeemaker.template.impl.extree.Enum;
+import com.github.mouse0w0.coffeemaker.template.impl.extree.*;
 import org.objectweb.asm.Type;
 
 import java.util.Collections;

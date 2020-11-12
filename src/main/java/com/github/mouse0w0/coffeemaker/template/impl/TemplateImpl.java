@@ -1,8 +1,8 @@
 package com.github.mouse0w0.coffeemaker.template.impl;
 
 import com.github.mouse0w0.coffeemaker.Evaluator;
-import com.github.mouse0w0.coffeemaker.extree.ClassNodeEx;
 import com.github.mouse0w0.coffeemaker.template.Template;
+import com.github.mouse0w0.coffeemaker.template.impl.extree.ClassNodeEx;
 import org.objectweb.asm.ClassWriter;
 
 import java.util.ArrayList;

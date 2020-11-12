@@ -2,12 +2,12 @@ package com.github.mouse0w0.coffeemaker.template.impl.handler;
 
 import com.github.mouse0w0.coffeemaker.Evaluator;
 import com.github.mouse0w0.coffeemaker.PrefixEvaluator;
-import com.github.mouse0w0.coffeemaker.extree.AnnotationHolder;
-import com.github.mouse0w0.coffeemaker.extree.AnnotationNodeEx;
-import com.github.mouse0w0.coffeemaker.extree.ClassNodeEx;
-import com.github.mouse0w0.coffeemaker.extree.FieldNodeEx;
 import com.github.mouse0w0.coffeemaker.template.DeclareStaticFieldForeach;
 import com.github.mouse0w0.coffeemaker.template.impl.Processor;
+import com.github.mouse0w0.coffeemaker.template.impl.extree.AnnotationHolder;
+import com.github.mouse0w0.coffeemaker.template.impl.extree.AnnotationNodeEx;
+import com.github.mouse0w0.coffeemaker.template.impl.extree.ClassNodeEx;
+import com.github.mouse0w0.coffeemaker.template.impl.extree.FieldNodeEx;
 import org.objectweb.asm.Type;
 
 import java.util.List;

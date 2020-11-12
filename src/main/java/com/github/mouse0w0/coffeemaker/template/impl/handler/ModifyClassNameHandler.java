@@ -1,11 +1,11 @@
 package com.github.mouse0w0.coffeemaker.template.impl.handler;
 
 import com.github.mouse0w0.coffeemaker.Evaluator;
-import com.github.mouse0w0.coffeemaker.extree.AnnotationHolder;
-import com.github.mouse0w0.coffeemaker.extree.AnnotationNodeEx;
-import com.github.mouse0w0.coffeemaker.extree.ClassNodeEx;
 import com.github.mouse0w0.coffeemaker.template.ModifyClassName;
 import com.github.mouse0w0.coffeemaker.template.impl.Processor;
+import com.github.mouse0w0.coffeemaker.template.impl.extree.AnnotationHolder;
+import com.github.mouse0w0.coffeemaker.template.impl.extree.AnnotationNodeEx;
+import com.github.mouse0w0.coffeemaker.template.impl.extree.ClassNodeEx;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.ClassRemapper;
 import org.objectweb.asm.commons.SimpleRemapper;

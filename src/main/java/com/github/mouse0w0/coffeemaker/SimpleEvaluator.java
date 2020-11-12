@@ -21,9 +21,9 @@ public class SimpleEvaluator extends BaseEvaluator {
 
     @Override
 
-    public <T> T eval(String statement) {
-        T obj = eval0(statement);
-        return obj != null ? obj : super.eval(statement);
+    public <T> T eval(String expression) {
+        T obj = eval0(expression);
+        return obj != null ? obj : super.eval(expression);
     }
 
     @SuppressWarnings("unchecked")

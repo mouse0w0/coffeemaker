@@ -12,7 +12,7 @@ public abstract class BaseEvaluator implements Evaluator {
     }
 
     @Override
-    public <T> T eval(String statement) {
-        return parent != null ? parent.eval(statement) : null;
+    public <T> T eval(String expression) {
+        return parent != null ? parent.eval(expression) : null;
     }
 }

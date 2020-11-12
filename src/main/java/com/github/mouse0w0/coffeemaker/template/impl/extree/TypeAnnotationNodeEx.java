@@ -1,4 +1,4 @@
-package com.github.mouse0w0.coffeemaker.extree;
+package com.github.mouse0w0.coffeemaker.template.impl.extree;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.TypePath;
