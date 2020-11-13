@@ -2,7 +2,6 @@ package com.github.mouse0w0.coffeemaker.template.impl2.handler;
 
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 import com.github.mouse0w0.coffeemaker.template.Field;
-import com.github.mouse0w0.coffeemaker.template.impl2.tree.insn.BtInsnBase;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.insn.BtInsnNode;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.insn.BtLabel;
 import org.objectweb.asm.MethodVisitor;
@@ -26,7 +25,7 @@ public class BtComputableFieldInsn extends BtInsnNode {
     }
 
     @Override
-    public BtInsnBase clone(Map<BtLabel, BtLabel> clonedLabels) {
-        throw new UnsupportedOperationException();
+    public BtInsnNode clone(Map<BtLabel, BtLabel> clonedLabels) {
+        return new BtComputableFieldInsn(opcode, expression);
     }
 }
