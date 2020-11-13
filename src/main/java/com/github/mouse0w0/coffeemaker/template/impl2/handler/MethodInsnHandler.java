@@ -39,10 +39,14 @@ public abstract class MethodInsnHandler implements Handler {
     public void handle(BtClass clazz) {
         for (BtMethod method : clazz.getMethods()) {
             BtInsnList instructions = method.getInstructions();
-            for (BtInsnNode insn : instructions) {
+            BtInsnNode insn = instructions.getFirst();
+            BtInsnNode next;
+            while (insn != null) {
+                next = insn.getNext();
                 if (insn instanceof BtMethodInsn && methods.contains(getMethodId(insn))) {
                     handle(method, insn);
                 }
+                insn = next;
             }
         }
     }

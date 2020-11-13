@@ -42,8 +42,17 @@ public final class Markers {
         throw new UnsupportedOperationException("template");
     }
 
-    // Get fields
+    // Get static fields
     public static <T> T $staticField(String expression) {
+        throw new UnsupportedOperationException("template");
+    }
+
+    // For
+    public static void $foreach(String iterable, String elementName) {
+        throw new UnsupportedOperationException("template");
+    }
+
+    public static void $endForeach() {
         throw new UnsupportedOperationException("template");
     }
 
@@ -61,15 +70,6 @@ public final class Markers {
     }
 
     public static void $endIf() {
-        throw new UnsupportedOperationException("template");
-    }
-
-    // For
-    public static void $foreach(String iterator, String elementName) {
-        throw new UnsupportedOperationException("template");
-    }
-
-    public static void $endForeach() {
         throw new UnsupportedOperationException("template");
     }
 

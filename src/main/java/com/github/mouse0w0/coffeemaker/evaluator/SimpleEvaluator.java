@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class SimpleEvaluator extends BaseEvaluator {
     private static final Pattern SYNTAX = Pattern.compile("\\.");
 
-    private final Object dataModel;
+    protected final Object dataModel;
 
     public SimpleEvaluator(Object dataModel) {
         this(null, dataModel);
@@ -34,6 +34,7 @@ public class SimpleEvaluator extends BaseEvaluator {
         return (T) obj;
     }
 
+    @SuppressWarnings("rawtypes")
     private Object eval1(Object obj, String name) {
         if (obj instanceof Map) {
             return ((Map) obj).get(name);

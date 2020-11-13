@@ -2,6 +2,7 @@ package com.github.mouse0w0.coffeemaker.template.impl2;
 
 import com.github.mouse0w0.coffeemaker.template.*;
 import com.github.mouse0w0.coffeemaker.template.impl2.handler.*;
+import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtAnnotation;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtClass;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtClassVisitor;
 import org.objectweb.asm.ClassReader;
@@ -22,6 +23,7 @@ public class TemplateParserImpl implements TemplateParser {
         handlers.add(new ModifyAnnotationHandler());
         handlers.add(new ConstantsHandler());
         handlers.add(new GetStaticFieldHandler());
+        handlers.add(new ForeachHandler());
     }
 
     @Override
@@ -33,9 +35,11 @@ public class TemplateParserImpl implements TemplateParser {
 
         String name = btClass.get(BtClass.NAME).getAsString();
 
-        if (btClass.getAnnotation(TEMPLATE_ANNOTATION) == null) {
+        BtAnnotation annotation = btClass.getAnnotation(TEMPLATE_ANNOTATION);
+        if (annotation == null) {
             throw new InvalidTemplateException(name.replace('/', '.'));
         }
+        btClass.getAnnotations().remove(annotation);
 
         for (Handler handler : handlers) {
             handler.handle(btClass);

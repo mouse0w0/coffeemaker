@@ -14,7 +14,16 @@ public class PrefixEvaluator extends SimpleEvaluator {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T eval(String expression) {
-        return expression.startsWith(prefix) ? eval0(expression.substring(prefix.length())) : super.eval(expression);
+        int dotIndex = expression.indexOf('.');
+        String first = dotIndex == -1 ? expression : expression.substring(0, dotIndex);
+        if (dotIndex == -1) {
+            if (prefix.equals(first)) return (T) dataModel;
+            else return super.eval(expression);
+        } else {
+            if (prefix.equals(first)) return eval0(expression.substring(dotIndex + 1));
+            else return super.eval(expression);
+        }
     }
 }
