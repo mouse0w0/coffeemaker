@@ -42,8 +42,12 @@ public final class Markers {
         throw new UnsupportedOperationException("template");
     }
 
-    // Get static fields
+    // Static field
     public static <T> T $staticField(String expression) {
+        throw new UnsupportedOperationException("template");
+    }
+
+    public static void $setStaticField(String expression, Object value) {
         throw new UnsupportedOperationException("template");
     }
 

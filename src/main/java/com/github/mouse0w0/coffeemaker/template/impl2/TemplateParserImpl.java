@@ -24,6 +24,7 @@ public class TemplateParserImpl implements TemplateParser {
         handlers.add(new DeclareFieldForeachHandler());
         handlers.add(new ConstantsHandler());
         handlers.add(new GetStaticFieldHandler());
+        handlers.add(new SetStaticFieldHandler());
         handlers.add(new NewInstanceHandler());
         handlers.add(new ForeachHandler());
     }
