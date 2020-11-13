@@ -19,7 +19,7 @@ public @interface ModifyAnnotation {
 
         String name();
 
-        String statement();
+        String expression();
     }
 
     @Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR})
