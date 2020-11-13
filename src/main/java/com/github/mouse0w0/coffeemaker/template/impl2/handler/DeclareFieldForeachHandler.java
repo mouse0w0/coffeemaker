@@ -15,11 +15,12 @@ public class DeclareFieldForeachHandler extends AnnotationHandler {
     @Override
     protected void handle(AnnotationOwner owner, BtAnnotation annotation) {
         String iterable = annotation.getValue("iterable");
-        String elementName = annotation.getValue("elementName", "i");
-        String fieldName = annotation.getValue("fieldName");
+        String elementName = annotation.getValue("elementName");
+        boolean modifierFinal = annotation.getValue("modifierFinal", true);
         BtField field = (BtField) owner;
-        BtClass clazz = (BtClass) field.getParent();
+//        field.getAnnotations().remove(annotation);
+        BtClass clazz = (BtClass) field.getParent().getParent();
         clazz.getFields().remove(field);
-        clazz.getFields().add(new BtDeclareFieldForeach(field, iterable, elementName, fieldName));
+        clazz.getFields().add(new BtDeclareFieldForeach(field, iterable, elementName, modifierFinal));
     }
 }

@@ -2,10 +2,8 @@ package com.github.mouse0w0.coffeemaker.template.impl2.handler;
 
 import com.github.mouse0w0.coffeemaker.template.Markers;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtMethod;
-import com.github.mouse0w0.coffeemaker.template.impl2.tree.insn.BtInsnList;
-import com.github.mouse0w0.coffeemaker.template.impl2.tree.insn.BtInsnNode;
-import com.github.mouse0w0.coffeemaker.template.impl2.tree.insn.BtLdcInsn;
-import com.github.mouse0w0.coffeemaker.template.impl2.tree.insn.BtTypeInsn;
+import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtValue;
+import com.github.mouse0w0.coffeemaker.template.impl2.tree.insn.*;
 import org.objectweb.asm.Opcodes;
 
 import java.lang.reflect.Method;
@@ -21,10 +19,14 @@ public class NewInstanceHandler extends MethodInsnHandler {
     protected void handle(BtMethod method, BtInsnNode insn) {
         BtInsnList instructions = method.getInstructions();
         BtLdcInsn arg0 = (BtLdcInsn) insn.getPrevious();
-        BtInsnNode cast = insn.getNext();
-        instructions.insert(insn, new BtTypeInsn(Opcodes.NEW, new BtComputableValue(arg0.getAsString())));
+        BtTypeInsn newType = new BtTypeInsn(Opcodes.NEW, new BtComputableValue(arg0.getAsString()));
+        BtInsn dup = new BtInsn(Opcodes.DUP);
+        BtMethodInsn invokeInit = new BtMethodInsn(Opcodes.INVOKESPECIAL, new BtComputableValue(arg0.getAsString()),
+                new BtValue("<init>"), new BtValue("()V"), new BtValue(false));
+        instructions.insert(insn, newType);
+        instructions.insert(newType, dup);
+        instructions.insert(dup, invokeInit);
         instructions.remove(arg0);
         instructions.remove(insn);
-        instructions.remove(cast);
     }
 }

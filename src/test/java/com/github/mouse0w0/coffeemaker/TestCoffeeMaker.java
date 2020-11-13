@@ -8,8 +8,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TestCoffeeMaker {
 
@@ -32,7 +33,10 @@ public class TestCoffeeMaker {
         List<Field> items = Arrays.asList(
                 new Field("template/ModItems", "EXAMPLE_ITEM", "Lnet/minecraft/item/Item;"),
                 new Field("template/ModItems", "EXAMPLE_ITEM_2", "Lnet/minecraft/item/Item;"));
-        SimpleEvaluator evaluator = new SimpleEvaluator(Collections.singletonMap("items", items));
+        Map<String, Object> map = new HashMap<>();
+        map.put("modid", "examplemod");
+        map.put("items", items);
+        SimpleEvaluator evaluator = new SimpleEvaluator(map);
         byte[] bytes = AsmUtils.rename(
                 coffeeMaker.getTemplate("template/ModItems")
                         .process(evaluator),

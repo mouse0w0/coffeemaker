@@ -28,8 +28,8 @@ public class ForeachHandler extends MethodInsnHandler {
                     instructions, foreachInsn.getNext(), insn.getPrevious().getPrevious());
             BtLabel injectPoint = Utils.findNextLabel(insn);
             BtForeach foreach = new BtForeach(arg0.getAsString(), arg1.getAsString(), insnList);
-            Utils.removeLabel(insnList, foreachInsn);
-            Utils.removeLabel(insnList, insn);
+            Utils.removeLabel(instructions, foreachInsn);
+            Utils.removeLabel(instructions, insn);
             instructions.insertBefore(injectPoint, foreach);
         }
     }

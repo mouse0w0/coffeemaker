@@ -5,6 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotate to static non-final field.
+ */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.CLASS)
 public @interface DeclareFieldForeach {
@@ -16,10 +19,7 @@ public @interface DeclareFieldForeach {
     /**
      * @return The name of each element.
      */
-    String elementName() default "i";
+    String elementName();
 
-    /**
-     * @return The expression of declare field.
-     */
-    String fieldName();
+    boolean modifierFinal() default true;
 }

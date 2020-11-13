@@ -21,10 +21,8 @@ public class SetStaticFieldHandler extends MethodInsnHandler {
         BtInsnList instructions = method.getInstructions();
         BtLabel label = Utils.findPreviousLabel(insn);
         BtLdcInsn arg0 = (BtLdcInsn) label.getNext().getNext();
-        BtInsnNode cast = insn.getNext();
         instructions.insert(insn, new BtComputableFieldInsn(Opcodes.PUTSTATIC, arg0.getAsString()));
         instructions.remove(arg0);
         instructions.remove(insn);
-        instructions.remove(cast);
     }
 }

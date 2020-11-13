@@ -63,7 +63,7 @@ public class BtTypeInsn extends BtInsnBase {
 
     public BtTypeInsn(final int opcode, final BtNode descriptor) {
         super(opcode);
-        putValue(DESCRIPTOR, descriptor);
+        put(DESCRIPTOR, descriptor);
     }
 
     /**

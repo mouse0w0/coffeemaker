@@ -46,7 +46,7 @@ public class Utils {
 
     public static BtLabel findPreviousLabel(BtInsnNode node) {
         BtInsnNode current = node;
-        while (!(current instanceof BtLabel)) {
+        while (!(current instanceof BtLabel) && current != null) {
             current = current.getPrevious();
         }
         return (BtLabel) current;
@@ -54,7 +54,7 @@ public class Utils {
 
     public static BtLabel findNextLabel(BtInsnNode node) {
         BtInsnNode current = node.getNext();
-        while (!(current instanceof BtLabel)) {
+        while (!(current instanceof BtLabel) && current != null) {
             current = current.getNext();
         }
         return (BtLabel) current;
