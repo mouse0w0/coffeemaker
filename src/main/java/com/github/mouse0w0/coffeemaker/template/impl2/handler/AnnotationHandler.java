@@ -21,22 +21,22 @@ public abstract class AnnotationHandler implements Handler {
 
     @Override
     public void handle(BtClass clazz) {
-        for (BtAnnotation annotation : clazz.getAnnotations()) {
+        for (BtAnnotation annotation : clazz.getAnnotations().toArray(BtAnnotation.EMPTY)) {
             if (annotations.contains(annotation.get(BtAnnotation.DESCRIPTOR).getAsString())) {
                 handle(clazz, annotation);
             }
         }
 
-        for (BtField field : clazz.getFields()) {
-            for (BtAnnotation annotation : field.getAnnotations()) {
+        for (BtField field : clazz.getFields().toArray(BtField.EMPTY)) {
+            for (BtAnnotation annotation : field.getAnnotations().toArray(BtAnnotation.EMPTY)) {
                 if (annotations.contains(annotation.get(BtAnnotation.DESCRIPTOR).getAsString())) {
                     handle(field, annotation);
                 }
             }
         }
 
-        for (BtMethod method : clazz.getMethods()) {
-            for (BtAnnotation annotation : method.getAnnotations()) {
+        for (BtMethod method : clazz.getMethods().toArray(BtMethod.EMPTY)) {
+            for (BtAnnotation annotation : method.getAnnotations().toArray(BtAnnotation.EMPTY)) {
                 if (annotations.contains(annotation.get(BtAnnotation.DESCRIPTOR).getAsString())) {
                     handle(method, annotation);
                 }

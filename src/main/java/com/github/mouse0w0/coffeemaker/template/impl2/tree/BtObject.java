@@ -2,10 +2,7 @@ package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -115,5 +112,10 @@ public class BtObject extends BtParent<BtNode> {
 
     public String[] computeStringArray(String key, Evaluator evaluator) {
         return get(key).computeStringArray(evaluator);
+    }
+
+    @Override
+    public Iterator<BtNode> iterator() {
+        return children.values().iterator();
     }
 }

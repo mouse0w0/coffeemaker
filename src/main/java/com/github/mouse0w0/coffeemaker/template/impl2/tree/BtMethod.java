@@ -8,6 +8,7 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 
 public class BtMethod extends BtObject implements AnnotationOwner {
+    public static final BtMethod[] EMPTY = new BtMethod[0];
 
     public static final String ACCESS = "access";
     public static final String NAME = "name";

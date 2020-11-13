@@ -11,6 +11,8 @@ import org.objectweb.asm.MethodVisitor;
 import java.util.Map;
 
 public class BtAnnotation extends BtObject {
+    public static final BtAnnotation[] EMPTY = new BtAnnotation[0];
+
     public static final String DESCRIPTOR = "descriptor";
     public static final String VISIBLE = "visible";
     public static final String VALUES = "values";

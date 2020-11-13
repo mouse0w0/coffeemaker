@@ -5,6 +5,8 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 
 public class BtField extends BtObject implements AnnotationOwner {
+    public static final BtField[] EMPTY = new BtField[0];
+
     public static final String ACCESS = "access";
     public static final String NAME = "name";
     public static final String DESCRIPTOR = "descriptor";

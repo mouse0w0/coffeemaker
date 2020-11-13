@@ -159,7 +159,7 @@ public class SmartList<E> extends AbstractList<E> implements RandomAccess {
     @SuppressWarnings("unchecked")
     public <T> T[] toArray(T[] a) {
         if (a.length < size) {
-            a = (T[]) Array.newInstance(a.getClass(), size);
+            a = (T[]) Array.newInstance(a.getClass().getComponentType(), size);
         }
 
         if (size == 1) {

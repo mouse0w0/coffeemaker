@@ -27,7 +27,6 @@ public class ModifyAnnotationHandler extends AnnotationHandler {
                 handleModifyAnnotation(owner, value);
             }
         }
-        // TODO: Unsafe remove
         owner.getAnnotations().remove(annotation);
     }
 
