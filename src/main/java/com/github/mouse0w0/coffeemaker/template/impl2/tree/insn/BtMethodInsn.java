@@ -105,7 +105,7 @@ public class BtMethodInsn extends BtInsnBase {
         putValue(IS_INTERFACE, isInterface);
     }
 
-    private BtMethodInsn(
+    public BtMethodInsn(
             final int opcode,
             final BtNode owner,
             final BtNode name,
@@ -136,9 +136,9 @@ public class BtMethodInsn extends BtInsnBase {
     @Override
     public void accept(final MethodVisitor methodVisitor, final Evaluator evaluator) {
         methodVisitor.visitMethodInsn(opcode,
-                computeString(OWNER, evaluator),
+                computeInternalName(OWNER, evaluator),
                 computeString(NAME, evaluator),
-                computeString(DESCRIPTOR, evaluator),
+                computeDescriptor(DESCRIPTOR, evaluator),
                 computeBoolean(IS_INTERFACE, evaluator));
         acceptAnnotations(methodVisitor);
     }

@@ -61,7 +61,7 @@ public class BtTypeInsn extends BtInsnBase {
         putValue(DESCRIPTOR, descriptor);
     }
 
-    private BtTypeInsn(final int opcode, final BtNode descriptor) {
+    public BtTypeInsn(final int opcode, final BtNode descriptor) {
         super(opcode);
         putValue(DESCRIPTOR, descriptor);
     }
@@ -83,7 +83,7 @@ public class BtTypeInsn extends BtInsnBase {
 
     @Override
     public void accept(final MethodVisitor methodVisitor, final Evaluator evaluator) {
-        methodVisitor.visitTypeInsn(opcode, computeString(DESCRIPTOR, evaluator));
+        methodVisitor.visitTypeInsn(opcode, computeDescriptor(DESCRIPTOR, evaluator));
         acceptAnnotations(methodVisitor);
     }
 

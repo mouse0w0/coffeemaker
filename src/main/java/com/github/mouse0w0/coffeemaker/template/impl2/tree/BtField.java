@@ -37,7 +37,7 @@ public class BtField extends BtObject implements AnnotationOwner {
         FieldVisitor fieldVisitor = classVisitor.visitField(
                 computeInt(ACCESS, evaluator),
                 computeString(NAME, evaluator),
-                computeString(DESCRIPTOR, evaluator),
+                computeDescriptor(DESCRIPTOR, evaluator),
                 computeString(SIGNATURE, evaluator),
                 compute(VALUE, evaluator));
         if (fieldVisitor == null) {

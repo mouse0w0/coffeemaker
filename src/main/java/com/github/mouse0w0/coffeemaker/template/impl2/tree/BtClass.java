@@ -57,9 +57,9 @@ public class BtClass extends BtObject implements AnnotationOwner {
         classVisitor.visit(
                 computeInt(VERSION, evaluator),
                 computeInt(ACCESS, evaluator),
-                computeString(NAME, evaluator),
+                computeInternalName(NAME, evaluator),
                 computeString(SIGNATURE, evaluator),
-                computeString(SUPER_NAME, evaluator),
+                computeInternalName(SUPER_NAME, evaluator),
                 computeStringArray(INTERFACES, evaluator));
         // Visit the source.
         if (containsKey(SOURCE_FILE) || containsKey(SOURCE_DEBUG)) {

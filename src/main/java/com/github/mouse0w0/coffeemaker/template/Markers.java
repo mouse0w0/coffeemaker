@@ -47,6 +47,11 @@ public final class Markers {
         throw new UnsupportedOperationException("template");
     }
 
+    // New instance
+    public static <T> T $new(String expression) {
+        throw new UnsupportedOperationException("template");
+    }
+
     // For
     public static void $foreach(String iterable, String elementName) {
         throw new UnsupportedOperationException("template");

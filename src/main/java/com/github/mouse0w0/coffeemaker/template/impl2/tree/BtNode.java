@@ -2,7 +2,11 @@ package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 
 import com.github.mouse0w0.coffeemaker.evaluator.EmptyEvaluator;
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
+import com.github.mouse0w0.coffeemaker.template.TemplateProcessException;
 import org.objectweb.asm.Attribute;
+import org.objectweb.asm.Type;
+
+import java.util.Collection;
 
 /**
  * Bytecode tree node
@@ -40,22 +44,56 @@ public abstract class BtNode {
     }
 
     public int computeInt(Evaluator evaluator) {
-        throw new UnsupportedOperationException();
+        Object value = compute(evaluator);
+        if (value instanceof Integer) {
+            return (int) value;
+        }
+        throw new TemplateProcessException("The type of value is not Integer");
     }
 
     public String computeString(Evaluator evaluator) {
-        throw new UnsupportedOperationException();
+        Object value = compute(evaluator);
+        if (value == null) return null;
+        if (value instanceof String) return (String) value;
+        throw new TemplateProcessException("The type of value is not String");
+    }
+
+    public String computeInternalName(Evaluator evaluator) {
+        Object value = compute(evaluator);
+        if (value == null) return null;
+        if (value instanceof String) return (String) value;
+        if (value instanceof Type) return ((Type) value).getInternalName();
+        throw new TemplateProcessException("The type of value is not String");
+    }
+
+    public String computeDescriptor(Evaluator evaluator) {
+        Object value = compute(evaluator);
+        if (value == null) return null;
+        if (value instanceof String) return (String) value;
+        if (value instanceof Type) return ((Type) value).getDescriptor();
+        throw new TemplateProcessException("The type of value is not String");
     }
 
     public boolean computeBoolean(Evaluator evaluator) {
-        throw new UnsupportedOperationException();
+        Object value = compute(evaluator);
+        if (value instanceof Boolean) {
+            return (boolean) value;
+        }
+        throw new TemplateProcessException("The type of value is not Boolean");
     }
 
+    @SuppressWarnings("unchecked")
     public String[] computeStringArray(Evaluator evaluator) {
-        throw new UnsupportedOperationException();
+        Object value = compute(evaluator);
+        if (value == null) return null;
+        else if (value instanceof Collection) return ((Collection<String>) value).toArray(new String[0]);
+        else if (value instanceof String[]) return (String[]) value;
+        throw new TemplateProcessException("The type of value is not String[]");
     }
 
     public Attribute computeAttribute(Evaluator evaluator) {
-        throw new UnsupportedOperationException();
+        Object value = compute(evaluator);
+        if (value instanceof Attribute) return (Attribute) value;
+        throw new TemplateProcessException("The type of value is not Attribute");
     }
 }

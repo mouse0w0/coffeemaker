@@ -62,7 +62,7 @@ public class BtMethod extends BtObject implements AnnotationOwner {
                 classVisitor.visitMethod(
                         computeInt(ACCESS, evaluator),
                         computeString(NAME, evaluator),
-                        computeString(DESCRIPTOR, evaluator),
+                        computeDescriptor(DESCRIPTOR, evaluator),
                         computeString(SIGNATURE, evaluator),
                         computeStringArray(EXCEPTIONS, evaluator));
 

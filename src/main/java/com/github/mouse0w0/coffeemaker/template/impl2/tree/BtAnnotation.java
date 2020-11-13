@@ -46,25 +46,25 @@ public class BtAnnotation extends BtObject {
     }
 
     public void accept(ClassVisitor classVisitor, Evaluator evaluator) {
-        String desc = computeString(DESCRIPTOR, evaluator);
+        String desc = computeDescriptor(DESCRIPTOR, evaluator);
         boolean visible = computeBoolean(VISIBLE, evaluator);
         accept(classVisitor.visitAnnotation(desc, visible), evaluator);
     }
 
     public void accept(FieldVisitor fieldVisitor, Evaluator evaluator) {
-        String desc = computeString(DESCRIPTOR, evaluator);
+        String desc = computeDescriptor(DESCRIPTOR, evaluator);
         boolean visible = computeBoolean(VISIBLE, evaluator);
         accept(fieldVisitor.visitAnnotation(desc, visible), evaluator);
     }
 
     public void accept(MethodVisitor methodVisitor, Evaluator evaluator) {
-        String desc = computeString(DESCRIPTOR, evaluator);
+        String desc = computeDescriptor(DESCRIPTOR, evaluator);
         boolean visible = computeBoolean(VISIBLE, evaluator);
         accept(methodVisitor.visitAnnotation(desc, visible), evaluator);
     }
 
     public void accept(AnnotationVisitor annotationVisitor, String name, Evaluator evaluator) {
-        accept(annotationVisitor.visitAnnotation(name, computeString(DESCRIPTOR, evaluator)), evaluator);
+        accept(annotationVisitor.visitAnnotation(name, computeDescriptor(DESCRIPTOR, evaluator)), evaluator);
     }
 
     public void accept(AnnotationVisitor annotationVisitor, Evaluator evaluator) {
@@ -87,7 +87,7 @@ public class BtAnnotation extends BtObject {
 
         if (node instanceof BtEnum) {
             BtEnum anEnum = (BtEnum) node;
-            annotationVisitor.visitEnum(name, anEnum.computeString(BtEnum.DESCRIPTOR, evaluator), anEnum.computeString(BtEnum.VALUE, evaluator));
+            annotationVisitor.visitEnum(name, anEnum.computeDescriptor(BtEnum.DESCRIPTOR, evaluator), anEnum.computeString(BtEnum.VALUE, evaluator));
         } else if (node instanceof BtAnnotation) {
             BtAnnotation annotationValue = (BtAnnotation) node;
             annotationValue.accept(annotationVisitor, name, evaluator);

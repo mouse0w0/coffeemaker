@@ -76,7 +76,7 @@ public class BtFieldInsn extends BtInsnBase {
         putValue(DESCRIPTOR, descriptor);
     }
 
-    private BtFieldInsn(
+    public BtFieldInsn(
             final int opcode, final BtNode owner, final BtNode name, final BtNode descriptor) {
         super(opcode);
         put(OWNER, owner);
@@ -102,9 +102,9 @@ public class BtFieldInsn extends BtInsnBase {
     @Override
     public void accept(final MethodVisitor methodVisitor, final Evaluator evaluator) {
         methodVisitor.visitFieldInsn(opcode,
-                computeString(OWNER, evaluator),
+                computeInternalName(OWNER, evaluator),
                 computeString(NAME, evaluator),
-                computeString(DESCRIPTOR, evaluator));
+                computeDescriptor(DESCRIPTOR, evaluator));
         acceptAnnotations(methodVisitor);
     }
 

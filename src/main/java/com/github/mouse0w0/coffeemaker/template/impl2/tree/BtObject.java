@@ -101,6 +101,14 @@ public class BtObject extends BtParent<BtNode> {
         return get(key).computeString(evaluator);
     }
 
+    public String computeInternalName(String key, Evaluator evaluator) {
+        return get(key).computeInternalName(evaluator);
+    }
+
+    public String computeDescriptor(String key, Evaluator evaluator) {
+        return get(key).computeDescriptor(evaluator);
+    }
+
     public boolean computeBoolean(String key, Evaluator evaluator) {
         return get(key).computeBoolean(evaluator);
     }
