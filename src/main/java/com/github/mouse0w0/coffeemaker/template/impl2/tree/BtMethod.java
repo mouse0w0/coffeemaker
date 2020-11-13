@@ -65,11 +65,13 @@ public class BtMethod extends BtObject implements AnnotationOwner {
                         computeDescriptor(DESCRIPTOR, evaluator),
                         computeString(SIGNATURE, evaluator),
                         computeStringArray(EXCEPTIONS, evaluator));
-
         if (methodVisitor == null) {
             return;
         }
+        accept(evaluator, methodVisitor);
+    }
 
+    protected void accept(Evaluator evaluator, MethodVisitor methodVisitor) {
         // Visit the parameters.
         BtList<BtParameter> parameters = get(PARAMETERS);
         if (parameters != null) {
@@ -142,7 +144,7 @@ public class BtMethod extends BtObject implements AnnotationOwner {
         if (containsKey(ATTRIBUTES)) {
             BtList<BtNode> attributes = get(ATTRIBUTES);
             for (BtNode node : attributes) {
-                classVisitor.visitAttribute(node.computeAttribute(evaluator));
+                methodVisitor.visitAttribute(node.computeAttribute(evaluator));
             }
         }
         // Visit the code.

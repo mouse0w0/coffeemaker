@@ -43,6 +43,10 @@ public class BtField extends BtObject implements AnnotationOwner {
         if (fieldVisitor == null) {
             return;
         }
+        accept(fieldVisitor, evaluator);
+    }
+
+    protected void accept(FieldVisitor fieldVisitor, Evaluator evaluator) {
         // Visit the annotations.
         BtList<BtAnnotation> annotations = getAnnotations();
         if (annotations != null) {
@@ -61,7 +65,7 @@ public class BtField extends BtObject implements AnnotationOwner {
         if (containsKey(ATTRIBUTES)) {
             BtList<BtNode> attributes = get(ATTRIBUTES);
             for (BtNode node : attributes) {
-                classVisitor.visitAttribute(node.computeAttribute(evaluator));
+                fieldVisitor.visitAttribute(node.computeAttribute(evaluator));
             }
         }
 
