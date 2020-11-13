@@ -46,7 +46,7 @@ public class ModifyAnnotationHandler extends AnnotationHandler {
             String type = value.<Type>getValue("type").getDescriptor();
             boolean isEnum = value.getValue("isEnum", false);
             String name = value.getValue("name");
-            String statement = value.getValue("statement");
+            String statement = value.getValue("expression");
             if (isEnum) {
                 BtEnum btEnum = new BtEnum();
                 btEnum.putValue(BtEnum.DESCRIPTOR, type);
