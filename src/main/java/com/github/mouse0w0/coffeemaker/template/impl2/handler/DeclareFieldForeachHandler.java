@@ -28,7 +28,7 @@ public class DeclareFieldForeachHandler extends AnnotationHandler {
         fieldForeach.put(BtField.SIGNATURE, field.get(BtField.SIGNATURE));
         fieldForeach.put(BtField.VALUE, field.get(BtField.VALUE));
         fieldForeach.put(BtField.ATTRIBUTES, field.get(BtField.ATTRIBUTES));
-        clazz.getAnnotations().forEach(fieldForeach.getAnnotations()::add);
+        field.getAnnotations().forEach(fieldForeach.getAnnotations()::add);
         fieldForeach.getAnnotations().remove(annotation);
         clazz.getFields().add(fieldForeach);
     }
