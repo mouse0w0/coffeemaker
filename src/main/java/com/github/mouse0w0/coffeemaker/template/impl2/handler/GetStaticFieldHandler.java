@@ -20,8 +20,10 @@ public class GetStaticFieldHandler extends MethodInsnHandler {
     protected void handle(BtMethod method, BtInsnNode insn) {
         BtInsnList instructions = method.getInstructions();
         BtLdcInsn arg0 = (BtLdcInsn) insn.getPrevious();
+        BtInsnNode cast = insn.getNext();
         instructions.insert(insn, new BtComputableFieldInsn(Opcodes.GETSTATIC, arg0.getAsString()));
         instructions.remove(arg0);
         instructions.remove(insn);
+        instructions.remove(cast);
     }
 }
