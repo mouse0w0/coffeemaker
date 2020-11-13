@@ -49,8 +49,7 @@ public class BtClassVisitor extends ClassVisitor {
     @Override
     public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
         BtAnnotation annotation = new BtAnnotation(descriptor, visible);
-        clazz.computeIfNull(BtClass.ANNOTATIONS, k -> new BtList())
-                .add(annotation);
+        clazz.getAnnotations().add(annotation);
         return new BtAnnotationVisitor(api, annotation);
     }
 
@@ -61,7 +60,7 @@ public class BtClassVisitor extends ClassVisitor {
 
     @Override
     public void visitAttribute(Attribute attribute) {
-        clazz.computeIfNull(BtClass.ATTRIBUTES, k -> new BtList())
+        clazz.computeIfNull(BtClass.ATTRIBUTES, k -> new BtList<>())
                 .addValue(attribute);
     }
 
@@ -72,7 +71,7 @@ public class BtClassVisitor extends ClassVisitor {
 
     @Override
     public void visitInnerClass(String name, String outerName, String innerName, int access) {
-        clazz.computeIfNull(BtClass.INNER_CLASSES, k -> new BtList())
+        clazz.computeIfNull(BtClass.INNER_CLASSES, k -> new BtList<>())
                 .add(new BtInnerClass(name, outerName, innerName, access));
     }
 
@@ -84,16 +83,14 @@ public class BtClassVisitor extends ClassVisitor {
     @Override
     public FieldVisitor visitField(int access, String name, String descriptor, String signature, Object value) {
         BtField field = new BtField(access, name, descriptor, signature, value);
-        clazz.computeIfNull(BtClass.FIELDS, k -> new BtList())
-                .add(field);
+        clazz.getFields().add(field);
         return new BtFieldVisitor(api, field);
     }
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
         BtMethod method = new BtMethod(access, name, descriptor, signature, exceptions);
-        clazz.computeIfNull(BtClass.METHODS, k -> new BtList())
-                .add(method);
+        clazz.getMethods().add(method);
         return new BtMethodVisitor(api, method);
     }
 

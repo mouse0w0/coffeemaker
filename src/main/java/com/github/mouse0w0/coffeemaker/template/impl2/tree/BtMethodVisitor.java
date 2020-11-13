@@ -17,8 +17,7 @@ class BtMethodVisitor extends MethodVisitor {
     @Override
     public void visitParameter(String name, int access) {
         BtParameter parameter = new BtParameter(name, access);
-        method.computeIfNull(BtMethod.PARAMETERS, k -> new BtList())
-                .add(parameter);
+        method.computeIfNull(BtMethod.PARAMETERS, k -> new BtList<>()).add(parameter);
     }
 
     @Override
@@ -34,8 +33,7 @@ class BtMethodVisitor extends MethodVisitor {
     @Override
     public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
         BtAnnotation annotation = new BtAnnotation(descriptor, visible);
-        method.computeIfNull(BtMethod.ANNOTATIONS, k -> new BtList())
-                .add(annotation);
+        method.getAnnotations().add(annotation);
         return new BtAnnotationVisitor(api, annotation);
     }
 
@@ -56,8 +54,7 @@ class BtMethodVisitor extends MethodVisitor {
 
     @Override
     public void visitAttribute(Attribute attribute) {
-        method.computeIfNull(BtMethod.ATTRIBUTES, k -> new BtList())
-                .addValue(attribute);
+        method.computeIfNull(BtMethod.ATTRIBUTES, k -> new BtList<>()).addValue(attribute);
     }
 
     @Override
@@ -176,8 +173,8 @@ class BtMethodVisitor extends MethodVisitor {
 
     @Override
     public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
-        method.computeIfNull(BtMethod.TRY_CATCH_BLOCKS, k -> new BtList())
-                .addValue(new BtTryCatchBlock(getBtLabel(start), getBtLabel(end), getBtLabel(handler), type));
+        method.computeIfNull(BtMethod.TRY_CATCH_BLOCKS, k -> new BtList<>())
+                .add(new BtTryCatchBlock(getBtLabel(start), getBtLabel(end), getBtLabel(handler), type));
     }
 
     @Override

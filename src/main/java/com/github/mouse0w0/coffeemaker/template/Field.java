@@ -4,13 +4,13 @@ import org.objectweb.asm.tree.FieldInsnNode;
 
 import java.util.Objects;
 
-public class FieldInsn {
+public class Field {
 
     private final String owner;
     private final String name;
     private final String descriptor;
 
-    public FieldInsn(String owner, String name, String descriptor) {
+    public Field(String owner, String name, String descriptor) {
         this.owner = owner;
         this.name = name;
         this.descriptor = descriptor;
@@ -36,10 +36,10 @@ public class FieldInsn {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FieldInsn fieldInsn = (FieldInsn) o;
-        return Objects.equals(owner, fieldInsn.owner) &&
-                Objects.equals(name, fieldInsn.name) &&
-                Objects.equals(descriptor, fieldInsn.descriptor);
+        Field field = (Field) o;
+        return Objects.equals(owner, field.owner) &&
+                Objects.equals(name, field.name) &&
+                Objects.equals(descriptor, field.descriptor);
     }
 
     @Override

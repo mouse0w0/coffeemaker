@@ -28,9 +28,9 @@
 package com.github.mouse0w0.coffeemaker.template.impl2.tree.insn;
 
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
-import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtNode;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 
 import java.util.Map;
 
@@ -42,7 +42,12 @@ import java.util.Map;
  */
 public class BtLdcInsn extends BtInsnBase {
 
-    public static final String CST = "cst";
+    /**
+     * The constant to be loaded on the stack. This parameter must be a non null {@link Integer}, a
+     * {@link Float}, a {@link Long}, a {@link Double}, a {@link String} or a {@link
+     * org.objectweb.asm.Type}.
+     */
+    public Object cst;
 
     /**
      * Constructs a new {@link BtLdcInsn}.
@@ -52,12 +57,15 @@ public class BtLdcInsn extends BtInsnBase {
      */
     public BtLdcInsn(final Object value) {
         super(Opcodes.LDC);
-        putValue(CST, value);
+        this.cst = value;
     }
 
-    private BtLdcInsn(final BtNode value) {
-        super(Opcodes.LDC);
-        put(CST, value);
+    public String getAsString() {
+        return (String) cst;
+    }
+
+    public Type getAsType() {
+        return (Type) cst;
     }
 
     @Override
@@ -67,12 +75,12 @@ public class BtLdcInsn extends BtInsnBase {
 
     @Override
     public void accept(final MethodVisitor methodVisitor, final Evaluator evaluator) {
-        methodVisitor.visitLdcInsn(compute(CST, evaluator));
+        methodVisitor.visitLdcInsn(cst);
         acceptAnnotations(methodVisitor);
     }
 
     @Override
     public BtInsnBase clone(final Map<BtLabel, BtLabel> clonedLabels) {
-        return new BtLdcInsn(get(CST)).cloneAnnotations(this);
+        return new BtLdcInsn(cst).cloneAnnotations(this);
     }
 }

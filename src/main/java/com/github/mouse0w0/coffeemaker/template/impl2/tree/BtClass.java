@@ -3,7 +3,7 @@ package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 import org.objectweb.asm.ClassVisitor;
 
-public class BtClass extends BtObject implements AnnotationHolder {
+public class BtClass extends BtObject implements AnnotationOwner {
 
     public static final String VERSION = "version";
     public static final String ACCESS = "access";

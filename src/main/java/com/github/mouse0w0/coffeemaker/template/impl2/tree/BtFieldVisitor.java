@@ -16,8 +16,7 @@ class BtFieldVisitor extends FieldVisitor {
     @Override
     public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
         BtAnnotation annotation = new BtAnnotation(descriptor, visible);
-        field.computeIfNull(BtField.ANNOTATIONS, k -> new BtList())
-                .add(annotation);
+        field.getAnnotations().add(annotation);
         return new BtAnnotationVisitor(api, annotation);
     }
 

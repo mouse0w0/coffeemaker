@@ -1,7 +1,7 @@
 package com.github.mouse0w0.coffeemaker.template.impl2;
 
 import com.github.mouse0w0.coffeemaker.template.*;
-import com.github.mouse0w0.coffeemaker.template.impl2.handler.Handler;
+import com.github.mouse0w0.coffeemaker.template.impl2.handler.*;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtClass;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtClassVisitor;
 import org.objectweb.asm.ClassReader;
@@ -18,6 +18,10 @@ public class TemplateParserImpl implements TemplateParser {
     private final List<Handler> handlers = new ArrayList<>();
 
     public TemplateParserImpl() {
+        handlers.add(new ModifySourceHandler());
+        handlers.add(new ModifyAnnotationHandler());
+        handlers.add(new ConstantsHandler());
+        handlers.add(new GetStaticFieldHandler());
     }
 
     @Override

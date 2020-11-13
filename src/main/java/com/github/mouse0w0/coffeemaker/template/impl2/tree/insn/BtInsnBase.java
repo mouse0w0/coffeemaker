@@ -27,14 +27,11 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 package com.github.mouse0w0.coffeemaker.template.impl2.tree.insn;
 
-import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
-import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtObject;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A node that represents a bytecode instruction. <i>An instruction can appear at most once in at
@@ -43,7 +40,7 @@ import java.util.Map;
  * @author Eric Bruneton
  * @author Mouse0w0 (modify)
  */
-public abstract class BtInsnBase extends BtObject {
+public abstract class BtInsnBase extends BtInsnNode {
 
   public static final String OPCODE = "opcode";
 
@@ -149,30 +146,13 @@ public abstract class BtInsnBase extends BtObject {
   public List<TypeAnnotationNode> invisibleTypeAnnotations;
 
   /**
-   * The previous instruction in the list to which this instruction belongs.
-   */
-  BtInsnBase previousInsn;
-
-  /**
-   * The next instruction in the list to which this instruction belongs.
-   */
-  BtInsnBase nextInsn;
-
-  /**
-   * The index of this instruction in the list to which it belongs. The value of this field is
-   * correct only when {@link BtInsnList#cache} is not null. A value of -1 indicates that this
-   * instruction does not belong to any {@link BtInsnList}.
-   */
-  int index;
-
-  /**
    * Constructs a new {@link BtInsnBase}.
    *
    * @param opcode the opcode of the instruction to be constructed.
    */
   protected BtInsnBase(final int opcode) {
+    super();
     this.opcode = opcode;
-    this.index = -1;
   }
 
   /**
@@ -190,33 +170,6 @@ public abstract class BtInsnBase extends BtObject {
    * @return the type of this instruction, i.e. one the constants defined in this class.
    */
   public abstract int getType();
-
-  /**
-   * Returns the previous instruction in the list to which this instruction belongs, if any.
-   *
-   * @return the previous instruction in the list to which this instruction belongs, if any. May be
-   * {@literal null}.
-   */
-  public BtInsnBase getPrevious() {
-    return previousInsn;
-  }
-
-  /**
-   * Returns the next instruction in the list to which this instruction belongs, if any.
-   *
-   * @return the next instruction in the list to which this instruction belongs, if any. May be
-   * {@literal null}.
-   */
-  public BtInsnBase getNext() {
-    return nextInsn;
-  }
-
-  /**
-   * Makes the given method visitor visit this instruction.
-   *
-   * @param methodVisitor a method visitor.
-   */
-  public abstract void accept(MethodVisitor methodVisitor, Evaluator evaluator);
 
   /**
    * Makes the given visitor visit the annotations of this instruction.
@@ -240,42 +193,6 @@ public abstract class BtInsnBase extends BtObject {
                         typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, false));
       }
     }
-  }
-
-  /**
-   * Returns a copy of this instruction.
-   *
-   * @param clonedLabels a map from LabelNodes to cloned LabelNodes.
-   * @return a copy of this instruction. The returned instruction does not belong to any {@link
-   * BtInsnList}.
-   */
-  public abstract BtInsnBase clone(Map<BtLabel, BtLabel> clonedLabels);
-
-  /**
-   * Returns the clone of the given label.
-   *
-   * @param label        a label.
-   * @param clonedLabels a map from LabelNodes to cloned LabelNodes.
-   * @return the clone of the given label.
-   */
-  static BtLabel clone(final BtLabel label, final Map<BtLabel, BtLabel> clonedLabels) {
-    return clonedLabels.get(label);
-  }
-
-  /**
-   * Returns the clones of the given labels.
-   *
-   * @param labels       a list of labels.
-   * @param clonedLabels a map from LabelNodes to cloned LabelNodes.
-   * @return the clones of the given labels.
-   */
-  static BtLabel[] clone(
-          final List<BtLabel> labels, final Map<BtLabel, BtLabel> clonedLabels) {
-    BtLabel[] clones = new BtLabel[labels.size()];
-    for (int i = 0, n = clones.length; i < n; ++i) {
-      clones[i] = clonedLabels.get(labels.get(i));
-    }
-    return clones;
   }
 
   /**

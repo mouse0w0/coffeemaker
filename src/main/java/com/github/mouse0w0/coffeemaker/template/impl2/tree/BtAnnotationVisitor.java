@@ -1,11 +1,10 @@
 package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 
-import com.github.mouse0w0.coffeemaker.template.Enum;
 import org.objectweb.asm.AnnotationVisitor;
 
 class BtAnnotationVisitor extends AnnotationVisitor {
     private BtAnnotation annotation;
-    private BtList list;
+    private BtList<BtNode> list;
 
     public BtAnnotationVisitor(int api) {
         super(api);
@@ -16,7 +15,7 @@ class BtAnnotationVisitor extends AnnotationVisitor {
         this.annotation = annotation;
     }
 
-    public BtAnnotationVisitor(int api, BtList list) {
+    public BtAnnotationVisitor(int api, BtList<BtNode> list) {
         super(api);
         this.list = list;
     }
@@ -44,7 +43,7 @@ class BtAnnotationVisitor extends AnnotationVisitor {
 
     @Override
     public void visitEnum(String name, String descriptor, String value) {
-        putValue(name, new Enum(descriptor, value));
+        put(name, new BtEnum(descriptor, value));
     }
 
     @Override
@@ -56,7 +55,7 @@ class BtAnnotationVisitor extends AnnotationVisitor {
 
     @Override
     public AnnotationVisitor visitArray(String name) {
-        BtList list = new BtList();
+        BtList<BtNode> list = new BtList<>();
         put(name, list);
         return new BtAnnotationVisitor(api, list);
     }

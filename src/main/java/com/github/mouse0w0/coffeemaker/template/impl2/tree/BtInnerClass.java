@@ -21,5 +21,10 @@ public class BtInnerClass extends BtObject {
     }
 
     public void accept(ClassVisitor classVisitor, Evaluator evaluator) {
+        classVisitor.visitInnerClass(
+                computeString(NAME, evaluator),
+                computeString(OUTER_NAME, evaluator),
+                computeString(INNER_NAME, evaluator),
+                computeInt(ACCESS, evaluator));
     }
 }
