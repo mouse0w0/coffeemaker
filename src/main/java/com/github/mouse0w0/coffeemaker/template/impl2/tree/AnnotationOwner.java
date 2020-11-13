@@ -1,6 +1,6 @@
 package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 
-public interface AnnotationHolder {
+public interface AnnotationOwner {
 
     BtList<BtAnnotation> getAnnotations();
 

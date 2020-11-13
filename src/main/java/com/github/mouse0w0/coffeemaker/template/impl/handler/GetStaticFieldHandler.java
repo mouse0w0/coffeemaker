@@ -1,7 +1,7 @@
 package com.github.mouse0w0.coffeemaker.template.impl.handler;
 
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
-import com.github.mouse0w0.coffeemaker.template.FieldInsn;
+import com.github.mouse0w0.coffeemaker.template.Field;
 import com.github.mouse0w0.coffeemaker.template.Markers;
 import com.github.mouse0w0.coffeemaker.template.TemplateProcessException;
 import com.github.mouse0w0.coffeemaker.template.impl.Processor;
@@ -49,7 +49,7 @@ public class GetStaticFieldHandler implements InvokeMethodHandler {
             AbstractInsnNode insertPoint = methodInsn.getPrevious();
             instructions.remove(methodInsn.getNext());
             instructions.remove(methodInsn);
-            instructions.set(insertPoint, ((FieldInsn) value).toInsnNode(Opcodes.GETSTATIC));
+            instructions.set(insertPoint, ((Field) value).toInsnNode(Opcodes.GETSTATIC));
             return classNode;
         }
 

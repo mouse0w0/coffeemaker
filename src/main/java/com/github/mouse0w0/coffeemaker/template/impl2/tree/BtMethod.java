@@ -7,7 +7,7 @@ import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 
-public class BtMethod extends BtObject implements AnnotationHolder {
+public class BtMethod extends BtObject implements AnnotationOwner {
 
     public static final String ACCESS = "access";
     public static final String NAME = "name";
@@ -34,7 +34,7 @@ public class BtMethod extends BtObject implements AnnotationHolder {
 
     public static final String LOCAL_VARIABLES = "localVariables";
 
-    private boolean visited = true;
+    private boolean visited;
 
     public BtMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
         putValue(ACCESS, access);
@@ -50,6 +50,10 @@ public class BtMethod extends BtObject implements AnnotationHolder {
     @Override
     public BtList<BtAnnotation> getAnnotations() {
         return computeIfNull(ANNOTATIONS, k -> new BtList<>());
+    }
+
+    public BtInsnList getInstructions() {
+        return computeIfNull(INSTRUCTIONS, k -> new BtInsnList());
     }
 
     @SuppressWarnings("unchecked")
@@ -131,8 +135,8 @@ public class BtMethod extends BtObject implements AnnotationHolder {
             }
         }
         // Visit the non standard attributes.
-        BtInsnList instructions = get(INSTRUCTIONS);
-        if (visited) {
+        BtInsnList instructions = getInstructions();
+        if (!visited) {
             instructions.resetLabels();
         }
         if (containsKey(ATTRIBUTES)) {
@@ -146,10 +150,10 @@ public class BtMethod extends BtObject implements AnnotationHolder {
             methodVisitor.visitCode();
             // Visits the try catch blocks.
 
-            BtList tryCatchBlocks = get(TRY_CATCH_BLOCKS);
+            BtList<BtTryCatchBlock> tryCatchBlocks = get(TRY_CATCH_BLOCKS);
             if (tryCatchBlocks != null) {
                 for (int i = 0, n = tryCatchBlocks.size(); i < n; ++i) {
-                    BtTryCatchBlock tryCatchBlock = (BtTryCatchBlock) tryCatchBlocks.get(i);
+                    BtTryCatchBlock tryCatchBlock = tryCatchBlocks.get(i);
                     tryCatchBlock.updateIndex(i);
                     tryCatchBlock.accept(methodVisitor, evaluator);
                 }

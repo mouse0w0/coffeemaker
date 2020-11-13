@@ -1,7 +1,7 @@
 package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 
+import com.github.mouse0w0.coffeemaker.evaluator.EmptyEvaluator;
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
-import com.github.mouse0w0.coffeemaker.template.Enum;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
@@ -22,14 +22,27 @@ public class BtAnnotation extends BtObject {
     public BtAnnotation() {
     }
 
+    public BtObject getValues() {
+        return computeIfNull(BtAnnotation.VALUES, k -> new BtObject());
+    }
+
     public void putAnnotationValue(String name, BtNode value) {
-        computeIfNull(BtAnnotation.VALUES, k -> new BtObject())
-                .put(name, value);
+        getValues().put(name, value);
     }
 
     public void putAnnotationValue(String name, Object value) {
-        computeIfNull(BtAnnotation.VALUES, k -> new BtObject())
-                .putValue(name, value);
+        getValues().putValue(name, value);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T getValue(String key) {
+        BtNode node = getValues().get(key);
+        return node != null ? (T) node.compute(EmptyEvaluator.INSTANCE) : null;
+    }
+
+    public <T> T getValue(String key, T defaultValue) {
+        T value = getValue(key);
+        return value != null ? value : defaultValue;
     }
 
     public void accept(ClassVisitor classVisitor, Evaluator evaluator) {
@@ -67,30 +80,28 @@ public class BtAnnotation extends BtObject {
         annotationVisitor.visitEnd();
     }
 
+    @SuppressWarnings("unchecked")
     public static void accept(
             final AnnotationVisitor annotationVisitor, final String name, final BtNode node, final Evaluator evaluator) {
         if (annotationVisitor == null) return;
 
-        if (node instanceof BtAnnotation) {
+        if (node instanceof BtEnum) {
+            BtEnum anEnum = (BtEnum) node;
+            annotationVisitor.visitEnum(name, anEnum.computeString(BtEnum.DESCRIPTOR, evaluator), anEnum.computeString(BtEnum.VALUE, evaluator));
+        } else if (node instanceof BtAnnotation) {
             BtAnnotation annotationValue = (BtAnnotation) node;
             annotationValue.accept(annotationVisitor, name, evaluator);
         } else if (node instanceof BtList) {
             AnnotationVisitor arrayAnnotationVisitor = annotationVisitor.visitArray(name);
             if (arrayAnnotationVisitor != null) {
-                BtList arrayValue = (BtList) node;
+                BtList<BtNode> arrayValue = (BtList<BtNode>) node;
                 for (int i = 0, n = arrayValue.size(); i < n; ++i) {
                     accept(arrayAnnotationVisitor, null, arrayValue.get(i), evaluator);
                 }
                 arrayAnnotationVisitor.visitEnd();
             }
         } else {
-            Object value = node.compute(evaluator);
-            if (value instanceof Enum) {
-                Enum anEnum = (Enum) value;
-                annotationVisitor.visitEnum(name, anEnum.getDescriptor(), anEnum.getValue());
-            } else {
-                annotationVisitor.visit(name, value);
-            }
+            annotationVisitor.visit(name, node.compute(evaluator));
         }
     }
 }

@@ -31,18 +31,15 @@ import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtParent;
 import org.objectweb.asm.MethodVisitor;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
- * A doubly linked list of {@link BtInsnBase} objects. <i>This implementation is not thread
+ * A doubly linked list of {@link BtInsnNode} objects. <i>This implementation is not thread
  * safe</i>.
  *
  * @author Mouse0w0 (modify)
  */
-public class BtInsnList extends BtParent<BtInsnBase> {
+public class BtInsnList extends BtParent<BtInsnNode> {
 
     /**
      * The number of instructions in this list.
@@ -52,23 +49,23 @@ public class BtInsnList extends BtParent<BtInsnBase> {
     /**
      * The first instruction in this list. May be {@literal null}.
      */
-    private BtInsnBase firstInsn;
+    private BtInsnNode firstInsn;
 
     /**
      * The last instruction in this list. May be {@literal null}.
      */
-    private BtInsnBase lastInsn;
+    private BtInsnNode lastInsn;
 
     /**
      * A cache of the instructions of this list. This cache is used to improve the performance of the
      * {@link #compute} method.
      */
-    BtInsnBase[] cache;
+    BtInsnNode[] cache;
 
     @Override
-    public Collection<BtInsnBase> getChildren() {
+    public Collection<BtInsnNode> getChildren() {
         if (cache == null) toArray();
-        return Arrays.asList(cache);
+        return cache != null ? Arrays.asList(cache) : Collections.emptyList();
     }
 
     @Override
@@ -90,7 +87,7 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      *
      * @return the first instruction in this list, or {@literal null} if the list is empty.
      */
-    public BtInsnBase getFirst() {
+    public BtInsnNode getFirst() {
         return firstInsn;
     }
 
@@ -99,7 +96,7 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      *
      * @return the last instruction in this list, or {@literal null} if the list is empty.
      */
-    public BtInsnBase getLast() {
+    public BtInsnNode getLast() {
         return lastInsn;
     }
 
@@ -113,7 +110,7 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      * @return the instruction whose index is given.
      * @throws IndexOutOfBoundsException if (index &lt; 0 || index &gt;= size()).
      */
-    public BtInsnBase get(final int index) {
+    public BtInsnNode get(final int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
@@ -131,8 +128,8 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      * @param insnNode an instruction.
      * @return {@literal true} if the given instruction belongs to this list.
      */
-    public boolean contains(final BtInsnBase insnNode) {
-        BtInsnBase currentInsn = firstInsn;
+    public boolean contains(final BtInsnNode insnNode) {
+        BtInsnNode currentInsn = firstInsn;
         while (currentInsn != null && currentInsn != insnNode) {
             currentInsn = currentInsn.nextInsn;
         }
@@ -150,7 +147,7 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      * undefined if the given instruction does not belong to this list</i>. Use {@link #contains }
      * to test if an instruction belongs to an instruction list or not.
      */
-    public int indexOf(final BtInsnBase insnNode) {
+    public int indexOf(final BtInsnNode insnNode) {
         if (cache == null) {
             cache = toArray();
         }
@@ -163,11 +160,16 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      * @param methodVisitor the method visitor that must visit the instructions.
      */
     public void accept(final MethodVisitor methodVisitor, final Evaluator evaluator) {
-        BtInsnBase currentInsn = firstInsn;
+        BtInsnNode currentInsn = firstInsn;
         while (currentInsn != null) {
             currentInsn.accept(methodVisitor, evaluator);
             currentInsn = currentInsn.nextInsn;
         }
+    }
+
+    @Override
+    public Iterator<BtInsnNode> iterator() {
+        return listIterator();
     }
 
     /**
@@ -175,7 +177,7 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      *
      * @return an iterator over the instructions in this list.
      */
-    public ListIterator<BtInsnBase> listIterator() {
+    public ListIterator<BtInsnNode> listIterator() {
         return listIterator(0);
     }
 
@@ -186,7 +188,7 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      * @return an iterator over the instructions in this list.
      */
     @SuppressWarnings("unchecked")
-    public ListIterator<BtInsnBase> listIterator(final int index) {
+    public ListIterator<BtInsnNode> listIterator(final int index) {
         return new InsnListIterator(index);
     }
 
@@ -195,10 +197,10 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      *
      * @return an array containing all the instructions in this list.
      */
-    public BtInsnBase[] toArray() {
+    public BtInsnNode[] toArray() {
         int currentInsnIndex = 0;
-        BtInsnBase currentInsn = firstInsn;
-        BtInsnBase[] insnNodeArray = new BtInsnBase[size];
+        BtInsnNode currentInsn = firstInsn;
+        BtInsnNode[] insnNodeArray = new BtInsnNode[size];
         while (currentInsn != null) {
             insnNodeArray[currentInsnIndex] = currentInsn;
             currentInsn.index = currentInsnIndex++;
@@ -213,15 +215,15 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      * @param oldInsnNode an instruction <i>of this list</i>.
      * @param newInsnNode another instruction, <i>which must not belong to any {@link BtInsnList}</i>.
      */
-    public void set(final BtInsnBase oldInsnNode, final BtInsnBase newInsnNode) {
-        BtInsnBase nextInsn = oldInsnNode.nextInsn;
+    public void set(final BtInsnNode oldInsnNode, final BtInsnNode newInsnNode) {
+        BtInsnNode nextInsn = oldInsnNode.nextInsn;
         newInsnNode.nextInsn = nextInsn;
         if (nextInsn != null) {
             nextInsn.previousInsn = newInsnNode;
         } else {
             lastInsn = newInsnNode;
         }
-        BtInsnBase previousInsn = oldInsnNode.previousInsn;
+        BtInsnNode previousInsn = oldInsnNode.previousInsn;
         newInsnNode.previousInsn = previousInsn;
         if (previousInsn != null) {
             previousInsn.nextInsn = newInsnNode;
@@ -245,7 +247,7 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      *
      * @param insnNode an instruction, <i>which must not belong to any {@link BtInsnList}</i>.
      */
-    public void add(final BtInsnBase insnNode) {
+    public void add(final BtInsnNode insnNode) {
         ++size;
         if (lastInsn == null) {
             firstInsn = insnNode;
@@ -274,7 +276,7 @@ public class BtInsnList extends BtParent<BtInsnBase> {
             firstInsn = insnList.firstInsn;
             lastInsn = insnList.lastInsn;
         } else {
-            BtInsnBase firstInsnListElement = insnList.firstInsn;
+            BtInsnNode firstInsnListElement = insnList.firstInsn;
             lastInsn.nextInsn = firstInsnListElement;
             firstInsnListElement.previousInsn = lastInsn;
             lastInsn = insnList.lastInsn;
@@ -288,7 +290,7 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      *
      * @param insnNode an instruction, <i>which must not belong to any {@link BtInsnList}</i>.
      */
-    public void insert(final BtInsnBase insnNode) {
+    public void insert(final BtInsnNode insnNode) {
         ++size;
         if (firstInsn == null) {
             firstInsn = insnNode;
@@ -317,7 +319,7 @@ public class BtInsnList extends BtParent<BtInsnBase> {
             firstInsn = insnList.firstInsn;
             lastInsn = insnList.lastInsn;
         } else {
-            BtInsnBase lastInsnListElement = insnList.lastInsn;
+            BtInsnNode lastInsnListElement = insnList.lastInsn;
             firstInsn.previousInsn = lastInsnListElement;
             lastInsnListElement.nextInsn = firstInsn;
             firstInsn = insnList.firstInsn;
@@ -333,9 +335,9 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      * @param insnNode     the instruction to be inserted, <i>which must not belong to any {@link
      *                     BtInsnList}</i>.
      */
-    public void insert(final BtInsnBase previousInsn, final BtInsnBase insnNode) {
+    public void insert(final BtInsnNode previousInsn, final BtInsnNode insnNode) {
         ++size;
-        BtInsnBase nextInsn = previousInsn.nextInsn;
+        BtInsnNode nextInsn = previousInsn.nextInsn;
         if (nextInsn == null) {
             lastInsn = insnNode;
         } else {
@@ -356,14 +358,14 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      * @param insnList     the instruction list to be inserted, which is cleared during the process. This
      *                     list must be different from 'this'.
      */
-    public void insert(final BtInsnBase previousInsn, final BtInsnList insnList) {
+    public void insert(final BtInsnNode previousInsn, final BtInsnList insnList) {
         if (insnList.size == 0) {
             return;
         }
         size += insnList.size;
-        BtInsnBase firstInsnListElement = insnList.firstInsn;
-        BtInsnBase lastInsnListElement = insnList.lastInsn;
-        BtInsnBase nextInsn = previousInsn.nextInsn;
+        BtInsnNode firstInsnListElement = insnList.firstInsn;
+        BtInsnNode lastInsnListElement = insnList.lastInsn;
+        BtInsnNode nextInsn = previousInsn.nextInsn;
         if (nextInsn == null) {
             lastInsn = lastInsnListElement;
         } else {
@@ -383,9 +385,9 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      * @param insnNode the instruction to be inserted, <i>which must not belong to any {@link
      *                 BtInsnList}</i>.
      */
-    public void insertBefore(final BtInsnBase nextInsn, final BtInsnBase insnNode) {
+    public void insertBefore(final BtInsnNode nextInsn, final BtInsnNode insnNode) {
         ++size;
-        BtInsnBase previousInsn = nextInsn.previousInsn;
+        BtInsnNode previousInsn = nextInsn.previousInsn;
         if (previousInsn == null) {
             firstInsn = insnNode;
         } else {
@@ -406,14 +408,14 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      * @param insnList the instruction list to be inserted, which is cleared during the process. This
      *                 list must be different from 'this'.
      */
-    public void insertBefore(final BtInsnBase nextInsn, final BtInsnList insnList) {
+    public void insertBefore(final BtInsnNode nextInsn, final BtInsnList insnList) {
         if (insnList.size == 0) {
             return;
         }
         size += insnList.size;
-        BtInsnBase firstInsnListElement = insnList.firstInsn;
-        BtInsnBase lastInsnListElement = insnList.lastInsn;
-        BtInsnBase previousInsn = nextInsn.previousInsn;
+        BtInsnNode firstInsnListElement = insnList.firstInsn;
+        BtInsnNode lastInsnListElement = insnList.lastInsn;
+        BtInsnNode previousInsn = nextInsn.previousInsn;
         if (previousInsn == null) {
             firstInsn = firstInsnListElement;
         } else {
@@ -431,10 +433,10 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      *
      * @param insnNode the instruction <i>of this list</i> that must be removed.
      */
-    public void remove(final BtInsnBase insnNode) {
+    public void remove(final BtInsnNode insnNode) {
         --size;
-        BtInsnBase nextInsn = insnNode.nextInsn;
-        BtInsnBase previousInsn = insnNode.previousInsn;
+        BtInsnNode nextInsn = insnNode.nextInsn;
+        BtInsnNode previousInsn = insnNode.previousInsn;
         if (nextInsn == null) {
             if (previousInsn == null) {
                 firstInsn = null;
@@ -465,9 +467,9 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      */
     void removeAll(final boolean mark) {
         if (mark) {
-            BtInsnBase currentInsn = firstInsn;
+            BtInsnNode currentInsn = firstInsn;
             while (currentInsn != null) {
-                BtInsnBase next = currentInsn.nextInsn;
+                BtInsnNode next = currentInsn.nextInsn;
                 currentInsn.index = -1; // currentInsn no longer belongs to an InsnList.
                 currentInsn.previousInsn = null;
                 currentInsn.nextInsn = null;
@@ -492,7 +494,7 @@ public class BtInsnList extends BtParent<BtInsnBase> {
      * instruction list between several <code>ClassWriter</code>s.
      */
     public void resetLabels() {
-        BtInsnBase currentInsn = firstInsn;
+        BtInsnNode currentInsn = firstInsn;
         while (currentInsn != null) {
             if (currentInsn instanceof BtLabel) {
                 ((BtLabel) currentInsn).resetLabel();
@@ -505,11 +507,11 @@ public class BtInsnList extends BtParent<BtInsnBase> {
     @SuppressWarnings("rawtypes")
     private final class InsnListIterator implements ListIterator {
 
-        BtInsnBase nextInsn;
+        BtInsnNode nextInsn;
 
-        BtInsnBase previousInsn;
+        BtInsnNode previousInsn;
 
-        BtInsnBase remove;
+        BtInsnNode remove;
 
         InsnListIterator(final int index) {
             if (index < 0 || index > size()) {
@@ -518,7 +520,7 @@ public class BtInsnList extends BtParent<BtInsnBase> {
                 nextInsn = null;
                 previousInsn = getLast();
             } else {
-                BtInsnBase currentInsn = getFirst();
+                BtInsnNode currentInsn = getFirst();
                 for (int i = 0; i < index; i++) {
                     currentInsn = currentInsn.nextInsn;
                 }
@@ -538,7 +540,7 @@ public class BtInsnList extends BtParent<BtInsnBase> {
             if (nextInsn == null) {
                 throw new NoSuchElementException();
             }
-            BtInsnBase result = nextInsn;
+            BtInsnNode result = nextInsn;
             previousInsn = result;
             nextInsn = result.nextInsn;
             remove = result;
@@ -570,7 +572,7 @@ public class BtInsnList extends BtParent<BtInsnBase> {
             if (previousInsn == null) {
                 throw new NoSuchElementException();
             }
-            BtInsnBase result = previousInsn;
+            BtInsnNode result = previousInsn;
             nextInsn = result;
             previousInsn = result.previousInsn;
             remove = result;
@@ -602,24 +604,24 @@ public class BtInsnList extends BtParent<BtInsnBase> {
         @Override
         public void add(final Object o) {
             if (nextInsn != null) {
-                BtInsnList.this.insertBefore(nextInsn, (BtInsnBase) o);
+                BtInsnList.this.insertBefore(nextInsn, (BtInsnNode) o);
             } else if (previousInsn != null) {
-                BtInsnList.this.insert(previousInsn, (BtInsnBase) o);
+                BtInsnList.this.insert(previousInsn, (BtInsnNode) o);
             } else {
-                BtInsnList.this.add((BtInsnBase) o);
+                BtInsnList.this.add((BtInsnNode) o);
             }
-            previousInsn = (BtInsnBase) o;
+            previousInsn = (BtInsnNode) o;
             remove = null;
         }
 
         @Override
         public void set(final Object o) {
             if (remove != null) {
-                BtInsnList.this.set(remove, (BtInsnBase) o);
+                BtInsnList.this.set(remove, (BtInsnNode) o);
                 if (remove == previousInsn) {
-                    previousInsn = (BtInsnBase) o;
+                    previousInsn = (BtInsnNode) o;
                 } else {
-                    nextInsn = (BtInsnBase) o;
+                    nextInsn = (BtInsnNode) o;
                 }
             } else {
                 throw new IllegalStateException();
