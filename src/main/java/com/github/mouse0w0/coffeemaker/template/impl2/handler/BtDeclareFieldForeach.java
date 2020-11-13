@@ -6,17 +6,14 @@ import com.github.mouse0w0.coffeemaker.template.Field;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtField;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
-import org.objectweb.asm.Opcodes;
 
 public class BtDeclareFieldForeach extends BtField {
     private final String iterable;
     private final String elementName;
 
-    public BtDeclareFieldForeach(BtField btField, String iterable, String elementName, boolean modifierFinal) {
+    public BtDeclareFieldForeach(String iterable, String elementName) {
         this.iterable = iterable;
         this.elementName = elementName;
-        btField.forEach(this::put);
-        putValue(ACCESS, btField.get(ACCESS).getAsInt() | (modifierFinal ? Opcodes.ACC_FINAL : 0));
     }
 
     @Override

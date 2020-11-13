@@ -5,6 +5,7 @@ import com.github.mouse0w0.coffeemaker.template.impl2.tree.AnnotationOwner;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtAnnotation;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtClass;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtField;
+import org.objectweb.asm.Opcodes;
 
 public class DeclareFieldForeachHandler extends AnnotationHandler {
     @Override
@@ -16,11 +17,19 @@ public class DeclareFieldForeachHandler extends AnnotationHandler {
     protected void handle(AnnotationOwner owner, BtAnnotation annotation) {
         String iterable = annotation.getValue("iterable");
         String elementName = annotation.getValue("elementName");
-        boolean modifierFinal = annotation.getValue("modifierFinal", true);
+        int modifierFinal = annotation.getValue("modifierFinal", true) ? Opcodes.ACC_FINAL : 0;
+
         BtField field = (BtField) owner;
-//        field.getAnnotations().remove(annotation);
         BtClass clazz = (BtClass) field.getParent().getParent();
         clazz.getFields().remove(field);
-        clazz.getFields().add(new BtDeclareFieldForeach(field, iterable, elementName, modifierFinal));
+
+        BtDeclareFieldForeach fieldForeach = new BtDeclareFieldForeach(iterable, elementName);
+        fieldForeach.putValue(BtField.ACCESS, field.get(BtField.ACCESS).getAsInt() | modifierFinal);
+        fieldForeach.put(BtField.SIGNATURE, field.get(BtField.SIGNATURE));
+        fieldForeach.put(BtField.VALUE, field.get(BtField.VALUE));
+        fieldForeach.put(BtField.ATTRIBUTES, field.get(BtField.ATTRIBUTES));
+        clazz.getAnnotations().forEach(fieldForeach.getAnnotations()::add);
+        fieldForeach.getAnnotations().remove(annotation);
+        clazz.getFields().add(fieldForeach);
     }
 }

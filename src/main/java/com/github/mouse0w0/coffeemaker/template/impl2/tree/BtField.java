@@ -62,8 +62,8 @@ public class BtField extends BtObject implements AnnotationOwner {
 //            }
 //        }
         // Visit the non standard attributes.
-        if (containsKey(ATTRIBUTES)) {
-            BtList<BtNode> attributes = get(ATTRIBUTES);
+        BtList<BtNode> attributes = get(ATTRIBUTES);
+        if (attributes != null) {
             for (BtNode node : attributes) {
                 fieldVisitor.visitAttribute(node.computeAttribute(evaluator));
             }

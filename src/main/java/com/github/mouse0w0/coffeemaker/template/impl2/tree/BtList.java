@@ -4,6 +4,7 @@ import com.github.mouse0w0.coffeemaker.template.impl2.tree.util.SmartList;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class BtList<T extends BtNode> extends BtParent<T> {
@@ -47,5 +48,10 @@ public class BtList<T extends BtNode> extends BtParent<T> {
     @Override
     public int size() {
         return children.size();
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return children.iterator();
     }
 }
