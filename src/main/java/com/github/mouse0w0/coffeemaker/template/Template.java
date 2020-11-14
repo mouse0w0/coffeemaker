@@ -7,4 +7,6 @@ public interface Template {
     String getName();
 
     byte[] process(Evaluator evaluator);
+
+    byte[] process(String newClassName, Evaluator evaluator);
 }
