@@ -2,7 +2,6 @@ package com.github.mouse0w0.coffeemaker;
 
 import com.github.mouse0w0.coffeemaker.evaluator.SimpleEvaluator;
 import com.github.mouse0w0.coffeemaker.template.Field;
-import com.github.mouse0w0.coffeemaker.util.AsmUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,11 +21,8 @@ public class TestCoffeeMaker {
 //        dataModel.put("registerName", "examplemod_example");
 //        dataModel.put("translationKey", "itemGroup.examplemod.example");
 //        dataModel.put("hasSearchBar", false);
-//        byte[] bytes = AsmUtils.rename(
-//                coffeeMaker.getTemplate("template/TemplateItemGroup")
-//                        .process(new SimpleEvaluator(dataModel)),
-//                "template/TemplateItemGroup",
-//                "com/example/examplemod/itemGroup/ExampleItemGroup");
+//        byte[] bytes = coffeeMaker.getTemplate("template/TemplateItemGroup")
+//                        .process("com/example/examplemod/itemGroup/ExampleItemGroup", new SimpleEvaluator(dataModel));
 //        Files.write(Paths.get("ExampleItemGroup.class"), bytes);
 
         coffeeMaker.loadTemplate(TestCoffeeMaker.class.getResourceAsStream("ModItems.class"));
@@ -37,11 +33,8 @@ public class TestCoffeeMaker {
         map.put("modid", "examplemod");
         map.put("items", items);
         SimpleEvaluator evaluator = new SimpleEvaluator(map);
-        byte[] bytes = AsmUtils.rename(
-                coffeeMaker.getTemplate("template/ModItems")
-                        .process(evaluator),
-                "template/ModItems",
-                "com/example/examplemod/item/ModItems");
+        byte[] bytes = coffeeMaker.getTemplate("template/ModItems")
+                .process("com/example/examplemod/item/ModItems", evaluator);
         Files.write(Paths.get("ModItems.class"), bytes);
     }
 }
