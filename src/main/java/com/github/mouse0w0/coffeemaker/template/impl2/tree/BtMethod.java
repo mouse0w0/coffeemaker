@@ -90,10 +90,13 @@ public class BtMethod extends BtObject implements AnnotationOwner {
                 annotationVisitor.visitEnd();
             }
         }
-        if (containsKey(ANNOTATIONS)) {
+
+        {
             BtList<BtAnnotation> annotations = getAnnotations();
-            for (BtNode node : annotations) {
-                ((BtAnnotation) node).accept(methodVisitor, evaluator);
+            if (annotations != null) {
+                for (BtNode node : annotations) {
+                    ((BtAnnotation) node).accept(methodVisitor, evaluator);
+                }
             }
         }
 
@@ -142,8 +145,8 @@ public class BtMethod extends BtObject implements AnnotationOwner {
         if (!visited) {
             instructions.resetLabels();
         }
-        if (containsKey(ATTRIBUTES)) {
-            BtList<BtNode> attributes = get(ATTRIBUTES);
+        BtList<BtNode> attributes = get(ATTRIBUTES);
+        if (attributes != null) {
             for (BtNode node : attributes) {
                 methodVisitor.visitAttribute(node.computeAttribute(evaluator));
             }

@@ -112,8 +112,10 @@ public class BtClass extends BtObject implements AnnotationOwner {
 //        }
         // Visit the inner classes.
         BtList<BtInnerClass> innerClasses = get(INNER_CLASSES);
-        for (BtInnerClass innerClass : innerClasses) {
-            innerClass.accept(classVisitor, evaluator);
+        if (innerClasses != null) {
+            for (BtInnerClass innerClass : innerClasses) {
+                innerClass.accept(classVisitor, evaluator);
+            }
         }
 //        // Visit the record components.
 //        if (recordComponents != null) {
@@ -123,14 +125,18 @@ public class BtClass extends BtObject implements AnnotationOwner {
 //        }
         // Visit the fields.
         BtList<BtField> fields = getFields();
-        for (BtField field : fields) {
-            field.accept(classVisitor, evaluator);
+        if (fields != null) {
+            for (BtField field : fields) {
+                field.accept(classVisitor, evaluator);
+            }
         }
 
         // Visit the methods.
         BtList<BtMethod> methods = getMethods();
-        for (BtMethod method : methods) {
-            method.accept(classVisitor, evaluator);
+        if (methods != null) {
+            for (BtMethod method : methods) {
+                method.accept(classVisitor, evaluator);
+            }
         }
 
         classVisitor.visitEnd();
