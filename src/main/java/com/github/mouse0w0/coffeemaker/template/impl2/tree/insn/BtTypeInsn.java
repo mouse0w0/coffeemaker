@@ -46,24 +46,24 @@ public class BtTypeInsn extends BtInsnBase {
      * The operand of this instruction. This operand is an internal name (see {@link
      * org.objectweb.asm.Type}).
      */
-    public static final String DESCRIPTOR = "descriptor";
+    public static final String TYPE = "type";
 
     /**
      * Constructs a new {@link BtTypeInsn}.
      *
-     * @param opcode     the opcode of the type instruction to be constructed. This opcode must be NEW,
-     *                   ANEWARRAY, CHECKCAST or INSTANCEOF.
-     * @param descriptor the operand of the instruction to be constructed. This operand is an internal
-     *                   name (see {@link org.objectweb.asm.Type}).
+     * @param opcode the opcode of the type instruction to be constructed. This opcode must be NEW,
+     *               ANEWARRAY, CHECKCAST or INSTANCEOF.
+     * @param type   the operand of the instruction to be constructed. This operand is an internal
+     *               name (see {@link org.objectweb.asm.Type}).
      */
-    public BtTypeInsn(final int opcode, final String descriptor) {
+    public BtTypeInsn(final int opcode, final String type) {
         super(opcode);
-        putValue(DESCRIPTOR, descriptor);
+        putValue(TYPE, type);
     }
 
     public BtTypeInsn(final int opcode, final BtNode descriptor) {
         super(opcode);
-        put(DESCRIPTOR, descriptor);
+        put(TYPE, descriptor);
     }
 
     /**
@@ -83,12 +83,12 @@ public class BtTypeInsn extends BtInsnBase {
 
     @Override
     public void accept(final MethodVisitor methodVisitor, final Evaluator evaluator) {
-        methodVisitor.visitTypeInsn(opcode, computeDescriptor(DESCRIPTOR, evaluator));
+        methodVisitor.visitTypeInsn(opcode, computeInternalName(TYPE, evaluator));
         acceptAnnotations(methodVisitor);
     }
 
     @Override
     public BtInsnBase clone(final Map<BtLabel, BtLabel> clonedLabels) {
-        return new BtTypeInsn(opcode, get(DESCRIPTOR)).cloneAnnotations(this);
+        return new BtTypeInsn(opcode, get(TYPE)).cloneAnnotations(this);
     }
 }
