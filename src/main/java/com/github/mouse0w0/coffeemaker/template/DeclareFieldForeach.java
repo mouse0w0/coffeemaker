@@ -21,5 +21,10 @@ public @interface DeclareFieldForeach {
      */
     String elementName();
 
+    /**
+     * @return The field definition of each element.
+     */
+    String expression() default "";
+
     boolean modifierFinal() default true;
 }

@@ -17,6 +17,7 @@ public class DeclareFieldForeachHandler extends AnnotationHandler {
     protected void handle(AnnotationOwner owner, BtAnnotation annotation) {
         String iterable = annotation.getValue("iterable");
         String elementName = annotation.getValue("elementName");
+        String expression = annotation.getValue("expression", elementName);
         int modifierFinal = annotation.getValue("modifierFinal", true) ? Opcodes.ACC_FINAL : 0;
 
         BtField field = (BtField) owner;
@@ -24,7 +25,7 @@ public class DeclareFieldForeachHandler extends AnnotationHandler {
         BtClass clazz = (BtClass) field.getParent().getParent();
         clazz.getFields().remove(field);
 
-        BtDeclareFieldForeach fieldForeach = new BtDeclareFieldForeach(iterable, elementName);
+        BtDeclareFieldForeach fieldForeach = new BtDeclareFieldForeach(iterable, elementName, expression);
         fieldForeach.putValue(BtField.ACCESS, field.get(BtField.ACCESS).getAsInt() | modifierFinal);
         field.forEach(fieldForeach::put);
 
