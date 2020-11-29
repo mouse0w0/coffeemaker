@@ -57,7 +57,7 @@ public final class Markers {
     }
 
     // For
-    public static void $foreach(String iterable, String elementName) {
+    public static void $foreach(String iterable, String varName) {
         throw new UnsupportedOperationException("template");
     }
 

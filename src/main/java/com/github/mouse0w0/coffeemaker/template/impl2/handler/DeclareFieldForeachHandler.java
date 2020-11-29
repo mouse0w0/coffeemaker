@@ -16,7 +16,7 @@ public class DeclareFieldForeachHandler extends AnnotationHandler {
     @Override
     protected void handle(AnnotationOwner owner, BtAnnotation annotation) {
         String iterable = annotation.getValue("iterable");
-        String elementName = annotation.getValue("elementName");
+        String elementName = annotation.getValue("variableName");
         String expression = annotation.getValue("expression", elementName);
         int modifyFinal = annotation.getValue("modifyFinal", true) ? Opcodes.ACC_FINAL : 0;
 

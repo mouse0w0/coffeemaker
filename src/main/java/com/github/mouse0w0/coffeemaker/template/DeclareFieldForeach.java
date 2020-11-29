@@ -17,9 +17,9 @@ public @interface DeclareFieldForeach {
     String iterable();
 
     /**
-     * @return The name of each element.
+     * @return The variable name of each element.
      */
-    String elementName();
+    String variableName();
 
     /**
      * @return The field definition of each element.
