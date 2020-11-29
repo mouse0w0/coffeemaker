@@ -59,6 +59,10 @@ public class SimpleEvaluator extends BaseEvaluator {
     }
 
     private Object evalValue(Object obj, String name) {
+        if (name == null || name.isEmpty()) {
+            return obj;
+        }
+
         if (obj instanceof Map) {
             Map map = (Map) obj;
             if (map.containsKey(name)) {
