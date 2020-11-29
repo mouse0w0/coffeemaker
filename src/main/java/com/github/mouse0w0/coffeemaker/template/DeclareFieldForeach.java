@@ -26,5 +26,7 @@ public @interface DeclareFieldForeach {
      */
     String expression() default "";
 
-    boolean modifierFinal() default true;
+    boolean modifyDescriptor() default false;
+
+    boolean modifyFinal() default true;
 }
