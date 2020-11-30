@@ -28,6 +28,10 @@ public class AviatorEvaluator implements Evaluator {
         this.env = env;
     }
 
+    public AviatorEvaluatorInstance getInstance() {
+        return instance;
+    }
+
     @Override
     public Map<String, Object> getEnv() {
         return env;
