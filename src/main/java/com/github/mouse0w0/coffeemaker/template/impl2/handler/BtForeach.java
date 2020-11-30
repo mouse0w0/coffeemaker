@@ -1,6 +1,7 @@
 package com.github.mouse0w0.coffeemaker.template.impl2.handler;
 
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
+import com.github.mouse0w0.coffeemaker.evaluator.LocalVar;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.insn.BtInsnList;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.insn.BtInsnNode;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.insn.BtLabel;
@@ -24,9 +25,10 @@ public class BtForeach extends BtInsnNode {
         Iterable<?> iterable = evaluator.eval(this.iterable);
         for (Object value : iterable) {
             insnList.resetLabels();
-            evaluator.addVariable(variableName, value);
-            insnList.accept(methodVisitor, evaluator);
-            evaluator.removeVariable(variableName);
+            try (LocalVar localVar = evaluator.pushLocalVar()) {
+                localVar.put(variableName, value);
+                insnList.accept(methodVisitor, evaluator);
+            }
         }
     }
 

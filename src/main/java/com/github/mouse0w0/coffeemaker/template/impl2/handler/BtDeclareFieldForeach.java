@@ -1,6 +1,7 @@
 package com.github.mouse0w0.coffeemaker.template.impl2.handler;
 
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
+import com.github.mouse0w0.coffeemaker.evaluator.LocalVar;
 import com.github.mouse0w0.coffeemaker.template.Field;
 import com.github.mouse0w0.coffeemaker.template.TemplateProcessException;
 import com.github.mouse0w0.coffeemaker.template.impl2.tree.BtField;
@@ -22,21 +23,22 @@ public class BtDeclareFieldForeach extends BtField {
     public void accept(ClassVisitor classVisitor, Evaluator evaluator) {
         Iterable<Object> iterable = evaluator.eval(this.iterable);
         for (Object element : iterable) {
-            evaluator.addVariable(variableName, element);
-            final Field field = evaluator.eval(expression);
-            if (field == null) {
-                throw new TemplateProcessException("The field of expression \"" + expression + "\" cannot be null");
+            try (LocalVar localVar = evaluator.pushLocalVar()) {
+                localVar.put(variableName, element);
+                final Field field = evaluator.eval(expression);
+                if (field == null) {
+                    throw new TemplateProcessException("The field of expression \"" + expression + "\" cannot be null");
+                }
+                final FieldVisitor fieldVisitor = classVisitor.visitField(
+                        computeInt(ACCESS, evaluator),
+                        field.getName(),
+                        field.getDescriptor(),
+                        computeString(SIGNATURE, evaluator),
+                        compute(VALUE, evaluator));
+                if (fieldVisitor != null) {
+                    accept(fieldVisitor, evaluator);
+                }
             }
-            final FieldVisitor fieldVisitor = classVisitor.visitField(
-                    computeInt(ACCESS, evaluator),
-                    field.getName(),
-                    field.getDescriptor(),
-                    computeString(SIGNATURE, evaluator),
-                    compute(VALUE, evaluator));
-            if (fieldVisitor != null) {
-                accept(fieldVisitor, evaluator);
-            }
-            evaluator.removeVariable(variableName);
         }
     }
 }
