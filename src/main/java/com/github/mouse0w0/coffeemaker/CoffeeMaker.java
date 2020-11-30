@@ -3,7 +3,7 @@ package com.github.mouse0w0.coffeemaker;
 import com.github.mouse0w0.coffeemaker.template.InvalidTemplateException;
 import com.github.mouse0w0.coffeemaker.template.Template;
 import com.github.mouse0w0.coffeemaker.template.TemplateParser;
-import com.github.mouse0w0.coffeemaker.template.impl2.TemplateParserImpl;
+import com.github.mouse0w0.coffeemaker.template.impl.TemplateParserImpl;
 
 import java.io.IOException;
 import java.io.InputStream;
