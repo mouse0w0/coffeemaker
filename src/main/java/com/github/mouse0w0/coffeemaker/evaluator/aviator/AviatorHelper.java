@@ -18,7 +18,6 @@ public final class AviatorHelper {
         instance.removeModule("io");
         instance.disableFeature(Feature.NewInstance);
         instance.disableFeature(Feature.Module);
-        instance.disableFeature(Feature.InternalVars);
         instance.addFunction(ToFloatFunction.INSTANCE);
         instance.addFunction(ToIntFunction.INSTANCE);
         instance.addFunction(NewFieldFunction.INSTANCE);
