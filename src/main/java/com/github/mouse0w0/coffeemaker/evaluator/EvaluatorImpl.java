@@ -18,6 +18,10 @@ public class EvaluatorImpl implements Evaluator {
         this.env = env;
     }
 
+    public Map<String, Object> getEnv() {
+        return env;
+    }
+
     @Override
     public <T> T eval(String expression) throws EvaluatorException {
         return (T) instance.execute(expression, env);
