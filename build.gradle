@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.github.mouse0w0'
-version '2.0.0'
+version '3.0.0'
 
 sourceCompatibility = targetCompatibility = 1.8
 
