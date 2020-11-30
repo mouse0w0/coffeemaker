@@ -44,35 +44,38 @@ public abstract class BtNode {
         throw new UnsupportedOperationException();
     }
 
+    public Object computeNonNull(Evaluator evaluator) {
+        throw new UnsupportedOperationException();
+    }
+
     public int computeInt(Evaluator evaluator) {
-        Object value = compute(evaluator);
+        Object value = computeNonNull(evaluator);
         if (value instanceof Integer) {
             return (int) value;
         }
-        throw new TemplateProcessException("The type of value is not Integer");
+        throw new TemplateProcessException("The type of value is not Integer, " + toString());
     }
 
     public String computeString(Evaluator evaluator) {
         Object value = compute(evaluator);
         if (value == null) return null;
         if (value instanceof String) return (String) value;
-        throw new TemplateProcessException("The type of value is not String");
+        throw new TemplateProcessException("The type of value is not String, " + toString());
     }
 
     public String computeInternalName(Evaluator evaluator) {
-        Object value = compute(evaluator);
+        Object value = computeNonNull(evaluator);
         if (value == null) return null;
         if (value instanceof String) return toInternalName((String) value);
         if (value instanceof Type) return ((Type) value).getInternalName();
-        throw new TemplateProcessException("The type of value is not String");
+        throw new TemplateProcessException("The type of value is not String or Type, " + toString());
     }
 
     public String computeDescriptor(Evaluator evaluator) {
-        Object value = compute(evaluator);
-        if (value == null) return null;
+        Object value = computeNonNull(evaluator);
         if (value instanceof String) return toDescriptor((String) value);
         if (value instanceof Type) return ((Type) value).getDescriptor();
-        throw new TemplateProcessException("The type of value is not String");
+        throw new TemplateProcessException("The type of value is not String or Type, " + toString());
     }
 
     private static final Pattern INTERNAL_NAME = Pattern.compile("^[a-zA-Z$_][0-9a-zA-Z$_]*(/[a-zA-Z$_][0-9a-zA-Z$_]*)*");
@@ -87,11 +90,11 @@ public abstract class BtNode {
     }
 
     public boolean computeBoolean(Evaluator evaluator) {
-        Object value = compute(evaluator);
+        Object value = computeNonNull(evaluator);
         if (value instanceof Boolean) {
             return (boolean) value;
         }
-        throw new TemplateProcessException("The type of value is not Boolean");
+        throw new TemplateProcessException("The type of value is not Boolean, " + toString());
     }
 
     @SuppressWarnings("unchecked")
@@ -100,12 +103,12 @@ public abstract class BtNode {
         if (value == null) return null;
         else if (value instanceof Collection) return ((Collection<String>) value).toArray(new String[0]);
         else if (value instanceof String[]) return (String[]) value;
-        throw new TemplateProcessException("The type of value is not String[]");
+        throw new TemplateProcessException("The type of value is not String[], " + toString());
     }
 
     public Attribute computeAttribute(Evaluator evaluator) {
-        Object value = compute(evaluator);
+        Object value = computeNonNull(evaluator);
         if (value instanceof Attribute) return (Attribute) value;
-        throw new TemplateProcessException("The type of value is not Attribute");
+        throw new TemplateProcessException("The type of value is not Attribute, " + toString());
     }
 }

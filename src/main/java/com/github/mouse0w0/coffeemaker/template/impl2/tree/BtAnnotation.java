@@ -2,7 +2,6 @@ package com.github.mouse0w0.coffeemaker.template.impl2.tree;
 
 import com.github.mouse0w0.coffeemaker.evaluator.EmptyEvaluator;
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
-import com.github.mouse0w0.coffeemaker.template.TemplateProcessException;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
@@ -104,9 +103,7 @@ public class BtAnnotation extends BtObject {
                 arrayAnnotationVisitor.visitEnd();
             }
         } else {
-            Object value = node.compute(evaluator);
-            if (value == null) throw new TemplateProcessException("The value cannot be null");
-            annotationVisitor.visit(name, value);
+            annotationVisitor.visit(name, node.computeNonNull(evaluator));
         }
     }
 }
