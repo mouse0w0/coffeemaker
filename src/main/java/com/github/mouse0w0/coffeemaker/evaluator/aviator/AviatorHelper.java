@@ -24,6 +24,7 @@ public final class AviatorHelper {
         try {
             instance.addStaticFunctions("Type", Type.class);
 
+            instance.addInstanceFunctions("str", String.class);
             instance.addInstanceFunctions("type", Type.class);
             instance.addInstanceFunctions("field", Field.class);
         } catch (ReflectiveOperationException e) {
