@@ -42,16 +42,32 @@ public final class Markers {
         throw new UnsupportedOperationException("template");
     }
 
-    // Static field
-    public static <T> T $staticField(String expression) {
+    // Static field accesses
+
+    /**
+     * @param expression An expression whose result is {@link com.github.mouse0w0.coffeemaker.template.Field}
+     * @param <T>
+     * @return
+     */
+    public static <T> T $getStaticField(String expression) {
         throw new UnsupportedOperationException("template");
     }
 
+    /**
+     * @param expression An expression whose result is {@link com.github.mouse0w0.coffeemaker.template.Field}
+     * @param value
+     */
     public static void $setStaticField(String expression, Object value) {
         throw new UnsupportedOperationException("template");
     }
 
-    // New instance
+    /**
+     * New instance of expression.
+     *
+     * @param expression
+     * @param <T>
+     * @return
+     */
     public static <T> T $new(String expression) {
         throw new UnsupportedOperationException("template");
     }

@@ -13,7 +13,7 @@ public class GetStaticFieldHandler extends MethodInsnHandler {
 
     @Override
     protected Method[] getAcceptableMethods() {
-        return new Method[]{Utils.getDeclaredMethod(Markers.class, "$staticField", String.class)};
+        return new Method[]{Utils.getDeclaredMethod(Markers.class, "$getStaticField", String.class)};
     }
 
     @Override
