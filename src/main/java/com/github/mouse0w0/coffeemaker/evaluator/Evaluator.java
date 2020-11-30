@@ -8,7 +8,9 @@ public interface Evaluator {
 
     <T> T eval(String expression) throws EvaluatorException;
 
-    void addVariable(String key, Object value) throws AlreadyExistsVariableException;
+    LocalVar pushLocalVar();
 
-    void removeVariable(String key);
+    void popLocalVar();
+
+    void popLocalVar(LocalVar localVar);
 }

@@ -20,12 +20,17 @@ public class EmptyEvaluator implements Evaluator {
     }
 
     @Override
-    public void addVariable(String key, Object value) {
-        throw new UnsupportedOperationException("empty");
+    public LocalVar pushLocalVar() {
+        return new LocalVar(this, Collections.emptyMap());
     }
 
     @Override
-    public void removeVariable(String key) {
-        throw new UnsupportedOperationException("empty");
+    public void popLocalVar() {
+
+    }
+
+    @Override
+    public void popLocalVar(LocalVar localVar) {
+
     }
 }

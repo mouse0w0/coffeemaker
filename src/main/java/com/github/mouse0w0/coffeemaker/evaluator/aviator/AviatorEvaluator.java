@@ -1,16 +1,19 @@
 package com.github.mouse0w0.coffeemaker.evaluator.aviator;
 
-import com.github.mouse0w0.coffeemaker.evaluator.AlreadyExistsVariableException;
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 import com.github.mouse0w0.coffeemaker.evaluator.EvaluatorException;
+import com.github.mouse0w0.coffeemaker.evaluator.LocalVar;
 import com.googlecode.aviator.AviatorEvaluatorInstance;
 
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 
 public class AviatorEvaluator implements Evaluator {
     private final AviatorEvaluatorInstance instance;
     private final Map<String, Object> env;
+
+    private final ArrayDeque<LocalVar> localVars = new ArrayDeque<>();
 
     public AviatorEvaluator() {
         this(AviatorHelper.getInstance(), new HashMap<>());
@@ -36,14 +39,19 @@ public class AviatorEvaluator implements Evaluator {
     }
 
     @Override
-    public void addVariable(String key, Object value) throws AlreadyExistsVariableException {
-        if (env.putIfAbsent(key, value) != null) {
-            throw new AlreadyExistsVariableException(key);
-        }
+    public LocalVar pushLocalVar() {
+        LocalVar localVar = new LocalVar(this, env);
+        localVars.addLast(localVar);
+        return localVar;
     }
 
     @Override
-    public void removeVariable(String key) {
-        env.remove(key);
+    public void popLocalVar() {
+        popLocalVar(localVars.removeLast());
+    }
+
+    @Override
+    public void popLocalVar(LocalVar localVar) {
+        localVar.getLocalVariables().forEach(env::remove);
     }
 }
