@@ -25,7 +25,7 @@ public class BtDeclareFieldForeach extends BtField {
             evaluator.addVariable(variableName, element);
             final Field field = evaluator.eval(expression);
             if (field == null) {
-                throw new TemplateProcessException("The field cannot be null");
+                throw new TemplateProcessException("The field of expression \"" + expression + "\" cannot be null");
             }
             final FieldVisitor fieldVisitor = classVisitor.visitField(
                     computeInt(ACCESS, evaluator),
