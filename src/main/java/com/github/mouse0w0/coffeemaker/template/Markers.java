@@ -64,7 +64,7 @@ public final class Markers {
     /**
      * New instance of expression.
      *
-     * @param expression
+     * @param expression An expression whose result is descriptor or {@link org.objectweb.asm.Type}
      * @param <T>
      * @return
      */
