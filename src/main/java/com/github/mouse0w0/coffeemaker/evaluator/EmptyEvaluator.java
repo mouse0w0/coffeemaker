@@ -10,4 +10,14 @@ public class EmptyEvaluator implements Evaluator {
     public <T> T eval(String expression) {
         return null;
     }
+
+    @Override
+    public void addVariable(String key, Object value) {
+        throw new UnsupportedOperationException("empty");
+    }
+
+    @Override
+    public void removeVariable(String key) {
+        throw new UnsupportedOperationException("empty");
+    }
 }
