@@ -1,6 +1,6 @@
 package com.github.mouse0w0.coffeemaker;
 
-import com.github.mouse0w0.coffeemaker.evaluator.EvaluatorImpl;
+import com.github.mouse0w0.coffeemaker.evaluator.aviator.AviatorEvaluator;
 import com.github.mouse0w0.coffeemaker.template.Field;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class TestCoffeeMaker {
         Map<String, Object> map = new HashMap<>();
         map.put("modid", "examplemod");
         map.put("items", items);
-        EvaluatorImpl evaluator = new EvaluatorImpl(map);
+        AviatorEvaluator evaluator = new AviatorEvaluator(map);
         byte[] bytes = coffeeMaker.getTemplate("template/ModItems")
                 .process("com/example/examplemod/item/ModItems", evaluator);
         Files.write(Paths.get("ModItems.class"), bytes);

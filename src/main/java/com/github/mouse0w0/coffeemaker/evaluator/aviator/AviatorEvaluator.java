@@ -1,23 +1,31 @@
-package com.github.mouse0w0.coffeemaker.evaluator;
+package com.github.mouse0w0.coffeemaker.evaluator.aviator;
 
-import com.github.mouse0w0.coffeemaker.evaluator.aviator.AviatorHelper;
+import com.github.mouse0w0.coffeemaker.evaluator.AlreadyExistsVariableException;
+import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
+import com.github.mouse0w0.coffeemaker.evaluator.EvaluatorException;
 import com.googlecode.aviator.AviatorEvaluatorInstance;
 
+import java.util.HashMap;
 import java.util.Map;
 
-public class EvaluatorImpl implements Evaluator {
+public class AviatorEvaluator implements Evaluator {
     private final AviatorEvaluatorInstance instance;
     private final Map<String, Object> env;
 
-    public EvaluatorImpl(Map<String, Object> env) {
+    public AviatorEvaluator() {
+        this(AviatorHelper.getInstance(), new HashMap<>());
+    }
+
+    public AviatorEvaluator(Map<String, Object> env) {
         this(AviatorHelper.getInstance(), env);
     }
 
-    public EvaluatorImpl(AviatorEvaluatorInstance instance, Map<String, Object> env) {
+    public AviatorEvaluator(AviatorEvaluatorInstance instance, Map<String, Object> env) {
         this.instance = instance;
         this.env = env;
     }
 
+    @Override
     public Map<String, Object> getEnv() {
         return env;
     }
