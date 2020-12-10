@@ -1,5 +1,6 @@
 package com.github.mouse0w0.coffeemaker.template;
 
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.FieldInsnNode;
 
 import java.util.Objects;
@@ -9,6 +10,14 @@ public class Field {
     private final String owner;
     private final String name;
     private final String descriptor;
+
+    public Field(Enum<?> value) {
+        this(Type.getType(value.getClass()), value.name());
+    }
+
+    public Field(Type type, String name) {
+        this(type.getInternalName(), name, type.getDescriptor());
+    }
 
     public Field(String owner, String name, String descriptor) {
         this.owner = owner;
