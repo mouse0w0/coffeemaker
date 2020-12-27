@@ -60,9 +60,4 @@ public final class BtForeach extends BtInsnNode {
     public BtInsnNode clone(Map<BtLabel, BtLabel> clonedLabels) {
         return new BtForeach(iterable, variableName, insnList);
     }
-
-    public static void main(String[] args) {
-        System.out.println(Object[].class);
-        System.out.println(int[].class);
-    }
 }
