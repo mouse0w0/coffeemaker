@@ -22,18 +22,47 @@ public final class BtForeach extends BtInsnNode {
 
     @Override
     public void accept(MethodVisitor methodVisitor, Evaluator evaluator) {
-        Iterable<?> iterable = evaluator.eval(this.iterable);
-        for (Object value : iterable) {
-            insnList.resetLabels();
-            try (LocalVar localVar = evaluator.pushLocalVar()) {
-                localVar.put(variableName, value);
-                insnList.accept(methodVisitor, evaluator);
+        Object value = evaluator.eval(this.iterable);
+        Class<?> type = value.getClass();
+        if (type.isAssignableFrom(Iterable.class)) {
+            accept(methodVisitor, evaluator, (Iterable<?>) value);
+        } else if (type.isArray()) {
+            Class<?> componentType = type.getComponentType();
+            if (!componentType.isPrimitive() && !componentType.isArray()) {
+                accept(methodVisitor, evaluator, (Object[]) value);
             }
+        } else {
+            accept(methodVisitor, evaluator, value);
+        }
+    }
+
+    private void accept(MethodVisitor methodVisitor, Evaluator evaluator, Iterable<?> iterable) {
+        for (Object value : iterable) {
+            accept(methodVisitor, evaluator, value);
+        }
+    }
+
+    private void accept(MethodVisitor methodVisitor, Evaluator evaluator, Object[] array) {
+        for (Object value : array) {
+            accept(methodVisitor, evaluator, value);
+        }
+    }
+
+    private void accept(MethodVisitor methodVisitor, Evaluator evaluator, Object value) {
+        insnList.resetLabels();
+        try (LocalVar localVar = evaluator.pushLocalVar()) {
+            localVar.put(variableName, value);
+            insnList.accept(methodVisitor, evaluator);
         }
     }
 
     @Override
     public BtInsnNode clone(Map<BtLabel, BtLabel> clonedLabels) {
         return new BtForeach(iterable, variableName, insnList);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Object[].class);
+        System.out.println(int[].class);
     }
 }
