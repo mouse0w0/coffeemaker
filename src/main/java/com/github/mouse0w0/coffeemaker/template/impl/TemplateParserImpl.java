@@ -27,6 +27,7 @@ public class TemplateParserImpl implements TemplateParser {
         handlers.add(new SetStaticFieldHandler());
         handlers.add(new NewInstanceHandler());
         handlers.add(new ForeachHandler());
+        handlers.add(new IfHandler());
     }
 
     @Override
