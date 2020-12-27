@@ -9,7 +9,7 @@ import org.objectweb.asm.MethodVisitor;
 
 import java.util.Map;
 
-public class BtForeach extends BtInsnNode {
+public final class BtForeach extends BtInsnNode {
     private final String iterable;
     private final String variableName;
     private final BtInsnList insnList;

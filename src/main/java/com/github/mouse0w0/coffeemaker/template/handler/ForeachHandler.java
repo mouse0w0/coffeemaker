@@ -24,13 +24,10 @@ public class ForeachHandler extends MethodInsnHandler {
             BtInsnList instructions = method.getInstructions();
             BtLdcInsn arg1 = (BtLdcInsn) foreachInsn.getPrevious();
             BtLdcInsn arg0 = (BtLdcInsn) arg1.getPrevious();
-            BtInsnList insnList = Utils.subInsnList(
-                    instructions, foreachInsn.getNext(), insn.getPrevious().getPrevious());
-            BtLabel injectPoint = Utils.findNextLabel(insn);
-            BtForeach foreach = new BtForeach(arg0.getAsString(), arg1.getAsString(), insnList);
-            Utils.removeLabel(instructions, foreachInsn);
-            Utils.removeLabel(instructions, insn);
-            instructions.insertBefore(injectPoint, foreach);
+            BtInsnList insnList = Utils.subInsnList(instructions, foreachInsn.getNextLabel(), insn.getPreviousLabel());
+            BtLabel injectPoint = insn.getNextLabel();
+            Utils.removeRange(instructions, foreachInsn.getPreviousLabel(), injectPoint);
+            instructions.insertBefore(injectPoint, new BtForeach(arg0.getAsString(), arg1.getAsString(), insnList));
         }
     }
 }

@@ -27,6 +27,22 @@ public abstract class BtInsnNode extends BtObject {
         this.index = -1;
     }
 
+    public BtLabel getPreviousLabel() {
+        BtInsnNode current = this;
+        while (!(current instanceof BtLabel) && current != null) {
+            current = current.getPrevious();
+        }
+        return (BtLabel) current;
+    }
+
+    public BtLabel getNextLabel() {
+        BtInsnNode current = this.getNext();
+        while (!(current instanceof BtLabel) && current != null) {
+            current = current.getNext();
+        }
+        return (BtLabel) current;
+    }
+
     /**
      * Returns the clone of the given label.
      *
