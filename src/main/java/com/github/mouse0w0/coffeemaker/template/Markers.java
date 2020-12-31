@@ -99,13 +99,13 @@ public final class Markers {
     }
 
     // Environment variable
-//    public static void $classVar(String key, Class<?> value) {
-//        throw new UnsupportedOperationException("template");
-//    }
-//
-//    public static void $staticFieldVar(String key, Object value) {
-//        throw new UnsupportedOperationException("template");
-//    }
+    public static void $classVar(String key, Class<?> value) {
+        throw new UnsupportedOperationException("template");
+    }
+
+    public static void $staticFieldVar(String key, Object value) {
+        throw new UnsupportedOperationException("template");
+    }
 
     public static void $mapVar(String key) {
         throw new UnsupportedOperationException("template");
