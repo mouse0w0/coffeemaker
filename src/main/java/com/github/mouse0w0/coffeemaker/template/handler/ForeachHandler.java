@@ -2,7 +2,10 @@ package com.github.mouse0w0.coffeemaker.template.handler;
 
 import com.github.mouse0w0.coffeemaker.template.Markers;
 import com.github.mouse0w0.coffeemaker.template.tree.BtMethod;
-import com.github.mouse0w0.coffeemaker.template.tree.insn.*;
+import com.github.mouse0w0.coffeemaker.template.tree.insn.BtInsnList;
+import com.github.mouse0w0.coffeemaker.template.tree.insn.BtInsnNode;
+import com.github.mouse0w0.coffeemaker.template.tree.insn.BtLabel;
+import com.github.mouse0w0.coffeemaker.template.tree.insn.BtMethodInsn;
 
 import java.lang.reflect.Method;
 
@@ -22,8 +25,8 @@ public class ForeachHandler extends MethodInsnHandler {
             foreachInsn = insn;
         } else {
             BtInsnList instructions = method.getInstructions();
-            BtLdcInsn arg1 = (BtLdcInsn) foreachInsn.getPrevious();
-            BtLdcInsn arg0 = (BtLdcInsn) arg1.getPrevious();
+            BtInsnNode arg1 = Utils.getPreviousConstant(foreachInsn, 0);
+            BtInsnNode arg0 = Utils.getPreviousConstant(foreachInsn, 1);
             BtInsnList insnList = Utils.subInsnList(instructions, foreachInsn.getNextLabel(), insn.getPreviousLabel());
             BtLabel injectPoint = insn.getNextLabel();
             Utils.removeRange(instructions, foreachInsn.getPreviousLabel(), injectPoint);

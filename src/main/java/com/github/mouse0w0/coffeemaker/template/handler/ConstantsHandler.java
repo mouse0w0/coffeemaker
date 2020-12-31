@@ -5,7 +5,6 @@ import com.github.mouse0w0.coffeemaker.template.TemplateParseException;
 import com.github.mouse0w0.coffeemaker.template.tree.BtMethod;
 import com.github.mouse0w0.coffeemaker.template.tree.insn.BtInsnList;
 import com.github.mouse0w0.coffeemaker.template.tree.insn.BtInsnNode;
-import com.github.mouse0w0.coffeemaker.template.tree.insn.BtLdcInsn;
 import com.github.mouse0w0.coffeemaker.template.tree.insn.BtMethodInsn;
 
 import java.lang.reflect.Method;
@@ -31,7 +30,7 @@ public class ConstantsHandler extends MethodInsnHandler {
     @Override
     protected void handle(BtMethod method, BtInsnNode insn) {
         BtInsnList instructions = method.getInstructions();
-        BtLdcInsn arg0 = (BtLdcInsn) insn.getPrevious();
+        BtInsnNode arg0 = Utils.getPreviousConstant(insn, 0);
         ConstantType type = getConstantType(insn.get(BtMethodInsn.NAME).getAsString());
         instructions.insert(insn, new BtComputableConstant(type, arg0.getAsString()));
         instructions.remove(arg0);

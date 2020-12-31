@@ -29,6 +29,7 @@ package com.github.mouse0w0.coffeemaker.template.tree.insn;
 
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 import java.util.Map;
 
@@ -72,5 +73,18 @@ public class BtInsn extends BtInsnBase {
     @Override
     public BtInsnBase clone(final Map<BtLabel, BtLabel> clonedLabels) {
         return new BtInsn(opcode).cloneAnnotations(this);
+    }
+
+    @Override
+    public boolean isConstant() {
+        return opcode >= Opcodes.ICONST_M1 && opcode <= Opcodes.ICONST_5;
+    }
+
+    @Override
+    public int getAsInt() {
+        if (opcode >= Opcodes.ICONST_M1 && opcode <= Opcodes.ICONST_5) {
+            return opcode - Opcodes.ICONST_0;
+        }
+        throw new UnsupportedOperationException("constant");
     }
 }

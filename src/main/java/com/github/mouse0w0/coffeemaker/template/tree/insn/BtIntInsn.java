@@ -30,6 +30,7 @@ package com.github.mouse0w0.coffeemaker.template.tree.insn;
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 import com.github.mouse0w0.coffeemaker.template.tree.BtNode;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 import java.util.Map;
 
@@ -70,6 +71,16 @@ public class BtIntInsn extends BtInsnBase {
      */
     public void setOpcode(final int opcode) {
         this.opcode = opcode;
+    }
+
+    @Override
+    public boolean isConstant() {
+        return opcode == Opcodes.BIPUSH || opcode == Opcodes.SIPUSH;
+    }
+
+    @Override
+    public int getAsInt() {
+        return get(OPERAND).getAsInt();
     }
 
     @Override

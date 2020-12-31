@@ -60,12 +60,24 @@ public class BtLdcInsn extends BtInsnBase {
         this.cst = value;
     }
 
+    @Override
+    public boolean isConstant() {
+        return true;
+    }
+
+    @Override
     public String getAsString() {
         return (String) cst;
     }
 
+    @Override
     public Type getAsType() {
         return (Type) cst;
+    }
+
+    @Override
+    public int getAsInt() {
+        return (int) cst;
     }
 
     @Override

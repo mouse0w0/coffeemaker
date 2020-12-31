@@ -3,6 +3,7 @@ package com.github.mouse0w0.coffeemaker.template.tree.insn;
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 import com.github.mouse0w0.coffeemaker.template.tree.BtObject;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Type;
 
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,22 @@ public abstract class BtInsnNode extends BtObject {
             current = current.getNext();
         }
         return (BtLabel) current;
+    }
+
+    public boolean isConstant() {
+        return false;
+    }
+
+    public int getAsInt() {
+        throw new UnsupportedOperationException("constant");
+    }
+
+    public String getAsString() {
+        throw new UnsupportedOperationException("constant");
+    }
+
+    public Type getAsType() {
+        throw new UnsupportedOperationException("constant");
     }
 
     /**
@@ -105,4 +122,5 @@ public abstract class BtInsnNode extends BtObject {
      * BtInsnList}.
      */
     public abstract BtInsnNode clone(Map<BtLabel, BtLabel> clonedLabels);
+
 }

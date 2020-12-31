@@ -36,4 +36,19 @@ public class Utils {
             insn = next;
         }
     }
+
+    public static BtInsnNode getPreviousConstant(BtInsnNode insn, int offset) {
+        BtInsnNode current = insn;
+        int count = 0;
+        while (current != null) {
+            if (current.isConstant()) {
+                if (count == offset) {
+                    return current;
+                }
+                count++;
+            }
+            current = current.getPrevious();
+        }
+        return null;
+    }
 }

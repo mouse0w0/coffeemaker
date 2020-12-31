@@ -3,7 +3,10 @@ package com.github.mouse0w0.coffeemaker.template.handler;
 import com.github.mouse0w0.coffeemaker.template.Markers;
 import com.github.mouse0w0.coffeemaker.template.TemplateProcessException;
 import com.github.mouse0w0.coffeemaker.template.tree.BtMethod;
-import com.github.mouse0w0.coffeemaker.template.tree.insn.*;
+import com.github.mouse0w0.coffeemaker.template.tree.insn.BtInsnList;
+import com.github.mouse0w0.coffeemaker.template.tree.insn.BtInsnNode;
+import com.github.mouse0w0.coffeemaker.template.tree.insn.BtLabel;
+import com.github.mouse0w0.coffeemaker.template.tree.insn.BtMethodInsn;
 import com.github.mouse0w0.coffeemaker.template.util.Pair;
 
 import java.lang.reflect.Method;
@@ -62,7 +65,7 @@ public class IfHandler extends MethodInsnHandler {
 
     private void branch(BtMethod method, BtInsnNode insn) {
         BtInsnList instructions = method.getInstructions();
-        BtLdcInsn expression = (BtLdcInsn) previousInsnNode.getPrevious();
+        BtInsnNode expression = Utils.getPreviousConstant(previousInsnNode, 0);
         BtInsnList branch = Utils.subInsnList(instructions,
                 previousInsnNode.getNextLabel(),
                 insn.getPreviousLabel());
