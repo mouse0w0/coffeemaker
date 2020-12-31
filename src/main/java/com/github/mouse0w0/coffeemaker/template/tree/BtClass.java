@@ -1,7 +1,11 @@
 package com.github.mouse0w0.coffeemaker.template.tree;
 
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
+import com.github.mouse0w0.coffeemaker.evaluator.LocalVar;
 import org.objectweb.asm.ClassVisitor;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class BtClass extends BtObject implements AnnotationOwner {
 
@@ -36,7 +40,13 @@ public class BtClass extends BtObject implements AnnotationOwner {
     public static final String FIELDS = "fields";
     public static final String METHODS = "methods";
 
+    private final Map<String, Object> localVar = new HashMap<>();
+
     public BtClass() {
+    }
+
+    public Map<String, Object> getLocalVar() {
+        return localVar;
     }
 
     @Override
@@ -53,18 +63,21 @@ public class BtClass extends BtObject implements AnnotationOwner {
     }
 
     public void accept(ClassVisitor classVisitor, Evaluator evaluator) {
-        // Visit the header.
-        classVisitor.visit(
-                computeInt(VERSION, evaluator),
-                computeInt(ACCESS, evaluator),
-                computeInternalName(NAME, evaluator),
-                computeString(SIGNATURE, evaluator),
-                computeInternalName(SUPER_NAME, evaluator),
-                computeStringArray(INTERFACES, evaluator));
-        // Visit the source.
-        if (containsKey(SOURCE_FILE) || containsKey(SOURCE_DEBUG)) {
-            classVisitor.visitSource(computeString(SOURCE_FILE, evaluator), computeString(SOURCE_DEBUG, evaluator));
-        }
+        try (LocalVar localVar = evaluator.pushLocalVar()) {
+            this.localVar.forEach(localVar::put);
+
+            // Visit the header.
+            classVisitor.visit(
+                    computeInt(VERSION, evaluator),
+                    computeInt(ACCESS, evaluator),
+                    computeInternalName(NAME, evaluator),
+                    computeString(SIGNATURE, evaluator),
+                    computeInternalName(SUPER_NAME, evaluator),
+                    computeStringArray(INTERFACES, evaluator));
+            // Visit the source.
+            if (containsKey(SOURCE_FILE) || containsKey(SOURCE_DEBUG)) {
+                classVisitor.visitSource(computeString(SOURCE_FILE, evaluator), computeString(SOURCE_DEBUG, evaluator));
+            }
 //        // Visit the module.
 //        if (module != null) {
 //            module.accept(classVisitor);
@@ -77,13 +90,13 @@ public class BtClass extends BtObject implements AnnotationOwner {
 //        if (outerClass != null) {
 //            classVisitor.visitOuterClass(outerClass, outerMethod, outerMethodDesc);
 //        }
-        // Visit the annotations.
-        BtList<BtAnnotation> annotations = getAnnotations();
-        if (annotations != null) {
-            for (BtAnnotation annotation : annotations) {
-                annotation.accept(classVisitor, evaluator);
+            // Visit the annotations.
+            BtList<BtAnnotation> annotations = getAnnotations();
+            if (annotations != null) {
+                for (BtAnnotation annotation : annotations) {
+                    annotation.accept(classVisitor, evaluator);
+                }
             }
-        }
 //        if (typeAnnotations != null) {
 //            for (TypeAnnotationNodeEx typeAnnotation : typeAnnotations.values()) {
 //                typeAnnotation.accept(
@@ -91,13 +104,13 @@ public class BtClass extends BtObject implements AnnotationOwner {
 //                                typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, typeAnnotation.visible));
 //            }
 //        }
-        // Visit the non standard attributes.
-        BtList<BtNode> attributes = get(ATTRIBUTES);
-        if (attributes != null) {
-            for (BtNode node : attributes) {
-                classVisitor.visitAttribute(node.computeAttribute(evaluator));
+            // Visit the non standard attributes.
+            BtList<BtNode> attributes = get(ATTRIBUTES);
+            if (attributes != null) {
+                for (BtNode node : attributes) {
+                    classVisitor.visitAttribute(node.computeAttribute(evaluator));
+                }
             }
-        }
 //        // Visit the nest members.
 //        if (nestMembers != null) {
 //            for (int i = 0, n = nestMembers.size(); i < n; ++i) {
@@ -110,35 +123,36 @@ public class BtClass extends BtObject implements AnnotationOwner {
 //                classVisitor.visitPermittedSubclass(permittedSubclasses.get(i));
 //            }
 //        }
-        // Visit the inner classes.
-        BtList<BtInnerClass> innerClasses = get(INNER_CLASSES);
-        if (innerClasses != null) {
-            for (BtInnerClass innerClass : innerClasses) {
-                innerClass.accept(classVisitor, evaluator);
+            // Visit the inner classes.
+            BtList<BtInnerClass> innerClasses = get(INNER_CLASSES);
+            if (innerClasses != null) {
+                for (BtInnerClass innerClass : innerClasses) {
+                    innerClass.accept(classVisitor, evaluator);
+                }
             }
-        }
 //        // Visit the record components.
 //        if (recordComponents != null) {
 //            for (int i = 0, n = recordComponents.size(); i < n; ++i) {
 //                recordComponents.get(i).accept(classVisitor);
 //            }
 //        }
-        // Visit the fields.
-        BtList<BtField> fields = getFields();
-        if (fields != null) {
-            for (BtField field : fields) {
-                field.accept(classVisitor, evaluator);
+            // Visit the fields.
+            BtList<BtField> fields = getFields();
+            if (fields != null) {
+                for (BtField field : fields) {
+                    field.accept(classVisitor, evaluator);
+                }
             }
-        }
 
-        // Visit the methods.
-        BtList<BtMethod> methods = getMethods();
-        if (methods != null) {
-            for (BtMethod method : methods) {
-                method.accept(classVisitor, evaluator);
+            // Visit the methods.
+            BtList<BtMethod> methods = getMethods();
+            if (methods != null) {
+                for (BtMethod method : methods) {
+                    method.accept(classVisitor, evaluator);
+                }
             }
-        }
 
-        classVisitor.visitEnd();
+            classVisitor.visitEnd();
+        }
     }
 }
