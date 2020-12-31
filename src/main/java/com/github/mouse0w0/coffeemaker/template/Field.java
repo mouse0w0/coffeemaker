@@ -61,4 +61,13 @@ public class Field {
     public int hashCode() {
         return Objects.hash(owner, name, descriptor);
     }
+
+    @Override
+    public String toString() {
+        return "Field{" +
+                "owner='" + owner + '\'' +
+                ", name='" + name + '\'' +
+                ", descriptor='" + descriptor + '\'' +
+                '}';
+    }
 }
