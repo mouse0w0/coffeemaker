@@ -1,7 +1,7 @@
 package com.github.mouse0w0.coffeemaker.template;
 
+import com.github.mouse0w0.coffeemaker.template.tree.insn.BtFieldInsn;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.FieldInsnNode;
 
 import java.util.Objects;
 
@@ -17,6 +17,12 @@ public class Field {
 
     public Field(Type type, String name) {
         this(type.getInternalName(), name, type.getDescriptor());
+    }
+
+    public Field(BtFieldInsn fieldInsn) {
+        this(fieldInsn.get(BtFieldInsn.OWNER).getAsString(),
+                fieldInsn.get(BtFieldInsn.NAME).getAsString(),
+                fieldInsn.get(BtFieldInsn.DESCRIPTOR).getAsString());
     }
 
     public Field(String owner, String name, String descriptor) {
@@ -37,8 +43,8 @@ public class Field {
         return descriptor;
     }
 
-    public FieldInsnNode toInsnNode(int opcode) {
-        return new FieldInsnNode(opcode, owner, name, descriptor);
+    public BtFieldInsn toInsnNode(int opcode) {
+        return new BtFieldInsn(opcode, owner, name, descriptor);
     }
 
     @Override
