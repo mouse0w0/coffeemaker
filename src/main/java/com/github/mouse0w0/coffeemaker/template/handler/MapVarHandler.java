@@ -46,7 +46,7 @@ public class MapVarHandler extends MethodInsnHandler {
         } else if ("$mapEnd".equals(name)) {
             if (startInsnNode == null) throw new TemplateParseException("isolated map end");
             BtInsnNode key = Utils.getPreviousConstant(startInsnNode, 0);
-            BtClass clazz = (BtClass) method.getParent();
+            BtClass clazz = (BtClass) method.getParent().getParent();
             clazz.getLocalVar().put(key.getAsString(), map);
             Utils.removeRange(method.getInstructions(), startInsnNode.getPreviousLabel(), insn.getNextLabel());
             startInsnNode = null;
