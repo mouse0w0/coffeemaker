@@ -1,7 +1,7 @@
 package com.github.mouse0w0.coffeemaker.template.handler;
 
 import com.github.mouse0w0.coffeemaker.template.Markers;
-import com.github.mouse0w0.coffeemaker.template.TemplateProcessException;
+import com.github.mouse0w0.coffeemaker.template.TemplateParseException;
 import com.github.mouse0w0.coffeemaker.template.tree.BtMethod;
 import com.github.mouse0w0.coffeemaker.template.tree.insn.BtInsnList;
 import com.github.mouse0w0.coffeemaker.template.tree.insn.BtInsnNode;
@@ -39,23 +39,23 @@ public class IfHandler extends MethodInsnHandler {
     protected void handle(BtMethod method, BtInsnNode insn) {
         String methodName = insn.get(BtMethodInsn.NAME).getAsString();
         if ("$if".equals(methodName)) {
-            if (state != State.END) throw new TemplateProcessException("open if");
+            if (state != State.END) throw new TemplateParseException("open if");
             state = State.BRANCH;
             startInsnNode = previousInsnNode = insn;
             branches = new ArrayList<>();
         } else if ("$elseIf".equals(methodName)) {
-            if (state == State.END) throw new TemplateProcessException("isolated else jf");
-            if (state == State.ELSE) throw new TemplateProcessException("else branch reached");
+            if (state == State.END) throw new TemplateParseException("isolated else jf");
+            if (state == State.ELSE) throw new TemplateParseException("else branch reached");
             branch(method, insn);
             previousInsnNode = insn;
         } else if ("$else".equals(methodName)) {
-            if (state == State.END) throw new TemplateProcessException("isolated else");
-            if (state == State.ELSE) throw new TemplateProcessException("too much else branch");
+            if (state == State.END) throw new TemplateParseException("isolated else");
+            if (state == State.ELSE) throw new TemplateParseException("too much else branch");
             branch(method, insn);
             state = State.ELSE;
             previousInsnNode = insn;
         } else if ("$endIf".equals(methodName)) {
-            if (state == State.END) throw new TemplateProcessException("isolated end if");
+            if (state == State.END) throw new TemplateParseException("isolated end if");
             endIf(method, insn);
             state = State.END;
             startInsnNode = previousInsnNode = null;
