@@ -18,7 +18,6 @@ public class SetStaticFieldHandler extends MethodInsnHandler {
     protected void handle(BtMethod method, BtInsnNode insn) {
         BtInsnList instructions = method.getInstructions();
         BtInsnNode arg0 = Utils.getPreviousConstant(insn, 0);
-        ;
         instructions.insert(insn, new BtComputableFieldInsn(Opcodes.PUTSTATIC, arg0.getAsString()));
         instructions.remove(arg0);
         instructions.remove(insn);
