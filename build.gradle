@@ -15,7 +15,6 @@ repositories {
 
 dependencies {
     compile 'org.ow2.asm:asm-commons:9.0'
-    compile 'com.googlecode.aviator:aviator:5.2.1'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.1'
