@@ -23,11 +23,11 @@ public class MapVarHandler extends MethodInsnHandler {
                 Utils.getDeclaredMethod(Markers.class, "$mapEnd")};
     }
 
-    private BtInsnNode startInsnNode;
+    private BtMethodInsn startInsnNode;
     private Map<String, Object> map;
 
     @Override
-    protected void handle(BtMethod method, BtInsnNode insn) {
+    protected void handle(BtMethod method, BtMethodInsn insn) {
         String name = insn.get(BtMethodInsn.NAME).getAsString();
         if ("$mapVar".equals(name)) {
             if (startInsnNode != null) throw new TemplateParseException("open map");
@@ -35,17 +35,17 @@ public class MapVarHandler extends MethodInsnHandler {
             map = new HashMap<>();
         } else if ("$mapClass".equals(name)) {
             if (startInsnNode == null) throw new TemplateParseException("isolated map class");
-            BtInsnNode value = Utils.getPreviousConstant(insn, 0);
-            BtInsnNode key = Utils.getPreviousConstant(insn, 1);
+            BtInsnNode value = Utils.getMethodArgument(insn, 1);
+            BtInsnNode key = Utils.getMethodArgument(insn, 0);
             map.put(key.getAsString(), value.getAsType());
         } else if ("$mapStaticField".equals(name)) {
             if (startInsnNode == null) throw new TemplateParseException("isolated map static field");
-            BtInsnNode value = insn.getPrevious();
-            BtInsnNode key = Utils.getPreviousConstant(insn, 1);
+            BtInsnNode value = Utils.getMethodArgument(insn, 1);
+            BtInsnNode key = Utils.getMethodArgument(insn, 0);
             map.put(key.getAsString(), new Field((BtFieldInsn) value));
         } else if ("$mapEnd".equals(name)) {
             if (startInsnNode == null) throw new TemplateParseException("isolated map end");
-            BtInsnNode key = Utils.getPreviousConstant(startInsnNode, 0);
+            BtInsnNode key = Utils.getMethodArgument(startInsnNode, 0);
             BtClass clazz = (BtClass) method.getParent().getParent();
             clazz.getLocalVar().put(key.getAsString(), map);
             Utils.removeRange(method.getInstructions(), startInsnNode.getPreviousLabel(), insn.getNextLabel());

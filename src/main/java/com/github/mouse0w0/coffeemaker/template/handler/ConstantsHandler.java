@@ -28,9 +28,9 @@ public class ConstantsHandler extends MethodInsnHandler {
     }
 
     @Override
-    protected void handle(BtMethod method, BtInsnNode insn) {
+    protected void handle(BtMethod method, BtMethodInsn insn) {
         BtInsnList instructions = method.getInstructions();
-        BtInsnNode arg0 = Utils.getPreviousConstant(insn, 0);
+        BtInsnNode arg0 = Utils.getMethodArgument(insn, 0);
         ConstantType type = getConstantType(insn.get(BtMethodInsn.NAME).getAsString());
         instructions.insert(insn, new BtComputableConstant(type, arg0.getAsString()));
         instructions.remove(arg0);

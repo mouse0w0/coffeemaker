@@ -128,6 +128,22 @@ public class BtMethodInsn extends BtInsnBase {
         this.opcode = opcode;
     }
 
+    public String getOwner() {
+        return get(OWNER).getAsString();
+    }
+
+    public String getName() {
+        return get(NAME).getAsString();
+    }
+
+    public String getDescriptor() {
+        return get(DESCRIPTOR).getAsString();
+    }
+
+    public boolean isInterface() {
+        return get(IS_INTERFACE).getAsBoolean();
+    }
+
     @Override
     public int getType() {
         return METHOD_INSN;

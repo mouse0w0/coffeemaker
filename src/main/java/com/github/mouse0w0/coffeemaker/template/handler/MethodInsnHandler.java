@@ -23,7 +23,7 @@ public abstract class MethodInsnHandler implements Handler {
 
     protected abstract Method[] getAcceptableMethods();
 
-    protected abstract void handle(BtMethod method, BtInsnNode insn);
+    protected abstract void handle(BtMethod method, BtMethodInsn insn);
 
     private static String getMethodId(Method method) {
         return Type.getInternalName(method.getDeclaringClass()) + "." + method.getName() + Type.getMethodDescriptor(method);
@@ -44,7 +44,7 @@ public abstract class MethodInsnHandler implements Handler {
             while (insn != null) {
                 next = insn.getNext();
                 if (insn instanceof BtMethodInsn && methods.contains(getMethodId(insn))) {
-                    handle(method, insn);
+                    handle(method, (BtMethodInsn) insn);
                 }
                 insn = next;
             }

@@ -1,9 +1,13 @@
 package com.github.mouse0w0.coffeemaker.template.handler;
 
+import com.github.mouse0w0.coffeemaker.template.tree.insn.BtFieldInsn;
 import com.github.mouse0w0.coffeemaker.template.tree.insn.BtInsnList;
 import com.github.mouse0w0.coffeemaker.template.tree.insn.BtInsnNode;
+import com.github.mouse0w0.coffeemaker.template.tree.insn.BtMethodInsn;
+import org.objectweb.asm.Type;
 
 import java.lang.reflect.Method;
+import java.util.ArrayDeque;
 
 public class Utils {
     public static Method getDeclaredMethod(Class<?> clazz, String name, Class<?>... parameters) {
@@ -37,18 +41,32 @@ public class Utils {
         }
     }
 
-    public static BtInsnNode getPreviousConstant(BtInsnNode insn, int offset) {
+    public static BtInsnNode getMethodArgument(BtMethodInsn insn, int index) {
+        ArrayDeque<BtInsnNode> stack = new ArrayDeque<>();
         BtInsnNode current = insn;
-        int count = 0;
+        int target = 1 - index;
         while (current != null) {
-            if (current.isConstant()) {
-                if (count == offset) {
-                    return current;
+            if (current instanceof BtMethodInsn) {
+                BtMethodInsn methodInsn = (BtMethodInsn) current;
+                String descriptor = methodInsn.getDescriptor();
+                target += getMethodArgumentCount(descriptor);
+                if (!Type.VOID_TYPE.equals(Type.getReturnType(descriptor))) {
+                    stack.addLast(current);
                 }
-                count++;
+            } else if (current instanceof BtFieldInsn) {
+                stack.addLast(current);
+            } else if (current.isConstant()) {
+                stack.addLast(current);
+            }
+            if (stack.size() == target) {
+                return stack.getLast();
             }
             current = current.getPrevious();
         }
         return null;
+    }
+
+    private static int getMethodArgumentCount(String methodDescriptor) {
+        return Type.getArgumentTypes(methodDescriptor).length;
     }
 }

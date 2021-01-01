@@ -17,16 +17,16 @@ public class ForeachHandler extends MethodInsnHandler {
                 Utils.getDeclaredMethod(Markers.class, "$endForeach")};
     }
 
-    private BtInsnNode foreachInsn;
+    private BtMethodInsn foreachInsn;
 
     @Override
-    protected void handle(BtMethod method, BtInsnNode insn) {
+    protected void handle(BtMethod method, BtMethodInsn insn) {
         if ("$foreach".equals(insn.get(BtMethodInsn.NAME).getAsString())) {
             foreachInsn = insn;
         } else {
             BtInsnList instructions = method.getInstructions();
-            BtInsnNode arg1 = Utils.getPreviousConstant(foreachInsn, 0);
-            BtInsnNode arg0 = Utils.getPreviousConstant(foreachInsn, 1);
+            BtInsnNode arg1 = Utils.getMethodArgument(foreachInsn, 1);
+            BtInsnNode arg0 = Utils.getMethodArgument(foreachInsn, 0);
             BtInsnList insnList = Utils.subInsnList(instructions, foreachInsn.getNextLabel(), insn.getPreviousLabel());
             BtLabel injectPoint = insn.getNextLabel();
             Utils.removeRange(instructions, foreachInsn.getPreviousLabel(), injectPoint);

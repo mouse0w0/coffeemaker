@@ -22,8 +22,8 @@ public class IfHandler extends MethodInsnHandler {
     }
 
     private State state = State.END;
-    private BtInsnNode startInsnNode;
-    private BtInsnNode previousInsnNode;
+    private BtMethodInsn startInsnNode;
+    private BtMethodInsn previousInsnNode;
     private List<Pair<String, BtInsnList>> branches;
 
     @Override
@@ -36,7 +36,7 @@ public class IfHandler extends MethodInsnHandler {
     }
 
     @Override
-    protected void handle(BtMethod method, BtInsnNode insn) {
+    protected void handle(BtMethod method, BtMethodInsn insn) {
         String methodName = insn.get(BtMethodInsn.NAME).getAsString();
         if ("$if".equals(methodName)) {
             if (state != State.END) throw new TemplateParseException("open if");
@@ -63,16 +63,16 @@ public class IfHandler extends MethodInsnHandler {
         }
     }
 
-    private void branch(BtMethod method, BtInsnNode insn) {
+    private void branch(BtMethod method, BtMethodInsn insn) {
         BtInsnList instructions = method.getInstructions();
-        BtInsnNode expression = Utils.getPreviousConstant(previousInsnNode, 0);
+        BtInsnNode expression = Utils.getMethodArgument(previousInsnNode, 0);
         BtInsnList branch = Utils.subInsnList(instructions,
                 previousInsnNode.getNextLabel(),
                 insn.getPreviousLabel());
         branches.add(Pair.of(expression.getAsString(), branch));
     }
 
-    private void endIf(BtMethod method, BtInsnNode insn) {
+    private void endIf(BtMethod method, BtMethodInsn insn) {
         BtInsnList instructions = method.getInstructions();
         BtInsnList elseBranch = null;
         if (state == State.BRANCH) branch(method, insn);

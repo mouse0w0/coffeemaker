@@ -19,16 +19,16 @@ public class VarHandler extends MethodInsnHandler {
     }
 
     @Override
-    protected void handle(BtMethod method, BtInsnNode insn) {
+    protected void handle(BtMethod method, BtMethodInsn insn) {
         String name = insn.get(BtMethodInsn.NAME).getAsString();
         if ("$classVar".equals(name)) {
-            BtInsnNode value = Utils.getPreviousConstant(insn, 0);
-            BtInsnNode key = Utils.getPreviousConstant(insn, 1);
+            BtInsnNode value = Utils.getMethodArgument(insn, 1);
+            BtInsnNode key = Utils.getMethodArgument(insn, 0);
             BtClass clazz = (BtClass) method.getParent().getParent();
             clazz.getLocalVar().put(key.getAsString(), value.getAsType());
         } else if ("$staticFieldVar".equals(name)) {
-            BtInsnNode value = insn.getPrevious();
-            BtInsnNode key = Utils.getPreviousConstant(insn, 1);
+            BtInsnNode value = Utils.getMethodArgument(insn, 1);
+            BtInsnNode key = Utils.getMethodArgument(insn, 0);
             BtClass clazz = (BtClass) method.getParent().getParent();
             clazz.getLocalVar().put(key.getAsString(), new Field((BtFieldInsn) value));
         }
