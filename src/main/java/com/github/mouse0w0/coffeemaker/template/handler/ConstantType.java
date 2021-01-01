@@ -46,7 +46,7 @@ public enum ConstantType {
         public void accept(MethodVisitor methodVisitor, Object o) {
             long value = (long) o;
             if (value == 0L || value == 1L) {
-                methodVisitor.visitInsn(Opcodes.LCONST_0 + (int) o);
+                methodVisitor.visitInsn(Opcodes.LCONST_0 + (int) value);
             } else {
                 methodVisitor.visitLdcInsn(o);
             }
@@ -55,9 +55,10 @@ public enum ConstantType {
     FLOAT() {
         @Override
         public void accept(MethodVisitor methodVisitor, Object o) {
-            int bits = Float.floatToIntBits((float) o);
+            float value = (float) o;
+            int bits = Float.floatToIntBits(value);
             if (bits == 0L || bits == 0x3F800000 || bits == 0x40000000) { // 0..2
-                methodVisitor.visitInsn(Opcodes.FCONST_0 + (int) o);
+                methodVisitor.visitInsn(Opcodes.FCONST_0 + (int) value);
             } else {
                 methodVisitor.visitLdcInsn(o);
             }
@@ -66,9 +67,10 @@ public enum ConstantType {
     DOUBLE() {
         @Override
         public void accept(MethodVisitor methodVisitor, Object o) {
-            long bits = Double.doubleToLongBits((double) o);
+            double value = (double) o;
+            long bits = Double.doubleToLongBits(value);
             if (bits == 0L || bits == 0x3FF0000000000000L) { // +0.0d and 1.0d
-                methodVisitor.visitInsn(Opcodes.DCONST_0 + (int) o);
+                methodVisitor.visitInsn(Opcodes.DCONST_0 + (int) value);
             } else {
                 methodVisitor.visitLdcInsn(o);
             }
