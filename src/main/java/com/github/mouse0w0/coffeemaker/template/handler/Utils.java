@@ -43,13 +43,12 @@ public class Utils {
 
     public static BtInsnNode getMethodArgument(BtMethodInsn insn, int index) {
         ArrayDeque<BtInsnNode> stack = new ArrayDeque<>();
-        BtInsnNode current = insn;
-        int target = 1 - index;
-        while (current != null) {
+        BtInsnNode current = insn.getPrevious();
+        for (int i = getMethodArgumentCount(insn.getDescriptor()) - index; current != null; current = current.getPrevious()) {
             if (current instanceof BtMethodInsn) {
                 BtMethodInsn methodInsn = (BtMethodInsn) current;
                 String descriptor = methodInsn.getDescriptor();
-                target += getMethodArgumentCount(descriptor);
+                i += getMethodArgumentCount(descriptor);
                 if (!Type.VOID_TYPE.equals(Type.getReturnType(descriptor))) {
                     stack.addLast(current);
                 }
@@ -58,10 +57,9 @@ public class Utils {
             } else if (current.isConstant()) {
                 stack.addLast(current);
             }
-            if (stack.size() == target) {
+            if (stack.size() == i) {
                 return stack.getLast();
             }
-            current = current.getPrevious();
         }
         return null;
     }
