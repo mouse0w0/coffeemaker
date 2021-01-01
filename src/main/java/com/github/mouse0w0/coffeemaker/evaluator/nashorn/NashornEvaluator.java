@@ -40,16 +40,26 @@ public final class NashornEvaluator implements Evaluator {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T eval(String expression) throws EvaluatorException {
+    public Object eval(String expression) throws EvaluatorException {
         try {
             if (USE_FUNCTION.matcher(expression).matches()) {
                 engine.eval(expression, bindings);
-                return (T) invocable.invokeFunction("main");
+                return invocable.invokeFunction("main");
             } else {
-                return (T) engine.eval(expression, bindings);
+                return engine.eval(expression, bindings);
             }
         } catch (ScriptException | NoSuchMethodException e) {
-            throw new EvaluatorException("An exception occurred when evaluating script", e);
+            throw new EvaluatorException("An exception occurred when evaluating script: \n" + expression, e);
+        }
+    }
+
+    @Override
+    public <T> T eval(String expression, Class<T> returnType) throws EvaluatorException {
+        Object eval = eval(expression);
+        try {
+            return returnType.cast(eval);
+        } catch (ClassCastException e) {
+            throw new EvaluatorException("An exception occurred when evaluating script: \n" + expression, e);
         }
     }
 

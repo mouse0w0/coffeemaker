@@ -22,7 +22,7 @@ public final class BtForeach extends BtInsnNode {
 
     @Override
     public void accept(MethodVisitor methodVisitor, Evaluator evaluator) {
-        Object value = evaluator.eval(this.iterable);
+        Object value = evaluator.eval(iterable);
         Class<?> type = value.getClass();
         if (type.isAssignableFrom(Iterable.class)) {
             accept(methodVisitor, evaluator, (Iterable<?>) value);

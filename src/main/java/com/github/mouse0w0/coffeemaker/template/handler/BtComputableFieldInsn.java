@@ -21,7 +21,7 @@ public class BtComputableFieldInsn extends BtInsnNode {
 
     @Override
     public void accept(MethodVisitor methodVisitor, Evaluator evaluator) {
-        Field field = evaluator.eval(expression);
+        Field field = evaluator.eval(expression, Field.class);
         if (field == null) {
             throw new TemplateProcessException("The field of expression \"" + expression + "\" cannot be null");
         }

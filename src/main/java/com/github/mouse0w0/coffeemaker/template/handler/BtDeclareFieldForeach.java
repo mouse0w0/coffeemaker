@@ -21,11 +21,10 @@ public class BtDeclareFieldForeach extends BtField {
 
     @Override
     public void accept(ClassVisitor classVisitor, Evaluator evaluator) {
-        Iterable<Object> iterable = evaluator.eval(this.iterable);
-        for (Object element : iterable) {
+        for (Object element : evaluator.eval(iterable, Iterable.class)) {
             try (LocalVar localVar = evaluator.pushLocalVar()) {
                 localVar.put(variableName, element);
-                final Field field = evaluator.eval(expression);
+                final Field field = evaluator.eval(expression, Field.class);
                 if (field == null) {
                     throw new TemplateProcessException("The field of expression \"" + expression + "\" cannot be null");
                 }

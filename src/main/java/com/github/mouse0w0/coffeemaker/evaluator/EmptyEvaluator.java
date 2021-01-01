@@ -15,8 +15,18 @@ public class EmptyEvaluator implements Evaluator {
     }
 
     @Override
-    public <T> T eval(String expression) {
+    public Object eval(String expression) {
         return null;
+    }
+
+    @Override
+    public <T> T eval(String expression, Class<T> returnType) throws EvaluatorException {
+        Object eval = eval(expression);
+        try {
+            return returnType.cast(eval);
+        } catch (ClassCastException e) {
+            throw new EvaluatorException("An exception occurred when evaluating script: \n" + expression, e);
+        }
     }
 
     @Override

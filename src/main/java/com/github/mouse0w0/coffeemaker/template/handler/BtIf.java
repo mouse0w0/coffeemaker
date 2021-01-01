@@ -22,7 +22,7 @@ public final class BtIf extends BtInsnNode {
     @Override
     public void accept(MethodVisitor methodVisitor, Evaluator evaluator) {
         for (Pair<String, BtInsnList> branch : branches) {
-            if (evaluator.eval(branch.getLeft())) {
+            if (evaluator.eval(branch.getLeft(), Boolean.class)) {
                 BtInsnList insnList = branch.getRight();
                 insnList.resetLabels();
                 insnList.accept(methodVisitor, evaluator);

@@ -6,7 +6,9 @@ public interface Evaluator {
 
     Map<String, Object> getEnv();
 
-    <T> T eval(String expression) throws EvaluatorException;
+    Object eval(String expression) throws EvaluatorException;
+
+    <T> T eval(String expression, Class<T> returnType) throws EvaluatorException;
 
     LocalVar pushLocalVar();
 
