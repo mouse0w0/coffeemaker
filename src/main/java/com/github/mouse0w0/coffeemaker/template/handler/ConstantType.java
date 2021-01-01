@@ -37,42 +37,42 @@ public enum ConstantType {
             } else if (value >= Short.MIN_VALUE && value <= Short.MAX_VALUE) {
                 methodVisitor.visitIntInsn(Opcodes.SIPUSH, value);
             } else {
-                methodVisitor.visitLdcInsn(o);
+                methodVisitor.visitLdcInsn(value);
             }
         }
     },
     LONG() {
         @Override
         public void accept(MethodVisitor methodVisitor, Object o) {
-            long value = (long) o;
+            long value = ((Number) o).longValue();
             if (value == 0L || value == 1L) {
                 methodVisitor.visitInsn(Opcodes.LCONST_0 + (int) value);
             } else {
-                methodVisitor.visitLdcInsn(o);
+                methodVisitor.visitLdcInsn(value);
             }
         }
     },
     FLOAT() {
         @Override
         public void accept(MethodVisitor methodVisitor, Object o) {
-            float value = (float) o;
+            float value = ((Number) o).floatValue();
             int bits = Float.floatToIntBits(value);
             if (bits == 0L || bits == 0x3F800000 || bits == 0x40000000) { // 0..2
                 methodVisitor.visitInsn(Opcodes.FCONST_0 + (int) value);
             } else {
-                methodVisitor.visitLdcInsn(o);
+                methodVisitor.visitLdcInsn(value);
             }
         }
     },
     DOUBLE() {
         @Override
         public void accept(MethodVisitor methodVisitor, Object o) {
-            double value = (double) o;
+            double value = ((Number) o).doubleValue();
             long bits = Double.doubleToLongBits(value);
             if (bits == 0L || bits == 0x3FF0000000000000L) { // +0.0d and 1.0d
                 methodVisitor.visitInsn(Opcodes.DCONST_0 + (int) value);
             } else {
-                methodVisitor.visitLdcInsn(o);
+                methodVisitor.visitLdcInsn(value);
             }
         }
     },
