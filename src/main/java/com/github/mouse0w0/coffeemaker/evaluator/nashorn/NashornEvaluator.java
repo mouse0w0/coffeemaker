@@ -5,16 +5,13 @@ import com.github.mouse0w0.coffeemaker.evaluator.EvaluatorException;
 import com.github.mouse0w0.coffeemaker.evaluator.LocalVar;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
-import javax.script.Bindings;
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
+import javax.script.*;
 import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 public final class NashornEvaluator implements Evaluator {
-    private static final Pattern USE_FUNCTION = Pattern.compile("^[\"']use function[\"'];", Pattern.CASE_INSENSITIVE);
+    private static final Pattern USE_FUNCTION = Pattern.compile("^[\"']use function[\"'];");
 
     private final ScriptEngine engine;
     private final Bindings bindings;
@@ -27,6 +24,7 @@ public final class NashornEvaluator implements Evaluator {
         engine = new NashornScriptEngineFactory().getScriptEngine();
         invocable = (Invocable) engine;
         bindings = engine.createBindings();
+        engine.getContext().setBindings(bindings, ScriptContext.GLOBAL_SCOPE);
     }
 
     public ScriptEngine getEngine() {
@@ -42,11 +40,11 @@ public final class NashornEvaluator implements Evaluator {
     @SuppressWarnings("unchecked")
     public Object eval(String expression) throws EvaluatorException {
         try {
-            if (USE_FUNCTION.matcher(expression).matches()) {
-                engine.eval(expression, bindings);
+            if (USE_FUNCTION.matcher(expression).find()) {
+                engine.eval(expression);
                 return invocable.invokeFunction("main");
             } else {
-                return engine.eval(expression, bindings);
+                return engine.eval(expression);
             }
         } catch (ScriptException | NoSuchMethodException e) {
             throw new EvaluatorException("An exception occurred when evaluating script: \n" + expression, e);
