@@ -18,6 +18,11 @@ public class BtComputableConstant extends BtInsnNode {
     }
 
     @Override
+    public boolean isConstant() {
+        return true;
+    }
+
+    @Override
     public void accept(MethodVisitor methodVisitor, Evaluator evaluator) {
         type.accept(methodVisitor, evaluator.eval(expression));
     }
