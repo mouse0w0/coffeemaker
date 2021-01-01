@@ -50,17 +50,17 @@ public abstract class BtNode {
 
     public int computeInt(Evaluator evaluator) {
         Object value = computeNonNull(evaluator);
-        if (value instanceof Integer) {
-            return (int) value;
+        if (value instanceof Number) {
+            return ((Number) value).intValue();
         }
-        throw new TemplateProcessException("The type of value is not Integer, " + toString());
+        throw new TemplateProcessException("The type of " + value.getClass() + " is not Number, " + toString());
     }
 
     public String computeString(Evaluator evaluator) {
         Object value = compute(evaluator);
         if (value == null) return null;
         if (value instanceof String) return (String) value;
-        throw new TemplateProcessException("The type of value is not String, " + toString());
+        throw new TemplateProcessException("The type of " + value.getClass() + " is not String, " + toString());
     }
 
     public String computeInternalName(Evaluator evaluator) {
@@ -68,14 +68,14 @@ public abstract class BtNode {
         if (value == null) return null;
         if (value instanceof String) return toInternalName((String) value);
         if (value instanceof Type) return ((Type) value).getInternalName();
-        throw new TemplateProcessException("The type of value is not String or Type, " + toString());
+        throw new TemplateProcessException("The type of " + value.getClass() + " is not String or Type, " + toString());
     }
 
     public String computeDescriptor(Evaluator evaluator) {
         Object value = computeNonNull(evaluator);
         if (value instanceof String) return toDescriptor((String) value);
         if (value instanceof Type) return ((Type) value).getDescriptor();
-        throw new TemplateProcessException("The type of value is not String or Type, " + toString());
+        throw new TemplateProcessException("The type of " + value.getClass() + " is not String or Type, " + toString());
     }
 
     private static final Pattern INTERNAL_NAME = Pattern.compile("^[a-zA-Z$_][0-9a-zA-Z$_]*(/[a-zA-Z$_][0-9a-zA-Z$_]*)*");
