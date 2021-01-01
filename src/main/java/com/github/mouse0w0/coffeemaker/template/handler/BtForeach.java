@@ -24,7 +24,7 @@ public final class BtForeach extends BtInsnNode {
     public void accept(MethodVisitor methodVisitor, Evaluator evaluator) {
         Object value = evaluator.eval(iterable);
         Class<?> type = value.getClass();
-        if (type.isAssignableFrom(Iterable.class)) {
+        if (Iterable.class.isAssignableFrom(type)) {
             accept(methodVisitor, evaluator, (Iterable<?>) value);
         } else if (type.isArray()) {
             Class<?> componentType = type.getComponentType();
