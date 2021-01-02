@@ -2,6 +2,7 @@ package com.github.mouse0w0.coffeemaker.template.handler;
 
 import com.github.mouse0w0.coffeemaker.evaluator.Evaluator;
 import com.github.mouse0w0.coffeemaker.evaluator.LocalVar;
+import com.github.mouse0w0.coffeemaker.template.TemplateProcessException;
 import com.github.mouse0w0.coffeemaker.template.tree.insn.BtInsnList;
 import com.github.mouse0w0.coffeemaker.template.tree.insn.BtInsnNode;
 import com.github.mouse0w0.coffeemaker.template.tree.insn.BtLabel;
@@ -23,6 +24,9 @@ public final class BtForeach extends BtInsnNode {
     @Override
     public void accept(MethodVisitor methodVisitor, Evaluator evaluator) {
         Object value = evaluator.eval(iterable);
+        if (value == null) {
+            throw new TemplateProcessException("The value of iterable \"" + iterable + "\" cannot be null");
+        }
         Class<?> type = value.getClass();
         if (Iterable.class.isAssignableFrom(type)) {
             accept(methodVisitor, evaluator, (Iterable<?>) value);
