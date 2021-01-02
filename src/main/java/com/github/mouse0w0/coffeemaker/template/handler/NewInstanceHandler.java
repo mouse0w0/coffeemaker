@@ -16,7 +16,7 @@ public class NewInstanceHandler extends MethodInsnHandler {
     }
 
     @Override
-    protected void handle(BtMethod method, BtMethodInsn insn) {
+    protected BtInsnNode handle(BtMethod method, BtMethodInsn insn) {
         BtInsnList instructions = method.getInstructions();
         BtInsnNode arg0 = Utils.getMethodArgument(insn, 0);
         BtTypeInsn newType = new BtTypeInsn(Opcodes.NEW, new BtComputableValue(arg0.getAsString()));
@@ -28,5 +28,6 @@ public class NewInstanceHandler extends MethodInsnHandler {
         instructions.insert(dup, invokeInit);
         instructions.remove(arg0);
         instructions.remove(insn);
+        return newType;
     }
 }

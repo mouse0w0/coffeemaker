@@ -28,13 +28,15 @@ public class ConstantsHandler extends MethodInsnHandler {
     }
 
     @Override
-    protected void handle(BtMethod method, BtMethodInsn insn) {
+    protected BtInsnNode handle(BtMethod method, BtMethodInsn insn) {
         BtInsnList instructions = method.getInstructions();
         BtInsnNode arg0 = Utils.getMethodArgument(insn, 0);
         ConstantType type = getConstantType(insn.get(BtMethodInsn.NAME).getAsString());
-        instructions.insert(insn, new BtComputableConstant(type, arg0.getAsString()));
+        BtComputableConstant constant = new BtComputableConstant(type, arg0.getAsString());
+        instructions.insert(insn, constant);
         instructions.remove(arg0);
         instructions.remove(insn);
+        return constant;
     }
 
     private static ConstantType getConstantType(String method) {

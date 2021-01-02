@@ -16,11 +16,13 @@ public class SetStaticFieldHandler extends MethodInsnHandler {
     }
 
     @Override
-    protected void handle(BtMethod method, BtMethodInsn insn) {
+    protected BtInsnNode handle(BtMethod method, BtMethodInsn insn) {
         BtInsnList instructions = method.getInstructions();
         BtInsnNode arg0 = Utils.getMethodArgument(insn, 0);
-        instructions.insert(insn, new BtComputableFieldInsn(Opcodes.PUTSTATIC, arg0.getAsString()));
+        BtComputableFieldInsn fieldInsn = new BtComputableFieldInsn(Opcodes.PUTSTATIC, arg0.getAsString());
+        instructions.insert(insn, fieldInsn);
         instructions.remove(arg0);
         instructions.remove(insn);
+        return fieldInsn;
     }
 }

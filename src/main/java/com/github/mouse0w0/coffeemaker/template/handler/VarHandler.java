@@ -6,6 +6,7 @@ import com.github.mouse0w0.coffeemaker.template.tree.BtClass;
 import com.github.mouse0w0.coffeemaker.template.tree.BtMethod;
 import com.github.mouse0w0.coffeemaker.template.tree.insn.BtFieldInsn;
 import com.github.mouse0w0.coffeemaker.template.tree.insn.BtInsnNode;
+import com.github.mouse0w0.coffeemaker.template.tree.insn.BtLabel;
 import com.github.mouse0w0.coffeemaker.template.tree.insn.BtMethodInsn;
 
 import java.lang.reflect.Method;
@@ -19,7 +20,7 @@ public class VarHandler extends MethodInsnHandler {
     }
 
     @Override
-    protected void handle(BtMethod method, BtMethodInsn insn) {
+    protected BtInsnNode handle(BtMethod method, BtMethodInsn insn) {
         String name = insn.get(BtMethodInsn.NAME).getAsString();
         BtInsnNode value = Utils.getMethodArgument(insn, 1);
         BtInsnNode key = Utils.getMethodArgument(insn, 0);
@@ -29,6 +30,8 @@ public class VarHandler extends MethodInsnHandler {
         } else if ("$staticFieldVar".equals(name)) {
             clazz.getLocalVar().put(key.getAsString(), new Field((BtFieldInsn) value));
         }
-        Utils.removeRange(method.getInstructions(), insn.getPreviousLabel(), insn.getNextLabel());
+        BtLabel next = insn.getNextLabel();
+        Utils.removeRange(method.getInstructions(), insn.getPreviousLabel(), next);
+        return next;
     }
 }

@@ -7,6 +7,7 @@ import com.github.mouse0w0.coffeemaker.template.tree.BtClass;
 import com.github.mouse0w0.coffeemaker.template.tree.BtMethod;
 import com.github.mouse0w0.coffeemaker.template.tree.insn.BtFieldInsn;
 import com.github.mouse0w0.coffeemaker.template.tree.insn.BtInsnNode;
+import com.github.mouse0w0.coffeemaker.template.tree.insn.BtLabel;
 import com.github.mouse0w0.coffeemaker.template.tree.insn.BtMethodInsn;
 
 import java.lang.reflect.Method;
@@ -27,7 +28,7 @@ public class MapVarHandler extends MethodInsnHandler {
     private Map<String, Object> map;
 
     @Override
-    protected void handle(BtMethod method, BtMethodInsn insn) {
+    protected BtInsnNode handle(BtMethod method, BtMethodInsn insn) {
         String name = insn.get(BtMethodInsn.NAME).getAsString();
         if ("$mapVar".equals(name)) {
             if (startInsnNode != null) throw new TemplateParseException("open map");
@@ -48,9 +49,12 @@ public class MapVarHandler extends MethodInsnHandler {
             BtInsnNode key = Utils.getMethodArgument(startInsnNode, 0);
             BtClass clazz = (BtClass) method.getParent().getParent();
             clazz.getLocalVar().put(key.getAsString(), map);
-            Utils.removeRange(method.getInstructions(), startInsnNode.getPreviousLabel(), insn.getNextLabel());
+            BtLabel next = insn.getNextLabel();
+            Utils.removeRange(method.getInstructions(), startInsnNode.getPreviousLabel(), next);
             startInsnNode = null;
             map = null;
+            return next;
         }
+        return insn.getNext();
     }
 }

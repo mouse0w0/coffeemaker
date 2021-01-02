@@ -23,7 +23,7 @@ public abstract class MethodInsnHandler implements Handler {
 
     protected abstract Method[] getAcceptableMethods();
 
-    protected abstract void handle(BtMethod method, BtMethodInsn insn);
+    protected abstract BtInsnNode handle(BtMethod method, BtMethodInsn insn);
 
     private static String getMethodId(Method method) {
         return Type.getInternalName(method.getDeclaringClass()) + "." + method.getName() + Type.getMethodDescriptor(method);
@@ -40,13 +40,12 @@ public abstract class MethodInsnHandler implements Handler {
         for (BtMethod method : clazz.getMethods()) {
             BtInsnList instructions = method.getInstructions();
             BtInsnNode insn = instructions.getFirst();
-            BtInsnNode next;
             while (insn != null) {
-                next = insn.getNext();
                 if (insn instanceof BtMethodInsn && methods.contains(getMethodId(insn))) {
-                    handle(method, (BtMethodInsn) insn);
+                    insn = handle(method, (BtMethodInsn) insn);
+                } else {
+                    insn = insn.getNext();
                 }
-                insn = next;
             }
         }
     }

@@ -36,7 +36,7 @@ public class IfHandler extends MethodInsnHandler {
     }
 
     @Override
-    protected void handle(BtMethod method, BtMethodInsn insn) {
+    protected BtInsnNode handle(BtMethod method, BtMethodInsn insn) {
         String methodName = insn.get(BtMethodInsn.NAME).getAsString();
         if ("$if".equals(methodName)) {
             if (state != State.END) throw new TemplateParseException("open if");
@@ -56,11 +56,21 @@ public class IfHandler extends MethodInsnHandler {
             previousInsnNode = insn;
         } else if ("$endIf".equals(methodName)) {
             if (state == State.END) throw new TemplateParseException("isolated end if");
-            endIf(method, insn);
+            BtInsnList instructions = method.getInstructions();
+            BtInsnList elseBranch = null;
+            if (state == State.BRANCH) branch(method, insn);
+            else elseBranch = Utils.subInsnList(instructions,
+                    previousInsnNode.getNextLabel(), insn.getPreviousLabel());
+
+            BtLabel next = insn.getNextLabel();
+            Utils.removeRange(instructions, startInsnNode.getPreviousLabel(), next);
+            instructions.insertBefore(next, new BtIf(branches, elseBranch));
             state = State.END;
             startInsnNode = previousInsnNode = null;
             branches = null;
+            return next;
         }
+        return insn.getNext();
     }
 
     private void branch(BtMethod method, BtMethodInsn insn) {
@@ -70,17 +80,5 @@ public class IfHandler extends MethodInsnHandler {
                 previousInsnNode.getNextLabel(),
                 insn.getPreviousLabel());
         branches.add(Pair.of(expression.getAsString(), branch));
-    }
-
-    private void endIf(BtMethod method, BtMethodInsn insn) {
-        BtInsnList instructions = method.getInstructions();
-        BtInsnList elseBranch = null;
-        if (state == State.BRANCH) branch(method, insn);
-        else elseBranch = Utils.subInsnList(instructions,
-                previousInsnNode.getNextLabel(), insn.getPreviousLabel());
-
-        BtLabel label = insn.getNextLabel();
-        Utils.removeRange(instructions, startInsnNode.getPreviousLabel(), label);
-        instructions.insertBefore(label, new BtIf(branches, elseBranch));
     }
 }
